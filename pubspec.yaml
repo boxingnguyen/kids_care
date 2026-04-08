@@ -1,0 +1,66 @@
+name: kids_care
+description: "Kids Care - Child location tracking and notification app for parents."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # State management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Data classes
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+
+  # Navigation
+  go_router: ^14.2.7
+
+  # Firebase
+  firebase_core: ^3.3.0
+  firebase_messaging: ^15.1.0
+  cloud_firestore: ^5.2.1
+  firebase_auth: ^5.1.2
+
+  # Location & Geofencing
+  geolocator: ^13.0.2
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
+  geofencing_api: ^2.0.0
+
+  # Voice/Video Calling
+  zego_uikit: ^2.28.44
+  zego_uikit_prebuilt_call: ^4.22.3
+  zego_uikit_signaling_plugin: ^2.8.20
+
+  # Utilities
+  google_fonts: ^6.2.1
+  url_launcher: ^6.3.0
+  permission_handler: ^12.0.1
+  intl: ^0.19.0
+  shared_preferences: ^2.3.2
+  google_sign_in: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  # Code generation
+  build_runner: ^2.4.11
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
+  riverpod_generator: ^2.4.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/
