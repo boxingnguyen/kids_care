@@ -6,7 +6,7 @@ import 'package:kids_care/core/theme/app_theme.dart';
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
   final bool obscureText;
   final Widget? suffixIcon;
   final TextInputType keyboardType;
@@ -16,7 +16,7 @@ class AuthTextField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.hint,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.obscureText = false,
     this.suffixIcon,
     this.keyboardType = TextInputType.text,
@@ -41,7 +41,7 @@ class AuthTextField extends StatelessWidget {
           fontSize: 14,
           color: AppTheme.textHint,
         ),
-        prefixIcon: Icon(prefixIcon, size: 20, color: AppTheme.textHint),
+        prefixIcon: prefixIcon != null ? Icon(prefixIcon, size: 20, color: AppTheme.textHint) : null,
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: AppTheme.surfaceVariant,

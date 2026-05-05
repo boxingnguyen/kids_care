@@ -1,7 +1,11 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
 import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
@@ -30,11 +34,59 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   Future<void> _register() async {
+    final name = _nameCtrl.text.trim();
+    final email = _emailCtrl.text.trim();
+    final password = _passwordCtrl.text;
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Vui lòng điền đầy đủ thông tin')),
+      );
+      return;
+    }
+
     ref.read(registerLoadingProvider.notifier).state = true;
-    await Future.delayed(const Duration(seconds: 1));
-    if (mounted) {
-      ref.read(registerLoadingProvider.notifier).state = false;
-      context.go('/');
+
+    try {
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      if (userCredential.user != null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+              'uid': userCredential.user!.uid,
+              'name': name,
+              'email': email,
+              'createdAt': FieldValue.serverTimestamp(),
+              'role': 'parent',
+            });
+      }
+
+      if (mounted) {
+        ref.read(registerLoadingProvider.notifier).state = false;
+        context.go('/');
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        ref.read(registerLoadingProvider.notifier).state = false;
+
+        var msgErrAlreadyUsed = e.code == 'email-already-in-use'
+            ? 'Địa chỉ email đã được sử dụng'
+            : null;
+        log('${e.message}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msgErrAlreadyUsed ?? 'Đăng ký thất bại')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ref.read(registerLoadingProvider.notifier).state = false;
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Đã có lỗi xảy ra: $e')));
+      }
     }
   }
 
@@ -131,7 +183,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             color: AppTheme.textHint,
                           ),
                           onPressed: () =>
-                              ref.read(registerObscureProvider.notifier).state = !obscurePassword,
+                              ref.read(registerObscureProvider.notifier).state =
+                                  !obscurePassword,
                         ),
                       ),
                       const SizedBox(height: 24),

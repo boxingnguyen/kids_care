@@ -138,6 +138,7 @@ class _ParentNotificationsScreenState
       onTap: (i) {
         ref.read(parentBottomNavProvider.notifier).state = i;
         if (i == 1) context.go('/map');
+        if (i == 2) context.go('/parent-todo');
         if (i == 3) context.go('/');
       },
       items: const [
@@ -150,8 +151,8 @@ class _ParentNotificationsScreenState
           label: 'Bản đồ',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications_outlined),
-          label: 'Thông báo',
+          icon: Icon(Icons.checklist_rounded),
+          label: 'Nhiệm vụ',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person_outline_rounded),

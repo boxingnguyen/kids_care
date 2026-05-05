@@ -20,14 +20,15 @@ class SocialButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 52,
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
+      height: 50,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
-          side: BorderSide(color: Colors.grey.shade200, width: 1.5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
+          surfaceTintColor: Colors.white,
+          elevation: 2,
+          shadowColor: Colors.black26,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
         ),
         onPressed: isLoading ? null : onPressed,
         child: isLoading
@@ -39,13 +40,13 @@ class SocialButton extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.black54),
                 ),
               )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            : Stack(
+                alignment: Alignment.centerLeft,
                 children: [
                   // Try loading the image asset; fall back to a colored icon
                   SizedBox(
-                    width: 22,
-                    height: 22,
+                    width: 24,
+                    height: 24,
                     child: Image.asset(
                       iconPath,
                       errorBuilder: (context, error, stackTrace) => const Icon(
@@ -55,13 +56,14 @@ class SocialButton extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Text(
-                    label,
-                    style: GoogleFonts.inter(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+                  Center(
+                    child: Text(
+                      label,
+                      style: GoogleFonts.roboto(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF757575),
+                      ),
                     ),
                   ),
                 ],

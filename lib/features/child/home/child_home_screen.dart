@@ -311,6 +311,7 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
       onTap: (i) {
         ref.read(childBottomNavProvider.notifier).state = i;
         if (i == 1) context.go('/map');
+        if (i == 2) context.go('/child-todo');
       },
       selectedItemColor: AppTheme.primaryColor,
       unselectedItemColor: AppTheme.textHint,
@@ -329,8 +330,8 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
           label: 'Bản đồ',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications_outlined),
-          label: 'Thông báo',
+          icon: Icon(Icons.checklist_rounded),
+          label: 'Nhiệm vụ',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.chat_bubble_outline_rounded),

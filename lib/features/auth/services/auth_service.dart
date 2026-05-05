@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kids_care/models/user_model.dart';
+
+import 'user_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -17,7 +20,8 @@ class AuthService {
       }
 
       // Lấy authentication data (tokens)
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       // Tạo Firebase credential từ Google tokens
       final AuthCredential credential = GoogleAuthProvider.credential(
@@ -37,6 +41,17 @@ class AuthService {
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _auth.signOut();
+  }
+
+  /// Lấy thông tin user hiện tại từ Firestore
+  Future<UserModel?> getCurrentUser() async {
+    final currentUser = _auth.currentUser;
+    if (currentUser == null) {
+      return null;
+    }
+
+    final userService = UserService();
+    return await userService.getUserData(currentUser.uid);
   }
 }
 

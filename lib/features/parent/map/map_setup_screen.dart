@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
 import 'package:kids_care/models/geofence_zone_model.dart';
 import 'package:kids_care/providers/geofence_provider.dart';
+import 'package:latlong2/latlong.dart';
 
 class MapSetupScreen extends ConsumerStatefulWidget {
   const MapSetupScreen({super.key});
@@ -45,12 +45,12 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  z.emoji,
-                  style: const TextStyle(fontSize: 28),
-                ),
+                Text(z.emoji, style: const TextStyle(fontSize: 28)),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -59,7 +59,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                         color: AppTheme.primaryColor.withValues(alpha: 0.2),
                         blurRadius: 8,
                         offset: const Offset(0, 3),
-                      )
+                      ),
                     ],
                   ),
                   child: Text(
@@ -111,7 +111,10 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppTheme.primaryColor, width: 2),
+              borderSide: const BorderSide(
+                color: AppTheme.primaryColor,
+                width: 2,
+              ),
             ),
           ),
         ),
@@ -119,17 +122,25 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             style: TextButton.styleFrom(foregroundColor: AppTheme.textHint),
-            child: Text('Huỷ', style: GoogleFonts.nunito(fontWeight: FontWeight.w700)),
+            child: Text(
+              'Huỷ',
+              style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
+            ),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, nameCtrl.text),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.primaryColor,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             ),
-            child: Text('Thêm', style: GoogleFonts.nunito(fontWeight: FontWeight.w800)),
+            child: Text(
+              'Thêm',
+              style: GoogleFonts.nunito(fontWeight: FontWeight.w800),
+            ),
           ),
         ],
       ),
@@ -178,14 +189,15 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                   ),
                   children: [
                     TileLayer(
-                      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'com.example.kidscare',
                     ),
                     CircleLayer(circles: _buildCircles(zones)),
                     MarkerLayer(markers: _buildMarkers(zones)),
                   ],
                 ),
-                
+
                 // Overlay tooltip
                 Positioned(
                   top: 16,
@@ -201,12 +213,15 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                           color: Colors.black.withValues(alpha: 0.08),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
-                        )
+                        ),
                       ],
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.touch_app_rounded, color: AppTheme.primaryColor),
+                        const Icon(
+                          Icons.touch_app_rounded,
+                          color: AppTheme.primaryColor,
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
@@ -229,7 +244,12 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
           // Zone list container
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 36), // extra padding for bottom safe area
+            padding: const EdgeInsets.fromLTRB(
+              20,
+              24,
+              20,
+              36,
+            ), // extra padding for bottom safe area
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -237,7 +257,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                   color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 20,
                   offset: const Offset(0, -6),
-                )
+                ),
               ],
             ),
             child: Column(
@@ -284,10 +304,12 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                               borderRadius: BorderRadius.circular(18),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                                  color: AppTheme.primaryColor.withValues(
+                                    alpha: 0.1,
+                                  ),
                                   blurRadius: 8,
                                   offset: const Offset(0, 3),
-                                )
+                                ),
                               ],
                             ),
                             child: Column(
