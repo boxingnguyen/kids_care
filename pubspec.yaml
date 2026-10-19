@@ -18,8 +18,8 @@ dependencies:
   riverpod_annotation: ^2.3.5
 
   # Data classes
-  freezed_annotation: ^2.4.1
-  json_annotation: ^4.9.0
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.12.0
 
   # Navigation
   go_router: ^14.2.7
@@ -41,6 +41,9 @@ dependencies:
   zego_uikit_prebuilt_call: ^4.22.3
   zego_uikit_signaling_plugin: ^2.8.20
 
+  # Notifications
+  flutter_local_notifications: ^18.0.1
+
   # Utilities
   google_fonts: ^6.2.1
   url_launcher: ^6.3.0
@@ -55,10 +58,9 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
   # Code generation
-  build_runner: ^2.4.11
-  freezed: ^2.5.2
-  json_serializable: ^6.8.0
-  riverpod_generator: ^2.4.3
+  build_runner: ^2.15.1
+  freezed: ^3.2.0
+  json_serializable: ^6.14.0
 
   # Testing
   mocktail: ^1.0.4

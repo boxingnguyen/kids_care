@@ -4,6 +4,8 @@ class AppConstants {
   static const String locationEventsCollection = 'location_events';
   static const String geofenceZonesCollection = 'geofence_zones';
   static const String statusCollection = 'child_status';
+  static const String zonesSubcollection = 'zones';
+  static const String geofenceEventsSubcollection = 'geofence_events';
 
   // Geofence defaults
   static const double defaultGeofenceRadius = 150.0; // meters

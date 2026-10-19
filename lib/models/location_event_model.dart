@@ -26,7 +26,7 @@ extension LocationEventTypeExt on LocationEventType {
 }
 
 @freezed
-class LocationEventModel with _$LocationEventModel {
+abstract class LocationEventModel with _$LocationEventModel {
   const factory LocationEventModel({
     required String id,
     required String childId,

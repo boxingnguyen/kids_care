@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zego_uikit/zego_uikit.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
@@ -11,19 +13,37 @@ import 'firebase_options.dart';
 /// Global navigator key required by ZegoCloud to show incoming call UI
 final navigatorKey = GlobalKey<NavigatorState>();
 
+/// Global notifications plugin instance — used by NotificationsProvider
+final FlutterLocalNotificationsPlugin localNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const iosSettings = DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+  );
+  await localNotificationsPlugin.initialize(
+    const InitializationSettings(android: androidSettings, iOS: iosSettings),
+  );
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // 1. Register navigatorKey so Zego can navigate on incoming calls
-  ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+  // Initialize Zego Cloud only for mobile platforms (not web)
+  if (!kIsWeb) {
+    // 1. Register navigatorKey so Zego can navigate on incoming calls
+    ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
 
-  // 2. Register the system calling UI (CallKit on iOS, ConnectionService on Android)
-  await ZegoUIKit().initLog().then((_) async {
-    await ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI([
-      ZegoUIKitSignalingPlugin(),
-    ]);
-  });
+    // 2. Register the system calling UI (CallKit on iOS, ConnectionService on Android)
+    await ZegoUIKit().initLog().then((_) async {
+      await ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI([
+        ZegoUIKitSignalingPlugin(),
+      ]);
+    });
+  }
 
   runApp(ProviderScope(child: KidsCareApp(navigatorKey: navigatorKey)));
 }

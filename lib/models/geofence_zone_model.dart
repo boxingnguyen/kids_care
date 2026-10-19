@@ -4,7 +4,7 @@ part 'geofence_zone_model.freezed.dart';
 part 'geofence_zone_model.g.dart';
 
 @freezed
-class GeofenceZoneModel with _$GeofenceZoneModel {
+abstract class GeofenceZoneModel with _$GeofenceZoneModel {
   const factory GeofenceZoneModel({
     required String id,
     required String name,

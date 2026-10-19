@@ -43,7 +43,7 @@ extension ChildStatusTypeExt on ChildStatusType {
 }
 
 @freezed
-class ChildStatus with _$ChildStatus {
+abstract class ChildStatus with _$ChildStatus {
   const factory ChildStatus({
     required String childId,
     required ChildStatusType type,

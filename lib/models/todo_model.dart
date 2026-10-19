@@ -5,7 +5,7 @@ part 'todo_model.freezed.dart';
 part 'todo_model.g.dart';
 
 @freezed
-class TodoModel with _$TodoModel {
+abstract class TodoModel with _$TodoModel {
   const factory TodoModel({
     required String id,
     required String title,
