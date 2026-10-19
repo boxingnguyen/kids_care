@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/models/geofence_zone_model.dart';
 import 'package:kids_care/providers/geofence_provider.dart';
 import 'package:latlong2/latlong.dart';
@@ -18,6 +19,23 @@ class MapSetupScreen extends ConsumerStatefulWidget {
 class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
   final MapController _mapController = MapController();
   static const LatLng _defaultCenter = LatLng(10.7769, 106.7009);
+
+  /// Chỉ bố/mẹ được thêm/xoá vùng; con xem vùng của bố/mẹ ở chế độ chỉ đọc.
+  bool _canEdit = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final user = await ref.read(currentUserProvider.future);
+      if (user == null || !mounted) return;
+      final isParent = user.role == 'parent';
+      final parentId = isParent ? user.uid : user.linkedParentId;
+      setState(() => _canEdit = isParent);
+      if (parentId == null) return;
+      await ref.read(geofenceZonesProvider.notifier).loadZonesForParent(parentId);
+    });
+  }
 
   List<CircleMarker> _buildCircles(List<GeofenceZoneModel> zones) {
     return zones
@@ -147,23 +165,44 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
     );
 
     if (result != null && result.isNotEmpty) {
-      ref
-          .read(geofenceZonesProvider.notifier)
-          .addZone(
-            GeofenceZoneModel(
-              id: DateTime.now().millisecondsSinceEpoch.toString(),
-              name: result,
-              lat: tapped.latitude,
-              lng: tapped.longitude,
-              emoji: '📍',
-            ),
+      try {
+        await ref
+            .read(geofenceZonesProvider.notifier)
+            .addZone(
+              GeofenceZoneModel(
+                id: DateTime.now().millisecondsSinceEpoch.toString(),
+                name: result,
+                lat: tapped.latitude,
+                lng: tapped.longitude,
+                emoji: '📍',
+              ),
+            );
+      } on StateError catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.message)),
           );
+        }
+      }
     }
+  }
+
+  void _onLongPress(LatLng point, bool atLimit) {
+    if (!_canEdit) return;
+    if (atLimit) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Đã đạt giới hạn 3 vùng')),
+      );
+      return;
+    }
+    _addZoneDialog(point);
   }
 
   @override
   Widget build(BuildContext context) {
     final zones = ref.watch(geofenceZonesProvider);
+    final atLimit = zones.length >= GeofenceZonesNotifier.maxZones;
+    final linkCode = ref.watch(currentUserProvider).value?.linkCode;
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundGrey,
@@ -171,7 +210,8 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
         title: const Text('Bản đồ & Thiết lập Vị trí'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
+          onPressed: () =>
+              context.canPop() ? context.pop() : context.go('/'),
         ),
       ),
       body: Column(
@@ -185,7 +225,8 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                   options: MapOptions(
                     initialCenter: _defaultCenter,
                     initialZoom: 15,
-                    onLongPress: (tapPosition, point) => _addZoneDialog(point),
+                    onLongPress: (tapPosition, point) =>
+                        _onLongPress(point, atLimit),
                   ),
                   children: [
                     TileLayer(
@@ -225,7 +266,9 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            'Nhấn giữ trên bản đồ để cài thiết lập vùng an toàn mới.',
+                            _canEdit
+                                ? 'Nhấn giữ trên bản đồ để cài thiết lập vùng an toàn mới.'
+                                : 'Các vùng an toàn do bố/mẹ thiết lập.',
                             style: GoogleFonts.nunito(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
@@ -237,13 +280,51 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                     ),
                   ),
                 ),
+
+                // Link code banner — để con nhập mã liên kết
+                if (_canEdit && linkCode != null)
+                  Positioned(
+                    bottom: 16,
+                    left: 16,
+                    right: 16,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryColor,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Mã liên kết: ',
+                            style: GoogleFonts.nunito(
+                              color: Colors.white70,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            linkCode,
+                            style: GoogleFonts.nunito(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
 
           // Zone list container
           Container(
-            color: Colors.white,
             padding: const EdgeInsets.fromLTRB(
               20,
               24,
@@ -265,7 +346,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Safety Zones',
+                  'Vùng an toàn (${zones.length}/${GeofenceZonesNotifier.maxZones})',
                   style: GoogleFonts.nunito(
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
@@ -290,7 +371,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                       separatorBuilder: (_, _) => const SizedBox(width: 12),
                       itemBuilder: (_, i) {
                         final zone = zones[i];
-                        return GestureDetector(
+                        final card = GestureDetector(
                           onTap: () {
                             _mapController.move(LatLng(zone.lat, zone.lng), 16);
                           },
@@ -332,7 +413,46 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                             ),
                           ),
                         );
+                        if (!_canEdit) return card;
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            card,
+                            Positioned(
+                              top: 4,
+                              right: 4,
+                              child: GestureDetector(
+                                onTap: () => ref
+                                    .read(geofenceZonesProvider.notifier)
+                                    .removeZone(zone.id),
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.close,
+                                    size: 12,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
                       },
+                    ),
+                  ),
+                if (_canEdit && atLimit)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      'Đã đạt giới hạn 3 vùng. Xoá một vùng để thêm mới.',
+                      style: GoogleFonts.nunito(
+                        fontSize: 12,
+                        color: Colors.red.shade400,
+                      ),
                     ),
                   ),
               ],
