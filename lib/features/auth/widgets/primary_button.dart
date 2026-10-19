@@ -5,18 +5,21 @@ import 'package:kids_care/core/theme/app_theme.dart';
 /// Orange gradient primary CTA button — Kite & String style.
 class PrimaryButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isLoading;
+  final bool outlined;
 
   const PrimaryButton({
     super.key,
     required this.label,
     required this.onPressed,
     this.isLoading = false,
+    this.outlined = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (outlined) return _buildOutlined();
     return SizedBox(
       width: double.infinity,
       height: 54,
@@ -63,6 +66,39 @@ class PrimaryButton extends StatelessWidget {
                   ),
                 ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildOutlined() {
+    return SizedBox(
+      width: double.infinity,
+      height: 54,
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: AppTheme.primaryColor, width: 2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        onPressed: isLoading ? null : onPressed,
+        child: isLoading
+            ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  color: AppTheme.primaryColor,
+                  strokeWidth: 2.5,
+                ),
+              )
+            : Text(
+                label,
+                style: GoogleFonts.nunito(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.primaryColor,
+                ),
+              ),
       ),
     );
   }
