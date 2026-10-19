@@ -46,7 +46,7 @@
 - Produces: `AppConstants.zonesSubcollection = 'zones'`
 - Produces: `FlutterLocalNotificationsPlugin` initialized and accessible via `localNotificationsPlugin` top-level in `main.dart`
 
-- [ ] **Step 1: Add flutter_local_notifications to pubspec.yaml**
+- [x] **Step 1: Add flutter_local_notifications to pubspec.yaml**
 
 Open `pubspec.yaml` and add under `dependencies:` (after `shared_preferences`):
 ```yaml
@@ -59,7 +59,7 @@ flutter pub get
 ```
 Expected: resolves without conflict.
 
-- [ ] **Step 2: Update UserModel with new fields**
+- [x] **Step 2: Update UserModel with new fields**
 
 Edit `lib/models/user_model.dart` — replace the factory with:
 ```dart
@@ -82,7 +82,7 @@ class UserModel with _$UserModel {
 }
 ```
 
-- [ ] **Step 3: Add new constants to AppConstants**
+- [x] **Step 3: Add new constants to AppConstants**
 
 Edit `lib/core/constants/app_constants.dart` — add inside the class body after `geofenceZonesCollection`:
 ```dart
@@ -90,14 +90,14 @@ Edit `lib/core/constants/app_constants.dart` — add inside the class body after
   static const String geofenceEventsSubcollection = 'geofence_events';
 ```
 
-- [ ] **Step 4: Regenerate freezed/json code**
+- [x] **Step 4: Regenerate freezed/json code**
 
 ```bash
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
 Expected: `user_model.freezed.dart` and `user_model.g.dart` regenerated with new fields, no errors.
 
-- [ ] **Step 5: Initialize flutter_local_notifications in main.dart**
+- [x] **Step 5: Initialize flutter_local_notifications in main.dart**
 
 Edit `lib/main.dart` — add at the top:
 ```dart
@@ -123,7 +123,7 @@ Inside `main()`, after `WidgetsFlutterBinding.ensureInitialized()` and before `F
   );
 ```
 
-- [ ] **Step 6: Write unit test for UserModel serialization with new fields**
+- [x] **Step 6: Write unit test for UserModel serialization with new fields**
 
 Create `test/models/user_model_test.dart`:
 ```dart
@@ -162,14 +162,14 @@ void main() {
 }
 ```
 
-- [ ] **Step 7: Run tests**
+- [x] **Step 7: Run tests**
 
 ```bash
 flutter test test/models/user_model_test.dart
 ```
 Expected: 2 tests pass.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add pubspec.yaml pubspec.lock lib/models/user_model.dart lib/models/user_model.freezed.dart lib/models/user_model.g.dart lib/core/constants/app_constants.dart lib/main.dart test/models/user_model_test.dart
@@ -190,7 +190,7 @@ git commit -m "feat: add UserModel guest fields + flutter_local_notifications in
 - Produces: `GuestAuthService.linkToUser(String myUid, String theirLinkCode) → Future<void>` — throws `ArgumentError` on role conflict, throws `StateError` if code not found
 - Produces: `guestAuthServiceProvider` (Riverpod Provider)
 
-- [ ] **Step 1: Create GuestAuthService**
+- [x] **Step 1: Create GuestAuthService**
 
 Create `lib/features/auth/services/guest_auth_service.dart`:
 ```dart
@@ -298,7 +298,7 @@ final guestAuthServiceProvider = Provider<GuestAuthService>((ref) {
 });
 ```
 
-- [ ] **Step 2: Write unit tests for GuestAuthService logic**
+- [x] **Step 2: Write unit tests for GuestAuthService logic**
 
 Create `test/features/auth/guest_auth_service_test.dart`:
 ```dart
@@ -325,14 +325,14 @@ void main() {
 }
 ```
 
-- [ ] **Step 3: Run tests**
+- [x] **Step 3: Run tests**
 
 ```bash
 flutter test test/features/auth/guest_auth_service_test.dart
 ```
 Expected: 1 test passes.
 
-- [ ] **Step 4: Register guestAuthServiceProvider in auth_providers.dart**
+- [x] **Step 4: Register guestAuthServiceProvider in auth_providers.dart**
 
 Edit `lib/features/auth/providers/auth_providers.dart` — add import and export:
 ```dart
@@ -340,7 +340,7 @@ import 'package:kids_care/features/auth/services/guest_auth_service.dart';
 export 'package:kids_care/features/auth/services/guest_auth_service.dart' show guestAuthServiceProvider;
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lib/features/auth/services/guest_auth_service.dart lib/features/auth/providers/auth_providers.dart test/features/auth/guest_auth_service_test.dart
@@ -359,7 +359,7 @@ git commit -m "feat: add GuestAuthService (anonymous sign-in + linkCode + linkin
 - Consumes: `currentUserProvider` from `auth_providers.dart`
 - On success → `context.go('/parent-home')` or `context.go('/child')`
 
-- [ ] **Step 1: Create WelcomeScreen**
+- [x] **Step 1: Create WelcomeScreen**
 
 Create `lib/features/auth/welcome_screen.dart`:
 ```dart
@@ -515,7 +515,7 @@ Verify:
 - Tap "Đăng nhập" → navigates to `/login`
 - Warning banner is visible
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add lib/features/auth/welcome_screen.dart
@@ -534,7 +534,7 @@ git commit -m "feat: add WelcomeScreen with guest mode entry points"
 - Consumes: `currentUserProvider` for current UID
 - On success → `context.go('/parent-home')` or `context.go('/child')`
 
-- [ ] **Step 1: Create lib/features/link/ directory and screen**
+- [x] **Step 1: Create lib/features/link/ directory and screen**
 
 Create `lib/features/link/link_account_screen.dart`:
 ```dart
@@ -706,7 +706,7 @@ class _LinkAccountScreenState extends ConsumerState<LinkAccountScreen> {
 
 > **Note on AuthTextField:** If `AuthTextField` does not have `errorText` or `textCapitalization` parameters, add them. Check `lib/features/auth/widgets/auth_text_field.dart` — add any missing named params with sensible defaults.
 
-- [ ] **Step 2: Write unit test for role validation logic**
+- [x] **Step 2: Write unit test for role validation logic**
 
 Create `test/features/link/link_account_screen_test.dart`:
 ```dart
@@ -758,14 +758,14 @@ void main() {
 }
 ```
 
-- [ ] **Step 3: Run tests**
+- [x] **Step 3: Run tests**
 
 ```bash
 flutter test test/features/link/link_account_screen_test.dart
 ```
 Expected: 4 tests pass.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add lib/features/link/link_account_screen.dart test/features/link/link_account_screen_test.dart
@@ -787,7 +787,7 @@ git commit -m "feat: add LinkAccountScreen with code entry and confirm dialog"
 - Produces: `AuthService.upgradeGuest() → Future<void>` (Google Sign-In link for anonymous user)
 - Redirect when `userRole == null` → `/` (was `/login`)
 
-- [ ] **Step 1: Update router redirect and add new routes**
+- [x] **Step 1: Update router redirect and add new routes**
 
 Edit `lib/core/router/app_router.dart`:
 
@@ -825,7 +825,7 @@ Add new routes inside `routes: [`:
       GoRoute(path: '/link', builder: (context, state) => const LinkAccountScreen()),
 ```
 
-- [ ] **Step 2: Add upgradeGuest to AuthService**
+- [x] **Step 2: Add upgradeGuest to AuthService**
 
 Edit `lib/features/auth/services/auth_service.dart` — add method inside `AuthService`:
 ```dart
@@ -853,7 +853,7 @@ Add import at top of `auth_service.dart`:
 import 'package:cloud_firestore/cloud_firestore.dart';
 ```
 
-- [ ] **Step 3: Add upgrade button in SettingsScreen**
+- [x] **Step 3: Add upgrade button in SettingsScreen**
 
 Edit `lib/features/settings/settings_screen.dart` — watch `currentUserProvider` and show upgrade card for guests:
 
@@ -991,7 +991,7 @@ Verify:
 - Settings shows "Nâng cấp tài khoản" for guest user
 - Sign out → goes to WelcomeScreen (not LoginScreen)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lib/core/router/app_router.dart lib/features/settings/settings_screen.dart lib/features/auth/services/auth_service.dart
@@ -1010,7 +1010,7 @@ git commit -m "feat: update router for WelcomeScreen landing + settings upgrade 
 - Produces: `GeofenceEventModel` with fields `id`, `zoneId`, `zoneName`, `childUid`, `childName`, `status` (`'enter'`/`'exit'`), `timestamp`
 - Consumed by: Task 8 (GeofenceService writes) and Task 9 (NotificationsProvider reads)
 
-- [ ] **Step 1: Create GeofenceEventModel**
+- [x] **Step 1: Create GeofenceEventModel**
 
 Create `lib/models/geofence_event_model.dart`:
 ```dart
@@ -1036,14 +1036,14 @@ class GeofenceEventModel with _$GeofenceEventModel {
 }
 ```
 
-- [ ] **Step 2: Run build_runner**
+- [x] **Step 2: Run build_runner**
 
 ```bash
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
 Expected: `geofence_event_model.freezed.dart` and `geofence_event_model.g.dart` generated.
 
-- [ ] **Step 3: Write unit test**
+- [x] **Step 3: Write unit test**
 
 Create `test/models/geofence_event_model_test.dart`:
 ```dart
@@ -1073,14 +1073,14 @@ void main() {
 }
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 ```bash
 flutter test test/models/geofence_event_model_test.dart
 ```
 Expected: 1 test passes.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lib/models/geofence_event_model.dart lib/models/geofence_event_model.freezed.dart lib/models/geofence_event_model.g.dart test/models/geofence_event_model_test.dart
@@ -1100,7 +1100,7 @@ git commit -m "feat: add GeofenceEventModel"
 - `loadZonesForParent(String parentId)` — loads zones from `users/{parentId}/zones` into state AND registers with geofencing_api (used by child side)
 - Zones are persisted to `users/{parentId}/zones/{id}` in Firestore on add/remove
 
-- [ ] **Step 1: Write unit test for 3-zone limit**
+- [x] **Step 1: Write unit test for 3-zone limit**
 
 Create `test/providers/geofence_provider_test.dart`:
 ```dart
@@ -1143,14 +1143,14 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run test to confirm it passes with logic (before rewriting provider)**
+- [x] **Step 2: Run test to confirm it passes with logic (before rewriting provider)**
 
 ```bash
 flutter test test/providers/geofence_provider_test.dart
 ```
 Expected: 2 tests pass.
 
-- [ ] **Step 3: Rewrite geofence_provider.dart**
+- [x] **Step 3: Rewrite geofence_provider.dart**
 
 Replace the full contents of `lib/providers/geofence_provider.dart`:
 ```dart
@@ -1274,7 +1274,7 @@ class GeofenceZonesNotifier extends StateNotifier<List<GeofenceZoneModel>> {
 }
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add lib/providers/geofence_provider.dart test/providers/geofence_provider_test.dart
@@ -1295,7 +1295,7 @@ git commit -m "feat: geofence provider with 3-zone limit and Firestore persisten
 - `GeofenceService.start(parentId, childUid, childName)` — loads parent zones, overrides `_onStatusChanged` to write events to Firestore
 - `GeofenceService.start()` is a no-op if `parentId` is null
 
-- [ ] **Step 1: Write test for null parentId guard**
+- [x] **Step 1: Write test for null parentId guard**
 
 Create `test/features/geofence/geofence_service_test.dart`:
 ```dart
@@ -1325,14 +1325,14 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run test**
+- [x] **Step 2: Run test**
 
 ```bash
 flutter test test/features/geofence/geofence_service_test.dart
 ```
 Expected: 2 tests pass.
 
-- [ ] **Step 3: Create GeofenceService**
+- [x] **Step 3: Create GeofenceService**
 
 Create `lib/features/geofence/geofence_service.dart`:
 ```dart
@@ -1414,7 +1414,7 @@ final geofenceServiceProvider = Provider<GeofenceService>((ref) {
 });
 ```
 
-- [ ] **Step 4: Start GeofenceService from child home screen**
+- [x] **Step 4: Start GeofenceService from child home screen**
 
 Edit `lib/features/child/home/child_home_screen.dart` — in `_ChildHomeScreenState.initState()`, after the ZegoService init, add:
 
@@ -1443,7 +1443,7 @@ Add method to the state class:
   }
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lib/features/geofence/geofence_service.dart lib/features/child/home/child_home_screen.dart test/features/geofence/geofence_service_test.dart
@@ -1465,7 +1465,7 @@ git commit -m "feat: add GeofenceService for child-side monitoring and Firestore
 - Fires local notification for events with `timestamp > _startedAt` (prevents replay on cold start)
 - State remains `List<LocationEventModel>` for display compatibility with `ParentNotificationsScreen`
 
-- [ ] **Step 1: Rewrite NotificationsProvider**
+- [x] **Step 1: Rewrite NotificationsProvider**
 
 Replace the full contents of `lib/providers/notifications_provider.dart`:
 ```dart
@@ -1572,7 +1572,7 @@ class NotificationsNotifier extends StateNotifier<List<LocationEventModel>> {
 }
 ```
 
-- [ ] **Step 2: Start listening in parent home screen**
+- [x] **Step 2: Start listening in parent home screen**
 
 Edit `lib/features/parent/home/parent_home_screen.dart` — in `initState` (or `ConsumerStatefulWidget` equivalent), call:
 
@@ -1591,7 +1591,7 @@ Inside `initState`:
     });
 ```
 
-- [ ] **Step 3: Write unit test for _startedAt replay guard**
+- [x] **Step 3: Write unit test for _startedAt replay guard**
 
 Add to `test/providers/geofence_provider_test.dart`:
 ```dart
@@ -1607,14 +1607,14 @@ Add to `test/providers/geofence_provider_test.dart`:
     });
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 ```bash
 flutter test test/providers/geofence_provider_test.dart
 ```
 Expected: 3 tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lib/providers/notifications_provider.dart lib/features/parent/home/parent_home_screen.dart test/providers/geofence_provider_test.dart
@@ -1635,7 +1635,7 @@ git commit -m "feat: notifications provider streams Firestore geofence events wi
 - Add button disabled/hidden when `zones.length >= 3`
 - Shows delete button on each zone card (long-press or trash icon)
 
-- [ ] **Step 1: Update MapSetupScreen**
+- [x] **Step 1: Update MapSetupScreen**
 
 Edit `lib/features/parent/map/map_setup_screen.dart`:
 
@@ -1811,7 +1811,7 @@ Verify as parent:
 - Tap × on a zone card → zone removed
 - Navigate away and back → zones reload from Firestore (not reset to empty)
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add lib/features/parent/map/map_setup_screen.dart
