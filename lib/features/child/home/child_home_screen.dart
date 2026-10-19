@@ -4,8 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/constants/app_constants.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/features/auth/providers/auth_providers.dart';
+import 'package:kids_care/features/geofence/geofence_service.dart';
 import 'package:kids_care/models/child_status.dart';
 import 'package:kids_care/models/location_event_model.dart';
+import 'package:kids_care/providers/geofence_provider.dart';
 import 'package:kids_care/providers/notifications_provider.dart';
 import 'package:kids_care/providers/user_provider.dart';
 import 'package:kids_care/providers/zego_service.dart';
@@ -30,7 +33,19 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
         userId: AppConstants.zegoChildUserId,
         userName: AppConstants.zegoChildUserName,
       );
+      _startGeofencing();
     });
+  }
+
+  Future<void> _startGeofencing() async {
+    final user = await ref.read(currentUserProvider.future);
+    if (user == null || !mounted) return;
+    await GeofenceService.instance.start(
+      parentId: user.linkedParentId,
+      childUid: user.uid,
+      childName: user.name,
+      zonesNotifier: ref.read(geofenceZonesProvider.notifier),
+    );
   }
 
   @override
@@ -93,7 +108,10 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
             _buildHeader(childName),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 32,
+                ),
                 child: Column(
                   children: [
                     Text(
@@ -173,7 +191,9 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                           height: 150,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color(0xFF22C55E).withValues(alpha: 0.1),
+                            color: const Color(
+                              0xFF22C55E,
+                            ).withValues(alpha: 0.1),
                           ),
                         ),
                         Container(
@@ -181,7 +201,9 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                           height: 110,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color(0xFF22C55E).withValues(alpha: 0.2),
+                            color: const Color(
+                              0xFF22C55E,
+                            ).withValues(alpha: 0.2),
                           ),
                         ),
                         // Actual button
@@ -192,10 +214,14 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                             ZegoUIKitUser(
                               id: AppConstants.zegoParentUserId,
                               name: AppConstants.zegoParentUserName,
-                            )
+                            ),
                           ],
                           icon: ButtonIcon(
-                            icon: const Icon(Icons.phone_rounded, color: Colors.white, size: 40),
+                            icon: const Icon(
+                              Icons.phone_rounded,
+                              color: Colors.white,
+                              size: 40,
+                            ),
                             backgroundColor: const Color(0xFF22C55E),
                           ),
                           iconSize: const Size(86, 86),
@@ -255,7 +281,8 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                     'https://api.dicebear.com/7.x/notionists/png?seed=$childName',
                     width: 32,
                     height: 32,
-                    errorBuilder: (context, error, stackTrace) => const Text('👧', style: TextStyle(fontSize: 22)),
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Text('👧', style: TextStyle(fontSize: 22)),
                   ),
                 ),
               ),
@@ -292,7 +319,7 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
-                  onPressed: () => context.go('/'),
+                  onPressed: () => context.go('/settings'),
                   icon: const Icon(Icons.settings_outlined, size: 20),
                   color: AppTheme.textSecondary,
                 ),
@@ -310,14 +337,20 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
       currentIndex: selectedIndex,
       onTap: (i) {
         ref.read(childBottomNavProvider.notifier).state = i;
-        if (i == 1) context.go('/map');
-        if (i == 2) context.go('/child-todo');
+        if (i == 1) context.go('/child-todo');
+        if (i == 2) context.go('/map');
       },
       selectedItemColor: AppTheme.primaryColor,
       unselectedItemColor: AppTheme.textHint,
       showUnselectedLabels: true,
-      selectedLabelStyle: GoogleFonts.nunito(fontWeight: FontWeight.w800, fontSize: 12),
-      unselectedLabelStyle: GoogleFonts.nunito(fontWeight: FontWeight.w700, fontSize: 12),
+      selectedLabelStyle: GoogleFonts.nunito(
+        fontWeight: FontWeight.w800,
+        fontSize: 12,
+      ),
+      unselectedLabelStyle: GoogleFonts.nunito(
+        fontWeight: FontWeight.w700,
+        fontSize: 12,
+      ),
       type: BottomNavigationBarType.fixed,
       backgroundColor: Colors.white,
       items: const [
@@ -326,12 +359,12 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
           label: 'Trang chủ',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.map_outlined),
-          label: 'Bản đồ',
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.checklist_rounded),
           label: 'Nhiệm vụ',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.map_outlined),
+          label: 'Bản đồ',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.chat_bubble_outline_rounded),
@@ -368,7 +401,9 @@ class _StatusCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: isSelected ? Border.all(color: color, width: 2) : Border.all(color: Colors.transparent, width: 2),
+          border: isSelected
+              ? Border.all(color: color, width: 2)
+              : Border.all(color: Colors.transparent, width: 2),
           boxShadow: [
             BoxShadow(
               color: isSelected
@@ -395,9 +430,7 @@ class _StatusCard extends StatelessWidget {
                 color: color.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
-              child: Center(
-                child: Icon(icon, color: color, size: 28),
-              ),
+              child: Center(child: Icon(icon, color: color, size: 28)),
             ),
             const SizedBox(height: 16),
             Text(

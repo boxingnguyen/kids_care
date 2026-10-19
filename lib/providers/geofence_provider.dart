@@ -14,11 +14,14 @@ final geofenceZonesProvider =
 class GeofenceZonesNotifier extends StateNotifier<List<GeofenceZoneModel>> {
   static const int maxZones = 3;
 
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  FirebaseFirestore get _db => FirebaseFirestore.instance;
   String? _parentId;
   bool _listenersAttached = false;
 
   GeofenceZonesNotifier() : super([]);
+
+  /// Danh sách vùng hiện tại (cho code ngoài notifier, vd. GeofenceService).
+  List<GeofenceZoneModel> get zones => state;
 
   /// Throws [StateError] nếu đã đủ [maxZones] vùng.
   static void checkZoneLimit(int currentCount) {
