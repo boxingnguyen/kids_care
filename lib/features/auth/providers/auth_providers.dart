@@ -3,6 +3,9 @@ import 'package:kids_care/models/user_model.dart';
 
 import '../services/auth_service.dart';
 
+export 'package:kids_care/features/auth/services/guest_auth_service.dart'
+    show guestAuthServiceProvider;
+
 /// Provider lưu trạng thái loading khi đang xử lý Google Sign-In
 final googleSignInLoadingProvider = StateProvider.autoDispose<bool>(
   (ref) => false,
