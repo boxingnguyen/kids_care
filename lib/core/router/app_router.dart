@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kids_care/features/auth/forgot_password_screen.dart';
+import 'package:kids_care/features/auth/welcome_screen.dart';
+import 'package:kids_care/features/link/link_account_screen.dart';
 import 'package:kids_care/features/auth/login_screen.dart';
 import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/features/auth/register_child_screen.dart';
@@ -11,17 +13,19 @@ import 'package:kids_care/features/child/home/child_home_screen.dart';
 import 'package:kids_care/features/parent/home/parent_home_screen.dart';
 import 'package:kids_care/features/parent/map/map_setup_screen.dart';
 import 'package:kids_care/features/parent/notifications/parent_notifications_screen.dart';
+import 'package:kids_care/features/settings/settings_screen.dart';
 import 'package:kids_care/features/todo/child/child_todo_screen.dart';
 import 'package:kids_care/features/todo/parent/parent_todo_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/',
     redirect: (context, state) async {
       // Check if user is already logged in and route accordingly
       final userRole = await ref.watch(userRoleProvider.future);
 
       final isAuthRoute =
+          state.matchedLocation == '/' ||
           state.matchedLocation.startsWith('/login') ||
           state.matchedLocation.startsWith('/register') ||
           state.matchedLocation.startsWith('/forgot-password') ||
@@ -36,6 +40,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     },
     routes: [
       // ── Auth ─────────────────────────────────────────
+      GoRoute(path: '/', builder: (context, state) => const WelcomeScreen()),
+      GoRoute(
+        path: '/link',
+        builder: (context, state) => const LinkAccountScreen(),
+      ),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/register',
@@ -66,6 +75,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/parent',
         builder: (context, state) => const ParentNotificationsScreen(),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
       ),
       GoRoute(
         path: '/map',

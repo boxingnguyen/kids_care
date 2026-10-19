@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -35,6 +36,24 @@ class AuthService {
       // Xử lý lỗi (tuỳ chọn: ném ra ngoài để UI hiển thị dialog / snackbar)
       rethrow;
     }
+  }
+
+  /// Liên kết tài khoản khách (anonymous) với Google. Giữ nguyên UID và dữ liệu.
+  /// Trả về false nếu người dùng huỷ.
+  Future<bool> upgradeGuest() async {
+    final googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) return false;
+    final googleAuth = await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    await _auth.currentUser!.linkWithCredential(credential);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(_auth.currentUser!.uid)
+        .update({'isGuest': false});
+    return true;
   }
 
   /// Đăng xuất khỏi Google và Firebase
