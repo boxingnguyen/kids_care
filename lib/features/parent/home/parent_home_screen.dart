@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/providers/notifications_provider.dart';
 
 class ParentHomeScreen extends ConsumerWidget {
   const ParentHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Giữ stream sự kiện geofence chạy khi bố/mẹ ở màn hình chính
+    // (để bắn thông báo local), không rebuild màn hình khi có sự kiện.
+    ref.listen(notificationsProvider, (_, _) {});
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nhà'),
