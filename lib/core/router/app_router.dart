@@ -21,8 +21,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
     redirect: (context, state) async {
-      // Check if user is already logged in and route accordingly
-      final userRole = await ref.watch(userRoleProvider.future);
+      // Check if user is already logged in and route accordingly.
+      // ref.read (không watch): invalidate currentUserProvider không được
+      // dựng lại GoRouter — nếu không sẽ reset về '/' giữa luồng liên kết.
+      final userRole = await ref.read(userRoleProvider.future);
 
       final isAuthRoute =
           state.matchedLocation == '/' ||
