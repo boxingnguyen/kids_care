@@ -11,6 +11,9 @@ class AuthTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final TextInputType keyboardType;
   final ValueChanged<String>? onChanged;
+  final String? label;
+  final String? errorText;
+  final TextCapitalization textCapitalization;
 
   const AuthTextField({
     super.key,
@@ -21,6 +24,9 @@ class AuthTextField extends StatelessWidget {
     this.suffixIcon,
     this.keyboardType = TextInputType.text,
     this.onChanged,
+    this.label,
+    this.errorText,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   @override
@@ -30,6 +36,7 @@ class AuthTextField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       onChanged: onChanged,
+      textCapitalization: textCapitalization,
       style: GoogleFonts.nunito(
         fontSize: 15,
         color: AppTheme.textPrimary,
@@ -37,6 +44,8 @@ class AuthTextField extends StatelessWidget {
       ),
       decoration: InputDecoration(
         hintText: hint,
+        labelText: label,
+        errorText: errorText,
         hintStyle: GoogleFonts.nunito(
           fontSize: 14,
           color: AppTheme.textHint,
