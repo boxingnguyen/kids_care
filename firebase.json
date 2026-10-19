@@ -1,30 +1,35 @@
 {
-    "flutter": {
-        "platforms": {
-            "android": {
-                "default": {
-                    "projectId": "kids-care-a9d54",
-                    "appId": "1:302393630013:android:707826327e76bb46e2b954",
-                    "fileOutput": "android/app/google-services.json"
-                }
-            },
-            "ios": {
-                "default": {
-                    "projectId": "kids-care-a9d54",
-                    "appId": "1:302393630013:ios:1d0cf6d1c1b01013e2b954",
-                    "uploadDebugSymbols": false,
-                    "fileOutput": "ios/Runner/GoogleService-Info.plist"
-                }
-            },
-            "dart": {
-                "lib/firebase_options.dart": {
-                    "projectId": "kids-care-a9d54",
-                    "configurations": {
-                        "android": "1:302393630013:android:707826327e76bb46e2b954",
-                        "ios": "1:302393630013:ios:1d0cf6d1c1b01013e2b954"
-                    }
-                }
-            }
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "kids-care-a9d54",
+          "appId": "1:302393630013:android:707826327e76bb46e2b954",
+          "fileOutput": "android/app/google-services.json"
         }
+      },
+      "ios": {
+        "default": {
+          "projectId": "kids-care-a9d54",
+          "appId": "1:302393630013:ios:1d0cf6d1c1b01013e2b954",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "kids-care-a9d54",
+          "configurations": {
+            "android": "1:302393630013:android:707826327e76bb46e2b954",
+            "ios": "1:302393630013:ios:1d0cf6d1c1b01013e2b954",
+            "web": "1:302393630013:web:5e2b25dd249c23cee2b954"
+          }
+        }
+      }
     }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
 }

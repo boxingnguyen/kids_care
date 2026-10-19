@@ -1,0 +1,65 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // Con đã liên kết với bố/mẹ [parentId]
+    function isLinkedChildOf(parentId) {
+      return signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('linkedParentId', null) == parentId;
+    }
+
+    function onlyChanges(fields) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields);
+    }
+
+    match /users/{uid} {
+      // Mọi user đã đăng nhập (kể cả khách) đọc được để tìm theo linkCode.
+      allow read: if signedIn();
+
+      allow create: if isSelf(uid);
+      allow delete: if isSelf(uid);
+
+      allow update: if isSelf(uid)
+        // Bố/mẹ liên kết con: chỉ được đặt linkedParentId của con = chính mình
+        || (signedIn()
+            && onlyChanges(['linkedParentId'])
+            && request.resource.data.linkedParentId == request.auth.uid)
+        // Con liên kết bố/mẹ: chỉ được thêm chính mình vào linkedChildIds
+        || (signedIn()
+            && onlyChanges(['linkedChildIds'])
+            && request.resource.data.linkedChildIds.toSet()
+                 .difference(resource.data.get('linkedChildIds', []).toSet())
+                 == [request.auth.uid].toSet()
+            && resource.data.get('linkedChildIds', []).toSet()
+                 .difference(request.resource.data.linkedChildIds.toSet()).size() == 0);
+
+      // Vùng an toàn: bố/mẹ ghi, con đã liên kết chỉ đọc
+      match /zones/{zoneId} {
+        allow read: if isSelf(uid) || isLinkedChildOf(uid);
+        allow write: if isSelf(uid);
+      }
+
+      // Sự kiện geofence: con đã liên kết tạo, bố/mẹ đọc
+      match /geofence_events/{eventId} {
+        allow read: if isSelf(uid);
+        allow create: if isLinkedChildOf(uid)
+          && request.resource.data.childUid == request.auth.uid;
+        allow delete: if isSelf(uid);
+      }
+    }
+
+    // Todo hiện dùng id cố định (child-001) — tạm cho mọi user đã đăng nhập.
+    match /todos/{todoId} {
+      allow read, write: if signedIn();
+    }
+  }
+}
