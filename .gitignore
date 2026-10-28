@@ -48,3 +48,12 @@ app.*.map.json
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 lib/firebase_options.dart
+
+# Release signing & store credentials - never commit
+android/key.properties
+*.jks
+*.keystore
+*.p8
+fastlane-secrets/
+**/fastlane/report.xml
+**/fastlane/README.md

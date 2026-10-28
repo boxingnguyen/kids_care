@@ -7,8 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
 import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 final registerLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
 final registerObscureProvider = StateProvider.autoDispose<bool>((ref) => true);
@@ -40,7 +42,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Vui lòng điền đầy đủ thông tin')),
+        SnackBar(content: Text(context.l10n.fillAllFields)),
       );
       return;
     }
@@ -66,18 +68,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
       if (mounted) {
         ref.read(registerLoadingProvider.notifier).state = false;
-        context.go('/');
+        context.go('/parent-home');
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
         ref.read(registerLoadingProvider.notifier).state = false;
 
         var msgErrAlreadyUsed = e.code == 'email-already-in-use'
-            ? 'Địa chỉ email đã được sử dụng'
+            ? context.l10n.emailTaken
             : null;
         log('${e.message}');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(msgErrAlreadyUsed ?? 'Đăng ký thất bại')),
+          SnackBar(content: Text(msgErrAlreadyUsed ?? context.l10n.signUpFailed)),
         );
       }
     } catch (e) {
@@ -85,7 +87,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         ref.read(registerLoadingProvider.notifier).state = false;
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Đã có lỗi xảy ra: $e')));
+        ).showSnackBar(SnackBar(content: Text(context.l10n.errorGeneric('$e'))));
       }
     }
   }
@@ -99,9 +101,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       backgroundColor: AppTheme.backgroundGrey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
+        automaticallyImplyLeading: false,
+        leadingWidth: 64,
+        leading: const Center(
+          child: AppBackButton(fallbackLocation: '/login'),
         ),
       ),
       extendBodyBehindAppBar: true,
@@ -122,7 +125,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 const SizedBox(height: 20),
 
                 Text(
-                  'Tạo tài khoản mới',
+                  context.l10n.createNewAccount,
                   style: GoogleFonts.nunito(
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
@@ -132,7 +135,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Bắt đầu hành trình nuôi dưỡng cùng bé yêu 🌟',
+                  context.l10n.registerSubtitle,
                   style: GoogleFonts.nunito(
                     fontSize: 15,
                     color: AppTheme.textSecondary,
@@ -159,20 +162,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     children: [
                       AuthTextField(
                         controller: _nameCtrl,
-                        hint: 'Họ và tên bố/mẹ',
+                        hint: context.l10n.parentFullName,
                         prefixIcon: Icons.person_outline_rounded,
                       ),
                       const SizedBox(height: 14),
                       AuthTextField(
                         controller: _emailCtrl,
-                        hint: 'Email',
+                        hint: context.l10n.email,
                         prefixIcon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 14),
                       AuthTextField(
                         controller: _passwordCtrl,
-                        hint: 'Mật khẩu',
+                        hint: context.l10n.password,
                         prefixIcon: Icons.lock_outline_rounded,
                         obscureText: obscurePassword,
                         suffixIcon: IconButton(
@@ -189,7 +192,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       ),
                       const SizedBox(height: 24),
                       PrimaryButton(
-                        label: 'Đăng ký',
+                        label: context.l10n.register,
                         isLoading: isLoading,
                         onPressed: _register,
                       ),
@@ -202,16 +205,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Đã có tài khoản? ',
+                      context.l10n.haveAccount,
                       style: GoogleFonts.nunito(
                         fontSize: 14,
                         color: AppTheme.textSecondary,
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => context.pop(),
+                      onTap: () =>
+                          context.canPop() ? context.pop() : context.go('/login'),
                       child: Text(
-                        'Đăng nhập',
+                        context.l10n.login,
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,

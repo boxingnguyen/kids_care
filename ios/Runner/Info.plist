@@ -14,6 +14,15 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>vi</string>
+		<string>en</string>
+		<string>pt</string>
+		<string>ja</string>
+		<string>zh</string>
+		<string>id</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>kids_care</string>
 	<key>CFBundlePackageType</key>
@@ -24,14 +33,20 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Kids Care uses the camera for video calls between parents and children.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to location in the background to monitor safe zones and alert you when your child enters or leaves them.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location in the background to monitor safe zones and alert you when your child enters or leaves them.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location to show your child's position on the map and trigger geofence alerts.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Kids Care uses the microphone for voice and video calls between parents and children.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

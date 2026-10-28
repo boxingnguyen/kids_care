@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 class CallScreen extends ConsumerStatefulWidget {
   const CallScreen({super.key});
@@ -63,12 +64,11 @@ class _CallScreenState extends ConsumerState<CallScreen>
         child: Column(
           children: [
             // Back button
-            Align(
+            const Align(
               alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                onPressed: () => context.pop(),
-                color: Colors.grey.shade600,
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: AppBackButton(),
               ),
             ),
 
@@ -100,8 +100,8 @@ class _CallScreenState extends ConsumerState<CallScreen>
             const SizedBox(height: 24),
 
             Text(
-              'Bố',
-              style: GoogleFonts.inter(
+              context.l10n.callDad,
+              style: GoogleFonts.nunito(
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
                 color: Colors.black87,
@@ -109,8 +109,8 @@ class _CallScreenState extends ConsumerState<CallScreen>
             ),
             const SizedBox(height: 8),
             Text(
-              'Đang kết nối...',
-              style: GoogleFonts.inter(
+              context.l10n.connecting,
+              style: GoogleFonts.nunito(
                 fontSize: 15,
                 color: AppTheme.primaryColor,
                 fontWeight: FontWeight.w500,
@@ -119,7 +119,7 @@ class _CallScreenState extends ConsumerState<CallScreen>
             const SizedBox(height: 8),
             Text(
               _timerText,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.nunito(
                 fontSize: 20,
                 color: Colors.grey.shade500,
                 fontWeight: FontWeight.w600,
@@ -136,7 +136,7 @@ class _CallScreenState extends ConsumerState<CallScreen>
                 children: [
                   _CallControl(
                     icon: _isMuted ? Icons.mic_off_rounded : Icons.mic_rounded,
-                    label: _isMuted ? 'Bật mic' : 'Tắt mic',
+                    label: _isMuted ? context.l10n.micOn : context.l10n.micOff,
                     color: _isMuted ? Colors.red : Colors.grey.shade600,
                     onTap: () => setState(() => _isMuted = !_isMuted),
                   ),
@@ -144,7 +144,7 @@ class _CallScreenState extends ConsumerState<CallScreen>
                     icon: _isSpeaker
                         ? Icons.volume_up_rounded
                         : Icons.volume_down_rounded,
-                    label: 'Loa ngoài',
+                    label: context.l10n.speaker,
                     color: _isSpeaker
                         ? AppTheme.primaryColor
                         : Colors.grey.shade600,
@@ -152,7 +152,7 @@ class _CallScreenState extends ConsumerState<CallScreen>
                   ),
                   _CallControl(
                     icon: Icons.videocam_rounded,
-                    label: 'Video',
+                    label: context.l10n.video,
                     color: Colors.grey.shade600,
                     onTap: () {},
                   ),
@@ -164,7 +164,7 @@ class _CallScreenState extends ConsumerState<CallScreen>
 
             // End call button
             GestureDetector(
-              onTap: () => context.pop(),
+              onTap: () => goBack(context, ref),
               child: Container(
                 width: 72,
                 height: 72,
@@ -181,8 +181,8 @@ class _CallScreenState extends ConsumerState<CallScreen>
             ),
             const SizedBox(height: 12),
             Text(
-              'Kết thúc cuộc gọi',
-              style: GoogleFonts.inter(
+              context.l10n.endCall,
+              style: GoogleFonts.nunito(
                 fontSize: 13,
                 color: Colors.grey.shade500,
               ),
@@ -227,7 +227,7 @@ class _CallControl extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             label,
-            style: GoogleFonts.inter(fontSize: 12, color: Colors.grey.shade500),
+            style: GoogleFonts.nunito(fontSize: 12, color: Colors.grey.shade500),
           ),
         ],
       ),

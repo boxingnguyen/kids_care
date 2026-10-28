@@ -1,0 +1,37 @@
+default_platform(:android)
+
+ROOT = File.expand_path("../..", __dir__)
+
+platform :android do
+  desc "Build signed AAB with Flutter"
+  lane :build do
+    UI.user_error!("android/key.properties missing — release would be signed with debug key") unless File.exist?("#{ROOT}/android/key.properties")
+    sh("cd #{ROOT} && flutter build appbundle --release")
+  end
+
+  desc "Upload to Play Console internal testing track"
+  lane :internal do
+    build
+    upload_to_play_store(
+      track: "internal",
+      release_status: "draft",
+      aab: "#{ROOT}/build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Promote internal -> production (staged)"
+  lane :promote_production do
+    upload_to_play_store(
+      track: "internal",
+      track_promote_to: "production",
+      rollout: "0.2",
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end

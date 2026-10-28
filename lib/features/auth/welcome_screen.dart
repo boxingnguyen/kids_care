@@ -6,6 +6,7 @@ import 'package:kids_care/core/theme/app_theme.dart';
 import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/features/auth/widgets/kids_care_logo.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 class WelcomeScreen extends ConsumerStatefulWidget {
   const WelcomeScreen({super.key});
@@ -34,7 +35,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
               const Center(child: KidsCareLogo()),
               const SizedBox(height: 16),
               Text(
-                'Kids Care',
+                context.l10n.appTitle,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.nunito(
                   fontSize: 32,
@@ -43,7 +44,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                 ),
               ),
               Text(
-                'Bảo vệ con yêu mọi lúc, mọi nơi',
+                context.l10n.welcomeTagline,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.nunito(
                   fontSize: 15,
@@ -70,7 +71,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Chế độ thử không cần đăng ký. Dữ liệu chỉ gắn với thiết bị này — hãy ghi lại mã liên kết và nâng cấp tài khoản để không mất dữ liệu.',
+                        context.l10n.guestModeWarning,
                         style: GoogleFonts.nunito(
                           fontSize: 12,
                           color: Colors.amber.shade800,
@@ -81,13 +82,13 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                 ),
               ),
               PrimaryButton(
-                label: 'Thử với tư cách Bố/Mẹ',
+                label: context.l10n.tryAsParent,
                 isLoading: loading == 'parent',
                 onPressed: loading != null ? null : () => _tryAs('parent'),
               ),
               const SizedBox(height: 12),
               PrimaryButton(
-                label: 'Thử với tư cách Con',
+                label: context.l10n.tryAsChild,
                 isLoading: loading == 'child',
                 outlined: true,
                 onPressed: loading != null ? null : () => _tryAs('child'),
@@ -95,17 +96,17 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
               const SizedBox(height: 20),
               Center(
                 child: GestureDetector(
-                  onTap: () => context.go('/login'),
+                  onTap: () => context.push('/login'),
                   child: Text.rich(
                     TextSpan(
-                      text: 'Đã có tài khoản? ',
+                      text: context.l10n.haveAccount,
                       style: GoogleFonts.nunito(
                         color: AppTheme.textSecondary,
                         fontSize: 14,
                       ),
                       children: [
                         TextSpan(
-                          text: 'Đăng nhập',
+                          text: context.l10n.login,
                           style: GoogleFonts.nunito(
                             color: AppTheme.primaryColor,
                             fontWeight: FontWeight.w800,
@@ -136,7 +137,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Lỗi: $e')),
+        SnackBar(content: Text(context.l10n.errorWithMessage('$e'))),
       );
     } finally {
       if (mounted) setState(() => _loadingRole = null);

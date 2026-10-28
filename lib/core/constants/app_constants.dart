@@ -24,8 +24,7 @@ class AppConstants {
   // ZegoCloud credentials - get from console.zegocloud.com
   // Replace with your actual AppID (integer) and AppSign (string)
   static const int zegoAppId = 1148150326; // YOUR_ZEGO_APP_ID
-  static const String zegoAppSign =
-      'bc6bffe286566237301a1e25649772dca81dfa28ce4750747566f5f620eb162d';
+  static const String zegoAppSign = '';
 
   // Zego User IDs for demo mode
   // In production, these should come from your auth system (e.g. Firebase UID)

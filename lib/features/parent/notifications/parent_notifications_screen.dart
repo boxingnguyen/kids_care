@@ -5,13 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kids_care/core/constants/app_constants.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
 import 'package:kids_care/models/location_event_model.dart';
 import 'package:kids_care/providers/notifications_provider.dart';
 import 'package:kids_care/providers/zego_service.dart';
 import 'package:zego_uikit/zego_uikit.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-
-final parentBottomNavProvider = StateProvider.autoDispose<int>((ref) => 0);
+import 'package:kids_care/l10n/l10n.dart';
 
 class ParentNotificationsScreen extends ConsumerStatefulWidget {
   const ParentNotificationsScreen({super.key});
@@ -44,7 +44,9 @@ class _ParentNotificationsScreenState
   Widget build(BuildContext context) {
     final events = ref.watch(notificationsProvider);
 
-    return Scaffold(
+    return AppBackScope(
+      fallbackLocation: '/parent-home',
+      child: Scaffold(
       backgroundColor: AppTheme.backgroundGrey,
       body: SafeArea(
         child: Column(
@@ -66,7 +68,7 @@ class _ParentNotificationsScreenState
                     Row(
                       children: [
                         Text(
-                          'Gần đây',
+                          context.l10n.recent,
                           style: GoogleFonts.nunito(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
@@ -75,7 +77,9 @@ class _ParentNotificationsScreenState
                         ),
                         const Spacer(),
                         Text(
-                          'Cập nhật lúc ${DateFormat('HH:mm').format(DateTime.now())} hôm nay',
+                          context.l10n.updatedAtToday(
+                            DateFormat('HH:mm').format(DateTime.now()),
+                          ),
                           style: GoogleFonts.nunito(
                             fontSize: 12,
                             color: AppTheme.textSecondary,
@@ -96,69 +100,42 @@ class _ParentNotificationsScreenState
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+    ),
     );
   }
 
   Widget _buildHeader() {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      padding: const EdgeInsets.fromLTRB(8, 8, 12, 8),
       child: Row(
         children: [
+          const AppBackButton(fallbackLocation: '/parent-home'),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Kids Care',
+              context.l10n.notifications,
               style: GoogleFonts.nunito(
-                fontSize: 24,
-                fontWeight: FontWeight.w900,
-                color: AppTheme.primaryColor,
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                color: AppTheme.textPrimary,
               ),
             ),
           ),
           IconButton(
-            onPressed: () => context.go('/map'),
-            icon: const Icon(Icons.map_outlined),
+            tooltip: context.l10n.map,
+            onPressed: () => context.push('/map'),
+            icon: const Icon(Icons.map_rounded),
             color: AppTheme.primaryColor,
           ),
           IconButton(
-            onPressed: () => context.go('/'),
-            icon: const Icon(Icons.settings_outlined),
-            color: AppTheme.textHint,
+            tooltip: context.l10n.settings,
+            onPressed: () => context.push('/settings'),
+            icon: const Icon(Icons.settings_rounded),
+            color: AppTheme.textSecondary,
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildBottomNav() {
-    final selectedIndex = ref.watch(parentBottomNavProvider);
-    return BottomNavigationBar(
-      currentIndex: selectedIndex,
-      onTap: (i) {
-        ref.read(parentBottomNavProvider.notifier).state = i;
-        if (i == 1) context.go('/map');
-        if (i == 2) context.go('/parent-todo');
-        if (i == 3) context.go('/');
-      },
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_rounded),
-          label: 'Trang chủ',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.map_outlined),
-          label: 'Bản đồ',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.checklist_rounded),
-          label: 'Nhiệm vụ',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline_rounded),
-          label: 'Cá nhân',
-        ),
-      ],
     );
   }
 }
@@ -190,7 +167,7 @@ class _StatusCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Gấc đang ở gần',
+                  context.l10n.childIsNear('Gấc'),
                   style: GoogleFonts.nunito(
                     fontSize: 13,
                     color: Colors.white.withValues(alpha: 0.85),
@@ -207,13 +184,16 @@ class _StatusCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    '✅ An toàn',
+                    context.l10n.statusSafe,
                     style: GoogleFonts.nunito(
                       fontSize: 12,
                       color: Colors.white,
@@ -266,7 +246,7 @@ class _EmergencyCallButton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Gọi khẩn cho con',
+                  context.l10n.emergencyCallChild,
                   style: GoogleFonts.nunito(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
@@ -274,7 +254,7 @@ class _EmergencyCallButton extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Cuộc gọi thoại qua ZegoCloud',
+                  context.l10n.voiceCallVia,
                   style: GoogleFonts.nunito(
                     fontSize: 12,
                     color: AppTheme.textSecondary,
@@ -290,10 +270,14 @@ class _EmergencyCallButton extends StatelessWidget {
               ZegoUIKitUser(
                 id: AppConstants.zegoChildUserId,
                 name: AppConstants.zegoChildUserName,
-              )
+              ),
             ],
             icon: ButtonIcon(
-              icon: const Icon(Icons.phone_rounded, color: Colors.white, size: 20),
+              icon: const Icon(
+                Icons.phone_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
               backgroundColor: AppTheme.dangerColor,
             ),
             iconSize: const Size(46, 46),
@@ -321,13 +305,6 @@ class _EventTile extends StatelessWidget {
     }
   }
 
-  String get _statusEmoji {
-    if (event.statusLabel?.contains('học') == true) return '🏫';
-    if (event.statusLabel?.contains('chơi') == true) return '⚽';
-    if (event.statusLabel?.contains('tới') == true) return '📍';
-    if (event.statusLabel?.contains('về') == true) return '🏠';
-    return '📢';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -358,7 +335,10 @@ class _EventTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
-              child: Text(_statusEmoji, style: const TextStyle(fontSize: 22)),
+              child: Text(
+                statusCodeEmoji(event.statusLabel),
+                style: const TextStyle(fontSize: 22),
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -367,7 +347,10 @@ class _EventTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${event.childName} ${event.statusLabel ?? event.zoneName}',
+                  event.statusLabel == null
+                      ? '${event.childName} · ${event.zoneName}'
+                      : '${event.childName} · '
+                            '${localizedStatusCode(context.l10n, event.statusLabel)}',
                   style: GoogleFonts.nunito(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -414,7 +397,7 @@ class _EmptyState extends StatelessWidget {
           const Text('🌟', style: TextStyle(fontSize: 48)),
           const SizedBox(height: 12),
           Text(
-            'Chưa có thông báo',
+            context.l10n.noNotifications,
             style: GoogleFonts.nunito(
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -423,7 +406,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Con chưa cập nhật trạng thái nào',
+            context.l10n.childNoStatusYet,
             style: GoogleFonts.nunito(
               fontSize: 13,
               color: AppTheme.textSecondary,

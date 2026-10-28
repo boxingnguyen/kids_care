@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show Locale;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kids_care/core/constants/app_constants.dart';
 import 'package:kids_care/core/notifications/local_notifications.dart';
 import 'package:kids_care/features/auth/providers/auth_providers.dart';
+import 'package:kids_care/l10n/locale_provider.dart';
 import 'package:kids_care/models/geofence_event_model.dart';
 import 'package:kids_care/models/location_event_model.dart';
 
@@ -13,7 +15,10 @@ import 'package:kids_care/models/location_event_model.dart';
 /// users/{parentId}/geofence_events và bắn thông báo local cho sự kiện mới.
 final notificationsProvider =
     StateNotifierProvider<NotificationsNotifier, List<LocationEventModel>>((ref) {
-  final notifier = NotificationsNotifier();
+  // Đọc ngôn ngữ mỗi lần bắn thông báo để luôn khớp lựa chọn mới nhất.
+  final notifier = NotificationsNotifier(
+    localeOf: () => ref.read(localeProvider),
+  );
   ref.listen(currentUserProvider, (_, next) {
     final user = next.value;
     if (user != null && user.role == 'parent') {
@@ -31,7 +36,12 @@ class NotificationsNotifier extends StateNotifier<List<LocationEventModel>> {
   String? _listeningParentId;
   final DateTime _startedAt = DateTime.now();
 
-  NotificationsNotifier() : super([]);
+  /// Ngôn ngữ người dùng chọn (null = theo thiết bị) — dùng cho thông báo đẩy.
+  final Locale? Function() _localeOf;
+
+  NotificationsNotifier({Locale? Function()? localeOf})
+    : _localeOf = localeOf ?? (() => null),
+      super([]);
 
   /// Chỉ thông báo sự kiện xảy ra sau khi app mở — tránh phát lại lịch sử.
   static bool shouldNotify(DateTime eventTime, DateTime startedAt) =>
@@ -90,29 +100,31 @@ class NotificationsNotifier extends StateNotifier<List<LocationEventModel>> {
           e.status == 'exit' ? LocationEventType.left : LocationEventType.arrived,
       zoneName: e.zoneName,
       timestamp: e.timestamp.toLocal(),
-      statusLabel: e.status == 'exit' ? 'Rời khỏi' : 'Đã đến',
+      // Lưu mã trạng thái; UI dịch sang ngôn ngữ đang chọn.
+      statusLabel: e.status == 'exit' ? 'left' : 'arrived',
     );
   }
 
   Future<void> _notify(GeofenceEventModel event) async {
     if (!localNotificationsSupported) return;
     final isExit = event.status == 'exit';
-    const details = NotificationDetails(
+    final l10n = l10nWithoutContext(_localeOf());
+    final details = NotificationDetails(
       android: AndroidNotificationDetails(
         'geofence_channel',
-        'Thông báo vùng an toàn',
-        channelDescription: 'Thông báo khi con vào/ra khỏi vùng an toàn',
+        l10n.geofenceChannelName,
+        channelDescription: l10n.geofenceChannelDesc,
         importance: Importance.high,
         priority: Priority.high,
       ),
-      iOS: DarwinNotificationDetails(),
+      iOS: const DarwinNotificationDetails(),
     );
     await localNotificationsPlugin.show(
       event.id.hashCode,
       isExit ? '⚠️ ${event.zoneName}' : '✅ ${event.zoneName}',
       isExit
-          ? '${event.childName} vừa rời khỏi ${event.zoneName}'
-          : '${event.childName} đã vào ${event.zoneName}',
+          ? l10n.geofenceLeft(event.childName, event.zoneName)
+          : l10n.geofenceEntered(event.childName, event.zoneName),
       details,
     );
   }

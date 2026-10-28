@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
+import 'package:kids_care/core/widgets/app_top_bar.dart';
+import 'package:kids_care/core/widgets/child_bottom_nav.dart';
 import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/models/geofence_zone_model.dart';
 import 'package:kids_care/providers/geofence_provider.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 class MapSetupScreen extends ConsumerStatefulWidget {
   const MapSetupScreen({super.key});
@@ -105,7 +108,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: Text(
-          'Thêm vùng an toàn',
+          context.l10n.addSafeZone,
           style: GoogleFonts.nunito(
             fontWeight: FontWeight.w800,
             color: AppTheme.textPrimary,
@@ -119,7 +122,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
             fontWeight: FontWeight.w600,
           ),
           decoration: InputDecoration(
-            hintText: 'Tên vùng (VD: Trường học)',
+            hintText: context.l10n.zoneNameHint,
             hintStyle: GoogleFonts.nunito(color: AppTheme.textHint),
             filled: true,
             fillColor: AppTheme.surfaceVariant,
@@ -141,7 +144,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
             onPressed: () => Navigator.pop(ctx),
             style: TextButton.styleFrom(foregroundColor: AppTheme.textHint),
             child: Text(
-              'Huỷ',
+              context.l10n.cancel,
               style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
             ),
           ),
@@ -156,7 +159,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             ),
             child: Text(
-              'Thêm',
+              context.l10n.add,
               style: GoogleFonts.nunito(fontWeight: FontWeight.w800),
             ),
           ),
@@ -180,7 +183,9 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
       } on StateError catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(e.message)),
+            SnackBar(
+              content: Text(localizeServiceError(context.l10n, e.message)),
+            ),
           );
         }
       }
@@ -191,7 +196,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
     if (!_canEdit) return;
     if (atLimit) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Đã đạt giới hạn 3 vùng')),
+        SnackBar(content: Text(context.l10n.zoneLimitReached)),
       );
       return;
     }
@@ -202,18 +207,18 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
   Widget build(BuildContext context) {
     final zones = ref.watch(geofenceZonesProvider);
     final atLimit = zones.length >= GeofenceZonesNotifier.maxZones;
-    final linkCode = ref.watch(currentUserProvider).value?.linkCode;
+    final currentUser = ref.watch(currentUserProvider).value;
+    final linkCode = currentUser?.linkCode;
+    final isChild = currentUser != null && currentUser.role != 'parent';
 
-    return Scaffold(
+    return AppBackScope(
+      child: Scaffold(
       backgroundColor: AppTheme.backgroundGrey,
-      appBar: AppBar(
-        title: const Text('Bản đồ & Thiết lập Vị trí'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () =>
-              context.canPop() ? context.pop() : context.go('/'),
-        ),
+      appBar: AppTopBar(
+        title: isChild ? context.l10n.childMapTitle : context.l10n.menuMapTitle,
       ),
+      bottomNavigationBar:
+          isChild ? const ChildBottomNav(current: ChildTab.map) : null,
       body: Column(
         children: [
           // Map
@@ -267,10 +272,10 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                         Expanded(
                           child: Text(
                             _canEdit
-                                ? 'Nhấn giữ trên bản đồ để cài thiết lập vùng an toàn mới.'
-                                : 'Các vùng an toàn do bố/mẹ thiết lập.',
+                                ? context.l10n.mapHintParent
+                                : context.l10n.mapHintChild,
                             style: GoogleFonts.nunito(
-                              fontSize: 13,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: AppTheme.textPrimary,
                             ),
@@ -300,7 +305,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Mã liên kết: ',
+                            context.l10n.linkCodeLabel,
                             style: GoogleFonts.nunito(
                               color: Colors.white70,
                               fontSize: 13,
@@ -325,12 +330,13 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
 
           // Zone list container
           Container(
-            padding: const EdgeInsets.fromLTRB(
+            padding: EdgeInsets.fromLTRB(
               20,
-              24,
               20,
-              36,
-            ), // extra padding for bottom safe area
+              20,
+              // Khi có bottom nav thì nav đã lo phần safe area.
+              isChild ? 16 : 16 + MediaQuery.paddingOf(context).bottom,
+            ),
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -346,7 +352,10 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Vùng an toàn (${zones.length}/${GeofenceZonesNotifier.maxZones})',
+                  context.l10n.safeZonesCount(
+                    '${zones.length}',
+                    '${GeofenceZonesNotifier.maxZones}',
+                  ),
                   style: GoogleFonts.nunito(
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
@@ -356,7 +365,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                 const SizedBox(height: 16),
                 if (zones.isEmpty)
                   Text(
-                    'Chưa có vùng an toàn nào được thiết lập.',
+                    context.l10n.noSafeZones,
                     style: GoogleFonts.nunito(
                       fontSize: 14,
                       color: AppTheme.textSecondary,
@@ -364,7 +373,7 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                   )
                 else
                   SizedBox(
-                    height: 85,
+                    height: 96,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: zones.length,
@@ -421,20 +430,22 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                             Positioned(
                               top: 4,
                               right: 4,
-                              child: GestureDetector(
-                                onTap: () => ref
-                                    .read(geofenceZonesProvider.notifier)
-                                    .removeZone(zone.id),
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.close,
-                                    size: 12,
-                                    color: Colors.white,
+                              child: Semantics(
+                                button: true,
+                                label: context.l10n.deleteZoneSemantic(zone.name),
+                                child: GestureDetector(
+                                  onTap: () => _confirmRemoveZone(zone),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: const BoxDecoration(
+                                      color: AppTheme.dangerColor,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.close_rounded,
+                                      size: 16,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -448,10 +459,11 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      'Đã đạt giới hạn 3 vùng. Xoá một vùng để thêm mới.',
+                      context.l10n.zoneLimitHint,
                       style: GoogleFonts.nunito(
-                        fontSize: 12,
-                        color: Colors.red.shade400,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.dangerColor,
                       ),
                     ),
                   ),
@@ -460,6 +472,32 @@ class _MapSetupScreenState extends ConsumerState<MapSetupScreen> {
           ),
         ],
       ),
+    ),
     );
+  }
+
+  Future<void> _confirmRemoveZone(GeofenceZoneModel zone) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(context.l10n.deleteZoneTitle),
+        content: Text(context.l10n.deleteZoneMessage(zone.name)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            style: TextButton.styleFrom(foregroundColor: AppTheme.textSecondary),
+            child: Text(context.l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: TextButton.styleFrom(foregroundColor: AppTheme.dangerColor),
+            child: Text(context.l10n.delete),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) {
+      await ref.read(geofenceZonesProvider.notifier).removeZone(zone.id);
+    }
   }
 }

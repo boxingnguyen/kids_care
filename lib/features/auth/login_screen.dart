@@ -1,13 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
 import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/features/auth/services/auth_service.dart';
 import 'package:kids_care/features/auth/services/user_service.dart';
 import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 final loginLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
 final loginObscureProvider = StateProvider.autoDispose<bool>((ref) => true);
@@ -30,28 +33,65 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
+  bool _isEmail(String input) => input.contains('@');
+
   Future<void> _login() async {
+    final input = _emailCtrl.text.trim();
+    final password = _passwordCtrl.text;
+
+    if (input.isEmpty || password.isEmpty) {
+      _showError(context.l10n.fillAllFields);
+      return;
+    }
+
     ref.read(loginLoadingProvider.notifier).state = true;
-    await Future.delayed(const Duration(seconds: 1)); // TODO: Email login
 
-    if (mounted) {
-      ref.read(loginLoadingProvider.notifier).state = false;
+    try {
+      // Email → parent, username → child (appended with @kidscare.app)
+      final email = _isEmail(input) ? input : '$input@kidscare.app';
 
-      // Check user role and route accordingly
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      if (!mounted) return;
+
       final userService = ref.read(userServiceProvider);
       final userData = await userService.getCurrentUserData();
 
-      if (userData != null) {
-        if (userData.role == 'parent') {
-          context.go('/parent-home');
-        } else {
-          context.go('/child');
-        }
-      } else {
-        // New user - go to child registration
+      if (!mounted) return;
+
+      if (userData == null) {
+        // First-time login with no Firestore doc → register child
         context.go('/register-child');
+      } else if (userData.role == 'parent') {
+        context.go('/parent-home');
+      } else {
+        context.go('/child');
       }
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      final msg = switch (e.code) {
+        'user-not-found' => context.l10n.loginNotFound,
+        'wrong-password' => context.l10n.loginWrongPassword,
+        'invalid-credential' => context.l10n.loginInvalidCredential,
+        _ => context.l10n.loginFailed('${e.message}'),
+      };
+      _showError(msg);
+    } finally {
+      if (mounted) ref.read(loginLoadingProvider.notifier).state = false;
     }
+  }
+
+  void _showError(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg,
+            style: GoogleFonts.nunito(fontWeight: FontWeight.w700)),
+        backgroundColor: AppTheme.dangerColor,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      ),
+    );
   }
 
   Future<void> _signInWithGoogle() async {
@@ -79,7 +119,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Đăng nhập Google thất bại: $e'),
+            content: Text(context.l10n.googleLoginFailed('$e')),
             backgroundColor: AppTheme.dangerColor,
             behavior: SnackBarBehavior.floating,
           ),
@@ -114,7 +154,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 28),
             child: Column(
               children: [
-                const SizedBox(height: 48),
+                const SizedBox(height: 8),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: AppBackButton(fallbackLocation: '/'),
+                ),
+                const SizedBox(height: 8),
 
                 // Kite & String logo
                 Container(
@@ -139,7 +184,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Kids Care',
+                  context.l10n.appTitle,
                   style: GoogleFonts.nunito(
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
@@ -149,7 +194,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'An toàn cho trẻ, bình yên cho bố mẹ',
+                  context.l10n.loginTagline,
                   style: GoogleFonts.nunito(
                     fontSize: 14,
                     color: AppTheme.textSecondary,
@@ -159,11 +204,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 const SizedBox(height: 44),
 
-                // "Chào mừng ba mẹ!" – the Kite & String signature
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Chào mừng ba mẹ! 👋',
+                    context.l10n.helloWave,
                     style: GoogleFonts.nunito(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
@@ -175,10 +219,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Bắt đầu hành trình nuôi dưỡng con yêu',
+                    context.l10n.loginSubtitle,
                     style: GoogleFonts.nunito(
-                      fontSize: 14,
+                      fontSize: 13,
                       color: AppTheme.textSecondary,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -203,14 +248,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     children: [
                       AuthTextField(
                         controller: _emailCtrl,
-                        hint: 'Email hoặc số điện thoại',
-                        prefixIcon: Icons.email_outlined,
-                        keyboardType: TextInputType.emailAddress,
+                        hint: context.l10n.loginIdentifierHint,
+                        prefixIcon: Icons.person_outline_rounded,
                       ),
                       const SizedBox(height: 14),
                       AuthTextField(
                         controller: _passwordCtrl,
-                        hint: 'Mật khẩu',
+                        hint: context.l10n.password,
                         prefixIcon: Icons.lock_outline_rounded,
                         obscureText: obscurePassword,
                         suffixIcon: IconButton(
@@ -235,7 +279,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: Text(
-                            'Quên mật khẩu?',
+                            context.l10n.forgotPasswordTitle,
                             style: GoogleFonts.nunito(
                               fontSize: 13,
                               color: AppTheme.primaryColor,
@@ -247,7 +291,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                       const SizedBox(height: 8),
                       PrimaryButton(
-                        label: 'Đăng nhập',
+                        label: context.l10n.login,
                         isLoading: isLoading,
                         onPressed: _login,
                       ),
@@ -286,7 +330,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Chưa có tài khoản? ',
+                      context.l10n.noAccount,
                       style: GoogleFonts.nunito(
                         fontSize: 14,
                         color: AppTheme.textSecondary,
@@ -295,7 +339,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     GestureDetector(
                       onTap: () => context.push('/register'),
                       child: Text(
-                        'Đăng ký',
+                        context.l10n.register,
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,

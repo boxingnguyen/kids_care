@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
+import 'package:kids_care/core/widgets/app_top_bar.dart';
 import 'package:kids_care/features/auth/forgot_password_screen.dart';
 import 'package:kids_care/features/auth/welcome_screen.dart';
 import 'package:kids_care/features/link/link_account_screen.dart';
@@ -16,10 +19,12 @@ import 'package:kids_care/features/parent/notifications/parent_notifications_scr
 import 'package:kids_care/features/settings/settings_screen.dart';
 import 'package:kids_care/features/todo/child/child_todo_screen.dart';
 import 'package:kids_care/features/todo/parent/parent_todo_screen.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
+    errorBuilder: (context, state) => const _NotFoundScreen(),
     redirect: (context, state) async {
       // Check if user is already logged in and route accordingly.
       // ref.read (không watch): invalidate currentUserProvider không được
@@ -98,3 +103,41 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+/// Màn hình khi đường dẫn không tồn tại — luôn có lối về trang chủ.
+class _NotFoundScreen extends ConsumerWidget {
+  const _NotFoundScreen();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppTopBar(title: context.l10n.notFoundTitle),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('🧭', style: TextStyle(fontSize: 64)),
+              const SizedBox(height: 16),
+              Text(
+                context.l10n.notFoundMessage,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  final home = await homeLocationFor(ref);
+                  if (context.mounted) context.go(home);
+                },
+                icon: const Icon(Icons.home_rounded),
+                label: Text(context.l10n.goHome),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

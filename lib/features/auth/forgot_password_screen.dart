@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
 import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 final forgotLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
 
@@ -39,9 +41,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       backgroundColor: AppTheme.backgroundGrey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
+        automaticallyImplyLeading: false,
+        leadingWidth: 64,
+        leading: const Center(
+          child: AppBackButton(fallbackLocation: '/login'),
         ),
       ),
       extendBodyBehindAppBar: true,
@@ -62,7 +65,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 const SizedBox(height: 20),
                 
                 Text(
-                  'Quên mật khẩu?',
+                  context.l10n.forgotPasswordTitle,
                   style: GoogleFonts.nunito(
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
@@ -72,7 +75,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Đừng lo lắng, nhập email để nhận mã khôi phục nhé! 🔑',
+                  context.l10n.forgotPasswordSubtitle,
                   style: GoogleFonts.nunito(
                     fontSize: 15,
                     color: AppTheme.textSecondary,
@@ -99,7 +102,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     children: [
                       AuthTextField(
                         controller: _emailCtrl,
-                        hint: 'Email của bạn',
+                        hint: context.l10n.yourEmail,
                         prefixIcon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
                       ),
@@ -108,7 +111,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                         builder: (context, ref, child) {
                           final isLoading = ref.watch(forgotLoadingProvider);
                           return PrimaryButton(
-                            label: 'Gửi mã khôi phục',
+                            label: context.l10n.sendRecoveryCode,
                             isLoading: isLoading,
                             onPressed: _sendResetLink,
                           );

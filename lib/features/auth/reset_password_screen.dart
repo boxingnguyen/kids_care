@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
 import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 final resetLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
 final resetSuccessProvider = StateProvider.autoDispose<bool>((ref) => false);
@@ -57,17 +59,17 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   }
 
   String _strengthLabel(int level) {
-    if (level <= 1) return 'Yếu';
-    if (level == 2) return 'Trung bình';
-    if (level == 3) return 'Tốt';
-    return 'Mạnh';
+    if (level <= 1) return context.l10n.strengthWeak;
+    if (level == 2) return context.l10n.strengthMedium;
+    if (level == 3) return context.l10n.strengthGood;
+    return context.l10n.strengthStrong;
   }
 
   Future<void> _resetPassword() async {
     if (_passwordCtrl.text != _confirmCtrl.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Mật khẩu không khớp'),
+          content: Text(context.l10n.passwordMismatch),
           backgroundColor: AppTheme.dangerColor,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -96,9 +98,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
       backgroundColor: AppTheme.backgroundGrey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
+        automaticallyImplyLeading: false,
+        leadingWidth: 64,
+        leading: const Center(
+          child: AppBackButton(fallbackLocation: '/login'),
         ),
       ),
       extendBodyBehindAppBar: true,
@@ -161,7 +164,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 const SizedBox(height: 24),
 
                 Text(
-                  'Đặt mật khẩu mới',
+                  context.l10n.setNewPassword,
                   style: GoogleFonts.nunito(
                     fontSize: 28,
                     fontWeight: FontWeight.w900,
@@ -171,7 +174,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Mật khẩu mới phải khác mật khẩu trước đó',
+                  context.l10n.newPasswordHint,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.nunito(
                     fontSize: 14,
@@ -200,7 +203,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     children: [
                       AuthTextField(
                         controller: _passwordCtrl,
-                        hint: 'Mật khẩu mới',
+                        hint: context.l10n.newPassword,
                         prefixIcon: Icons.lock_outline_rounded,
                         obscureText: obscurePw,
                         suffixIcon: IconButton(
@@ -237,7 +240,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Độ mạnh: ${_strengthLabel(strength)}',
+                          context.l10n.passwordStrength(_strengthLabel(strength)),
                           style: GoogleFonts.nunito(
                             fontSize: 13,
                             color: _strengthColor(strength),
@@ -249,7 +252,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                       const SizedBox(height: 16),
                       AuthTextField(
                         controller: _confirmCtrl,
-                        hint: 'Xác nhận mật khẩu mới',
+                        hint: context.l10n.confirmNewPassword,
                         prefixIcon: Icons.lock_outline_rounded,
                         obscureText: obscureConfirm,
                         suffixIcon: IconButton(
@@ -268,23 +271,23 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
 
                       // Rules
                       _PasswordRule(
-                        label: 'Ít nhất 8 ký tự',
+                        label: context.l10n.ruleMin8,
                         satisfied: passwordText.length >= 8,
                       ),
                       const SizedBox(height: 6),
                       _PasswordRule(
-                        label: 'Có chữ hoa',
+                        label: context.l10n.ruleUppercase,
                         satisfied: passwordText.contains(RegExp(r'[A-Z]')),
                       ),
                       const SizedBox(height: 6),
                       _PasswordRule(
-                        label: 'Có số',
+                        label: context.l10n.ruleNumber,
                         satisfied: passwordText.contains(RegExp(r'[0-9]')),
                       ),
 
                       const SizedBox(height: 28),
                       PrimaryButton(
-                        label: 'Đặt lại mật khẩu',
+                        label: context.l10n.resetPassword,
                         isLoading: isLoading,
                         onPressed: _resetPassword,
                       ),
@@ -311,7 +314,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Đặt lại thành công!',
+                          context.l10n.resetSuccessTitle,
                           style: GoogleFonts.nunito(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
@@ -320,7 +323,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Mật khẩu đã được thay đổi. Đăng nhập để lướt cùng Kids Care!',
+                          context.l10n.resetSuccessMessage,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.nunito(
                             fontSize: 14,
@@ -343,7 +346,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                             ),
                             onPressed: () => context.go('/login'),
                             child: Text(
-                              'Đăng nhập ngay',
+                              context.l10n.loginNow,
                               style: GoogleFonts.nunito(
                                 fontWeight: FontWeight.w800,
                                 fontSize: 16,

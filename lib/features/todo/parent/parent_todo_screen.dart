@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
 import 'package:kids_care/features/todo/providers/todo_provider.dart';
 import 'package:kids_care/models/todo_model.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 // ── Emoji options for task creation ──────────────────────────────────────
 const _kEmojis = ['📚', '🍽️', '🛁', '🏃', '🎨', '🧹', '🌙', '🐕', '🎯', '💊'];
@@ -21,7 +23,9 @@ class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
   Widget build(BuildContext context) {
     final todosAsync = ref.watch(defaultTodosStreamProvider);
 
-    return Scaffold(
+    return AppBackScope(
+      fallbackLocation: '/parent-home',
+      child: Scaffold(
       backgroundColor: AppTheme.backgroundGrey,
       body: SafeArea(
         child: Column(
@@ -41,8 +45,14 @@ class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
                   child: CircularProgressIndicator(color: AppTheme.primaryColor),
                 ),
                 error: (e, _) => Center(
-                  child: Text('Lỗi: $e',
-                      style: GoogleFonts.nunito(color: AppTheme.dangerColor)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Text(
+                      context.l10n.parentTasksLoadError('$e'),
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.nunito(color: AppTheme.dangerColor),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -50,6 +60,7 @@ class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
         ),
       ),
       floatingActionButton: _AddTodoFab(),
+    ),
     );
   }
 
@@ -65,15 +76,17 @@ class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
           BoxShadow(color: Color(0x0A000000), blurRadius: 8, offset: Offset(0, 2)),
         ],
       ),
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+      padding: const EdgeInsets.fromLTRB(8, 12, 20, 12),
       child: Row(
         children: [
+          const AppBackButton(fallbackLocation: '/parent-home'),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '📋 Nhiệm vụ của con',
+                  context.l10n.parentTasksTitle,
                   style: GoogleFonts.nunito(
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
@@ -82,7 +95,7 @@ class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '$done/$total nhiệm vụ hoàn thành',
+                  context.l10n.tasksCompleted('$done', '$total'),
                   style: GoogleFonts.nunito(
                     fontSize: 13,
                     color: AppTheme.textSecondary,
@@ -162,18 +175,18 @@ class _ParentTodoTile extends ConsumerWidget {
         return await showDialog<bool>(
           context: context,
           builder: (_) => AlertDialog(
-            title: Text('Xoá nhiệm vụ?',
+            title: Text(context.l10n.deleteTaskTitle,
                 style: GoogleFonts.nunito(fontWeight: FontWeight.w800)),
-            content: Text('Bạn muốn xoá "${todo.title}"?',
+            content: Text(context.l10n.deleteTaskMessage(todo.title),
                 style: GoogleFonts.nunito()),
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: Text('Huỷ',
+                  child: Text(context.l10n.cancel,
                       style: GoogleFonts.nunito(color: AppTheme.textSecondary))),
               TextButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: Text('Xoá',
+                  child: Text(context.l10n.delete,
                       style: GoogleFonts.nunito(
                           color: AppTheme.dangerColor,
                           fontWeight: FontWeight.w800))),
@@ -283,7 +296,7 @@ class _ParentTodoTile extends ConsumerWidget {
                         size: 14, color: AppTheme.playColor),
                     const SizedBox(width: 4),
                     Text(
-                      'Xong',
+                      context.l10n.taskDone,
                       style: GoogleFonts.nunito(
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
@@ -302,7 +315,7 @@ class _ParentTodoTile extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Text(
-                  'Chờ',
+                  context.l10n.taskPending,
                   style: GoogleFonts.nunito(
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
@@ -326,7 +339,7 @@ class _AddTodoFab extends ConsumerWidget {
       backgroundColor: AppTheme.primaryColor,
       icon: const Icon(Icons.add_rounded, color: Colors.white),
       label: Text(
-        'Thêm nhiệm vụ',
+        context.l10n.addTask,
         style: GoogleFonts.nunito(
           fontWeight: FontWeight.w800,
           color: Colors.white,
@@ -409,7 +422,7 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
           ),
           const SizedBox(height: 20),
           Text(
-            '✨ Thêm nhiệm vụ mới',
+            context.l10n.addNewTask,
             style: GoogleFonts.nunito(
               fontSize: 20,
               fontWeight: FontWeight.w900,
@@ -419,7 +432,7 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
           const SizedBox(height: 20),
 
           // Emoji picker
-          Text('Chọn biểu tượng',
+          Text(context.l10n.chooseIcon,
               style: GoogleFonts.nunito(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -457,7 +470,7 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
           TextField(
             controller: _titleCtrl,
             decoration: InputDecoration(
-              hintText: 'Tên nhiệm vụ (ví dụ: Làm bài tập)',
+              hintText: context.l10n.taskNameHint,
               hintStyle: GoogleFonts.nunito(color: AppTheme.textHint),
               filled: true,
               fillColor: AppTheme.surfaceVariant,
@@ -477,7 +490,7 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
             controller: _descCtrl,
             maxLines: 2,
             decoration: InputDecoration(
-              hintText: 'Mô tả thêm (không bắt buộc)',
+              hintText: context.l10n.taskDescriptionHint,
               hintStyle: GoogleFonts.nunito(color: AppTheme.textHint),
               filled: true,
               fillColor: AppTheme.surfaceVariant,
@@ -522,8 +535,8 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
                   const SizedBox(width: 10),
                   Text(
                     _dueDate != null
-                        ? 'Hạn: ${DateFormat('dd/MM/yyyy').format(_dueDate!)}'
-                        : 'Chọn ngày hết hạn (không bắt buộc)',
+                        ? context.l10n.dueDateLabel(DateFormat('dd/MM/yyyy').format(_dueDate!))
+                        : context.l10n.pickDueDate,
                     style: GoogleFonts.nunito(
                       color: _dueDate != null
                           ? AppTheme.textPrimary
@@ -559,7 +572,7 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
                           color: Colors.white, strokeWidth: 2.5),
                     )
                   : Text(
-                      'Giao nhiệm vụ 🚀',
+                      context.l10n.assignTask,
                       style: GoogleFonts.nunito(
                           fontWeight: FontWeight.w800, fontSize: 16),
                     ),
@@ -582,7 +595,7 @@ class _EmptyState extends StatelessWidget {
           const Text('📋', style: TextStyle(fontSize: 64)),
           const SizedBox(height: 16),
           Text(
-            'Chưa có nhiệm vụ nào',
+            context.l10n.noTasksYetParent,
             style: GoogleFonts.nunito(
               fontSize: 20,
               fontWeight: FontWeight.w800,
@@ -591,7 +604,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Bấm + để giao nhiệm vụ cho con nhé!',
+            context.l10n.tapPlusToAssign,
             style: GoogleFonts.nunito(
               fontSize: 14,
               color: AppTheme.textSecondary,

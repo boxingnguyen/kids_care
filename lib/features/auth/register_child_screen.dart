@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,18 +5,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
 import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
-final registerChildLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
-final registerChildObscureProvider = StateProvider.autoDispose<bool>((ref) => true);
-final registerChildConfirmObscureProvider = StateProvider.autoDispose<bool>((ref) => true);
+final registerChildLoadingProvider = StateProvider.autoDispose<bool>(
+  (ref) => false,
+);
+final registerChildObscureProvider = StateProvider.autoDispose<bool>(
+  (ref) => true,
+);
+final registerChildConfirmObscureProvider = StateProvider.autoDispose<bool>(
+  (ref) => true,
+);
 
 class RegisterChildScreen extends ConsumerStatefulWidget {
   const RegisterChildScreen({super.key});
 
   @override
-  ConsumerState<RegisterChildScreen> createState() => _RegisterChildScreenState();
+  ConsumerState<RegisterChildScreen> createState() =>
+      _RegisterChildScreenState();
 }
 
 class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
@@ -41,14 +48,14 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
 
     if (username.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Vui lòng điền đầy đủ thông tin')),
+        SnackBar(content: Text(context.l10n.fillAllFields)),
       );
       return;
     }
 
     if (password != confirmPassword) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Mật khẩu xác nhận không khớp')),
+        SnackBar(content: Text(context.l10n.passwordConfirmMismatch)),
       );
       return;
     }
@@ -56,21 +63,47 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
     ref.read(registerChildLoadingProvider.notifier).state = true;
 
     try {
-      // Logic for creating a child account
-      // This is a placeholder for actual backend logic (e.g. creating a child profile under the parent)
-      await Future.delayed(const Duration(seconds: 1));
+      final email = '$username@kidscare.app';
+      final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-      if (mounted) {
-        ref.read(registerChildLoadingProvider.notifier).state = false;
-        context.go('/home'); // Go to parent home or where it's appropriate
-      }
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(cred.user!.uid)
+          .set({
+            'uid': cred.user!.uid,
+            'name': username,
+            'role': 'child',
+            'createdAt': FieldValue.serverTimestamp(),
+          });
+
+      if (mounted) context.go('/child');
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      final msg = e.code == 'email-already-in-use'
+          ? context.l10n.usernameTaken
+          : context.l10n.signUpFailedWithMessage('${e.message}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            msg,
+            style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
+          ),
+          backgroundColor: AppTheme.dangerColor,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     } catch (e) {
       if (mounted) {
-        ref.read(registerChildLoadingProvider.notifier).state = false;
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Đã có lỗi xảy ra: $e')));
+        ).showSnackBar(SnackBar(content: Text(context.l10n.errorGeneric('$e'))));
       }
+    } finally {
+      if (mounted)
+        ref.read(registerChildLoadingProvider.notifier).state = false;
     }
   }
 
@@ -99,16 +132,19 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
   Widget build(BuildContext context) {
     final isLoading = ref.watch(registerChildLoadingProvider);
     final obscurePassword = ref.watch(registerChildObscureProvider);
-    final obscureConfirmPassword = ref.watch(registerChildConfirmObscureProvider);
+    final obscureConfirmPassword = ref.watch(
+      registerChildConfirmObscureProvider,
+    );
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundGrey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
+        automaticallyImplyLeading: false,
+        leadingWidth: 64,
+        leading: const Center(
+          child: AppBackButton(fallbackLocation: '/login'),
         ),
       ),
       extendBodyBehindAppBar: true,
@@ -151,7 +187,7 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
                 const SizedBox(height: 24),
 
                 Text(
-                  'Tạo tài khoản cho con',
+                  context.l10n.createChildAccount,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.nunito(
                     fontSize: 28,
@@ -162,7 +198,7 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Bắt đầu hành trình làm bạn cùng bé yêu',
+                  context.l10n.createChildSubtitle,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.nunito(
                     fontSize: 15,
@@ -191,17 +227,17 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
                     children: [
                       _buildLabelField(
                         icon: Icons.person_outline_rounded,
-                        label: 'TÊN ĐĂNG NHẬP',
+                        label: context.l10n.usernameLabelCaps,
                       ),
                       AuthTextField(
                         controller: _usernameCtrl,
-                        hint: 'tên/ nickname của bé',
+                        hint: context.l10n.childUsernameHint,
                       ),
                       const SizedBox(height: 20),
 
                       _buildLabelField(
                         icon: Icons.lock_outline_rounded,
-                        label: 'MẬT KHẨU',
+                        label: context.l10n.passwordLabelCaps,
                       ),
                       AuthTextField(
                         controller: _passwordCtrl,
@@ -214,16 +250,20 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
                                 : Icons.visibility_outlined,
                             color: AppTheme.textHint,
                           ),
-                          onPressed: () => ref
-                              .read(registerChildObscureProvider.notifier)
-                              .state = !obscurePassword,
+                          onPressed: () =>
+                              ref
+                                      .read(
+                                        registerChildObscureProvider.notifier,
+                                      )
+                                      .state =
+                                  !obscurePassword,
                         ),
                       ),
                       const SizedBox(height: 20),
 
                       _buildLabelField(
                         icon: Icons.verified_user_outlined,
-                        label: 'XÁC NHẬN MẬT KHẨU',
+                        label: context.l10n.confirmPasswordLabelCaps,
                       ),
                       AuthTextField(
                         controller: _confirmPasswordCtrl,
@@ -236,15 +276,20 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
                                 : Icons.visibility_outlined,
                             color: AppTheme.textHint,
                           ),
-                          onPressed: () => ref
-                              .read(registerChildConfirmObscureProvider.notifier)
-                              .state = !obscureConfirmPassword,
+                          onPressed: () =>
+                              ref
+                                      .read(
+                                        registerChildConfirmObscureProvider
+                                            .notifier,
+                                      )
+                                      .state =
+                                  !obscureConfirmPassword,
                         ),
                       ),
                       const SizedBox(height: 36),
 
                       PrimaryButton(
-                        label: 'BẮT ĐẦU NGAY →',
+                        label: context.l10n.startNow,
                         isLoading: isLoading,
                         onPressed: _registerChild,
                       ),

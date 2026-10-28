@@ -4,10 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_back_button.dart';
+import 'package:kids_care/core/widgets/app_top_bar.dart';
 import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/features/auth/services/guest_auth_service.dart';
 import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 class LinkAccountScreen extends ConsumerStatefulWidget {
   const LinkAccountScreen({super.key});
@@ -32,9 +35,10 @@ class _LinkAccountScreenState extends ConsumerState<LinkAccountScreen> {
   }
 
   Future<void> _link() async {
+    final l10n = context.l10n;
     final code = GuestAuthService.normalizeLinkCode(_codeCtrl.text);
     if (code == null) {
-      setState(() => _errorText = 'Nhập mã 6 ký tự (VD: ABC-123)');
+      setState(() => _errorText = l10n.linkCodeFormatError);
       return;
     }
 
@@ -59,17 +63,17 @@ class _LinkAccountScreenState extends ConsumerState<LinkAccountScreen> {
         builder: (ctx) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
-            'Liên kết thành công!',
+            l10n.linkSuccessTitle,
             style: GoogleFonts.nunito(fontWeight: FontWeight.w900),
           ),
           content: Text(
-            'Tài khoản đã được liên kết. Bắt đầu sử dụng ngay?',
+            l10n.linkSuccessMessage,
             style: GoogleFonts.nunito(),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Để sau'),
+              child: Text(l10n.later),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -80,7 +84,7 @@ class _LinkAccountScreenState extends ConsumerState<LinkAccountScreen> {
                 ),
               ),
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('OK'),
+              child: Text(l10n.ok),
             ),
           ],
         ),
@@ -89,11 +93,15 @@ class _LinkAccountScreenState extends ConsumerState<LinkAccountScreen> {
       if (!mounted) return;
       if (confirmed == true) _goHome(currentUser?.role);
     } on ArgumentError catch (e) {
-      setState(() => _errorText = '${e.message}');
+      setState(
+        () => _errorText = localizeServiceError(l10n, e.message),
+      );
     } on StateError catch (e) {
-      setState(() => _errorText = e.message);
+      setState(
+        () => _errorText = localizeServiceError(l10n, e.message),
+      );
     } catch (e) {
-      setState(() => _errorText = 'Lỗi không xác định: $e');
+      setState(() => _errorText = l10n.unknownError('$e'));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -101,33 +109,18 @@ class _LinkAccountScreenState extends ConsumerState<LinkAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppBackScope(
+      child: Scaffold(
       backgroundColor: AppTheme.backgroundGrey,
-      appBar: AppBar(
-        title: Text(
-          'Liên kết tài khoản',
-          style: GoogleFonts.nunito(fontWeight: FontWeight.w800),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () async {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              final user = await ref.read(currentUserProvider.future);
-              if (mounted) _goHome(user?.role);
-            }
-          },
-        ),
-      ),
-      body: Padding(
+      appBar: AppTopBar(title: context.l10n.linkAccountTitle),
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 24),
             Text(
-              'Nhập mã liên kết',
+              context.l10n.enterLinkCode,
               style: GoogleFonts.nunito(
                 fontSize: 22,
                 fontWeight: FontWeight.w900,
@@ -136,29 +129,31 @@ class _LinkAccountScreenState extends ConsumerState<LinkAccountScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Nhập mã 6 ký tự của bố/mẹ hoặc con để liên kết hai tài khoản với nhau.',
+              context.l10n.enterLinkCodeDescription,
               style: GoogleFonts.nunito(
-                fontSize: 14,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
                 color: AppTheme.textSecondary,
               ),
             ),
             const SizedBox(height: 32),
             AuthTextField(
               controller: _codeCtrl,
-              hint: 'VD: ABC-123',
-              label: 'Mã liên kết',
+              hint: context.l10n.linkCodeHint,
+              label: context.l10n.linkCode,
               errorText: _errorText,
               textCapitalization: TextCapitalization.characters,
             ),
             const SizedBox(height: 24),
             PrimaryButton(
-              label: 'Liên kết',
+              label: context.l10n.linkAction,
               isLoading: _loading,
               onPressed: _loading ? null : _link,
             ),
           ],
         ),
       ),
+    ),
     );
   }
 }

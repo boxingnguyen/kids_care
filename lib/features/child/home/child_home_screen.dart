@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/constants/app_constants.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/child_bottom_nav.dart';
 import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/features/geofence/geofence_service.dart';
 import 'package:kids_care/models/child_status.dart';
@@ -14,8 +16,7 @@ import 'package:kids_care/providers/user_provider.dart';
 import 'package:kids_care/providers/zego_service.dart';
 import 'package:zego_uikit/zego_uikit.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-
-final childBottomNavProvider = StateProvider.autoDispose<int>((ref) => 0);
+import 'package:kids_care/l10n/l10n.dart';
 
 class ChildHomeScreen extends ConsumerStatefulWidget {
   const ChildHomeScreen({super.key});
@@ -55,6 +56,7 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
   }
 
   void _updateStatus(ChildStatusType status) {
+    HapticFeedback.mediumImpact();
     ref.read(childStatusProvider.notifier).updateStatus(status);
 
     final event = LocationEventModel(
@@ -64,14 +66,18 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
       eventType: LocationEventType.statusUpdate,
       zoneName: _getZoneForStatus(status),
       timestamp: DateTime.now(),
-      statusLabel: status.label,
+      statusLabel: status.name,
     );
     ref.read(notificationsProvider.notifier).addEvent(event);
 
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
       SnackBar(
         content: Text(
-          'Đã báo bố mẹ: ${status.label} ${status.emoji}',
+          context.l10n.toldParents(
+            '${status.localizedLabel(context.l10n)} ${status.emoji}',
+          ),
           style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
         ),
         backgroundColor: AppTheme.primaryColor,
@@ -84,14 +90,14 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
   String _getZoneForStatus(ChildStatusType s) {
     switch (s) {
       case ChildStatusType.school:
-        return 'Trường học';
+        return context.l10n.zoneSchool;
       case ChildStatusType.playing:
-        return 'Sân chơi';
+        return context.l10n.zonePlayground;
       case ChildStatusType.home:
       case ChildStatusType.arrived:
-        return 'Nhà';
+        return context.l10n.zoneHome;
       default:
-        return 'Không rõ';
+        return context.l10n.unknown;
     }
   }
 
@@ -115,9 +121,9 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                 child: Column(
                   children: [
                     Text(
-                      'Hôm nay con thế nào?',
+                      context.l10n.howAreYouToday,
                       style: GoogleFonts.nunito(
-                        fontSize: 22,
+                        fontSize: 26,
                         fontWeight: FontWeight.w900,
                         color: AppTheme.textPrimary,
                       ),
@@ -125,9 +131,9 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Chọn một nút để báo cho bố mẹ biết nhé!',
+                      context.l10n.pickButtonToTell,
                       style: GoogleFonts.nunito(
-                        fontSize: 14,
+                        fontSize: 16,
                         color: AppTheme.textSecondary,
                         fontWeight: FontWeight.w600,
                       ),
@@ -146,7 +152,7 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                       children: [
                         _StatusCard(
                           icon: Icons.school_rounded,
-                          label: 'Con đi học',
+                          label: context.l10n.statusGoSchool,
                           sublabel: 'SCHOOL',
                           color: const Color(0xFFFFCA28), // Amber
                           isSelected: currentStatus == ChildStatusType.school,
@@ -154,7 +160,7 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                         ),
                         _StatusCard(
                           icon: Icons.sports_esports_rounded,
-                          label: 'Con đi chơi',
+                          label: context.l10n.statusGoPlay,
                           sublabel: 'PLAY',
                           color: const Color(0xFF4ADE80), // Green
                           isSelected: currentStatus == ChildStatusType.playing,
@@ -162,7 +168,7 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                         ),
                         _StatusCard(
                           icon: Icons.location_on_rounded,
-                          label: 'Con đã tới',
+                          label: context.l10n.statusArrived,
                           sublabel: 'ARRIVED',
                           color: const Color(0xFFC084FC), // Purple
                           isSelected: currentStatus == ChildStatusType.arrived,
@@ -170,7 +176,7 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                         ),
                         _StatusCard(
                           icon: Icons.home_rounded,
-                          label: 'Con đã về',
+                          label: context.l10n.statusBackHome,
                           sublabel: 'BACK HOME',
                           color: const Color(0xFFFF8C00), // Orange
                           isSelected: currentStatus == ChildStatusType.home,
@@ -231,9 +237,9 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'BỐ MẸ ƠI',
+                      context.l10n.callParents,
                       style: GoogleFonts.nunito(
-                        fontSize: 20,
+                        fontSize: 22,
                         fontWeight: FontWeight.w900,
                         color: const Color(0xFF22C55E),
                         letterSpacing: 0.5,
@@ -241,12 +247,12 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Nhấn vào đây nếu con cần trợ giúp ngay!',
+                      context.l10n.callParentsHint,
+                      textAlign: TextAlign.center,
                       style: GoogleFonts.nunito(
-                        fontSize: 13,
+                        fontSize: 15,
                         color: AppTheme.textSecondary,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -257,7 +263,7 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: const ChildBottomNav(current: ChildTab.home),
     );
   }
 
@@ -292,18 +298,20 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'CHÀO',
+                      context.l10n.helloCaps,
                       style: GoogleFonts.nunito(
-                        fontSize: 10,
+                        fontSize: 12,
                         color: AppTheme.textHint,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.2,
                       ),
                     ),
                     Text(
-                      '$childName của Bố Mẹ nha! 👋',
+                      context.l10n.childGreeting(childName),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.nunito(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.w900,
                         color: AppTheme.textPrimary,
                       ),
@@ -311,16 +319,18 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                   ],
                 ),
               ),
-              Container(
-                width: 40,
-                height: 40,
-                decoration: const BoxDecoration(
-                  color: AppTheme.surfaceVariant,
-                  shape: BoxShape.circle,
-                ),
+              Material(
+                color: AppTheme.surfaceVariant,
+                shape: const CircleBorder(),
+                clipBehavior: Clip.antiAlias,
                 child: IconButton(
-                  onPressed: () => context.go('/settings'),
-                  icon: const Icon(Icons.settings_outlined, size: 20),
+                  tooltip: context.l10n.settings,
+                  constraints: const BoxConstraints(
+                    minWidth: 48,
+                    minHeight: 48,
+                  ),
+                  onPressed: () => context.push('/settings'),
+                  icon: const Icon(Icons.settings_rounded, size: 24),
                   color: AppTheme.textSecondary,
                 ),
               ),
@@ -328,49 +338,6 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildBottomNav() {
-    final selectedIndex = ref.watch(childBottomNavProvider);
-    return BottomNavigationBar(
-      currentIndex: selectedIndex,
-      onTap: (i) {
-        ref.read(childBottomNavProvider.notifier).state = i;
-        if (i == 1) context.go('/child-todo');
-        if (i == 2) context.go('/map');
-      },
-      selectedItemColor: AppTheme.primaryColor,
-      unselectedItemColor: AppTheme.textHint,
-      showUnselectedLabels: true,
-      selectedLabelStyle: GoogleFonts.nunito(
-        fontWeight: FontWeight.w800,
-        fontSize: 12,
-      ),
-      unselectedLabelStyle: GoogleFonts.nunito(
-        fontWeight: FontWeight.w700,
-        fontSize: 12,
-      ),
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.white,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_rounded),
-          label: 'Trang chủ',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.checklist_rounded),
-          label: 'Nhiệm vụ',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.map_outlined),
-          label: 'Bản đồ',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat_bubble_outline_rounded),
-          label: 'Tin nhắn',
-        ),
-      ],
     );
   }
 }
@@ -394,64 +361,99 @@ class _StatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          border: isSelected
-              ? Border.all(color: color, width: 2)
-              : Border.all(color: Colors.transparent, width: 2),
-          boxShadow: [
-            BoxShadow(
-              color: isSelected
-                  ? color.withValues(alpha: 0.6)
-                  : color.withValues(alpha: 0.2),
-              blurRadius: isSelected ? 16 : 0,
-              offset: const Offset(0, 4),
-            ),
-            if (!isSelected)
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: label,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedScale(
+          scale: isSelected ? 1.03 : 1.0,
+          duration: const Duration(milliseconds: 200),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              color: isSelected ? color.withValues(alpha: 0.12) : Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: isSelected ? color : Colors.transparent,
+                width: 3,
               ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.15),
-                shape: BoxShape.circle,
-              ),
-              child: Center(child: Icon(icon, color: color, size: 28)),
+              boxShadow: [
+                BoxShadow(
+                  color: isSelected
+                      ? color.withValues(alpha: 0.45)
+                      : Colors.black.withValues(alpha: 0.05),
+                  blurRadius: isSelected ? 16 : 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            Text(
-              label,
-              style: GoogleFonts.nunito(
-                fontSize: 15,
-                fontWeight: FontWeight.w900,
-                color: AppTheme.textPrimary,
-              ),
+            child: Stack(
+              children: [
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: color.withValues(alpha: 0.18),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Icon(icon, color: color, size: 36),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        label,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunito(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                      // Nhãn phụ tiếng Anh giúp bé làm quen từ vựng — ẩn khi
+                      // app đang ở tiếng Anh để khỏi lặp chữ.
+                      if (Localizations.localeOf(context).languageCode !=
+                          'en') ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          sublabel,
+                          style: GoogleFonts.nunito(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: AppTheme.textHint,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                if (isSelected)
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      padding: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.check_rounded,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+              ],
             ),
-            const SizedBox(height: 2),
-            Text(
-              sublabel,
-              style: GoogleFonts.nunito(
-                fontSize: 10,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.textHint,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

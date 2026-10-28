@@ -1,0 +1,398 @@
+{
+  "@@locale": "vi",
+  "appTitle": "Kids Care",
+  "back": "Quay lại",
+  "home": "Trang chủ",
+  "tasks": "Nhiệm vụ",
+  "map": "Bản đồ",
+  "settings": "Cài đặt",
+  "notifications": "Thông báo",
+  "cancel": "Huỷ",
+  "delete": "Xoá",
+  "add": "Thêm",
+  "ok": "OK",
+  "later": "Để sau",
+  "login": "Đăng nhập",
+  "register": "Đăng ký",
+  "password": "Mật khẩu",
+  "email": "Email",
+  "haveAccount": "Đã có tài khoản? ",
+  "noAccount": "Chưa có tài khoản? ",
+  "unknown": "Không rõ",
+  "errorWithMessage": "Lỗi: {message}",
+  "@errorWithMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "errorGeneric": "Đã có lỗi xảy ra: {message}",
+  "@errorGeneric": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "unknownError": "Lỗi không xác định: {message}",
+  "@unknownError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "fillAllFields": "Vui lòng điền đầy đủ thông tin",
+  "signUpFailed": "Đăng ký thất bại",
+  "signUpFailedWithMessage": "Đăng ký thất bại: {message}",
+  "@signUpFailedWithMessage": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "notFoundTitle": "Ôi, lạc đường rồi!",
+  "notFoundMessage": "Không tìm thấy trang này.",
+  "goHome": "Về trang chủ",
+  "language": "Ngôn ngữ",
+  "languageSystem": "Theo thiết bị",
+  "chooseLanguage": "Chọn ngôn ngữ",
+  "welcomeTagline": "Bảo vệ con yêu mọi lúc, mọi nơi",
+  "guestModeWarning": "Chế độ thử không cần đăng ký. Dữ liệu chỉ gắn với thiết bị này — hãy ghi lại mã liên kết và nâng cấp tài khoản để không mất dữ liệu.",
+  "tryAsParent": "Thử với tư cách Bố/Mẹ",
+  "tryAsChild": "Thử với tư cách Con",
+  "loginTagline": "An toàn cho trẻ, bình yên cho bố mẹ",
+  "helloWave": "Xin chào! 👋",
+  "loginSubtitle": "Đăng nhập bằng email (bố/mẹ) hoặc tên đăng nhập (bé)",
+  "loginIdentifierHint": "Email (bố/mẹ) hoặc tên đăng nhập (bé)",
+  "forgotPasswordTitle": "Quên mật khẩu?",
+  "loginNotFound": "Không tìm thấy tài khoản",
+  "loginWrongPassword": "Mật khẩu không đúng",
+  "loginInvalidCredential": "Email/tên đăng nhập hoặc mật khẩu không đúng",
+  "loginFailed": "Đăng nhập thất bại: {message}",
+  "@loginFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "googleLoginFailed": "Đăng nhập Google thất bại: {message}",
+  "@googleLoginFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "forgotPasswordSubtitle": "Đừng lo lắng, nhập email để nhận mã khôi phục nhé! 🔑",
+  "yourEmail": "Email của bạn",
+  "sendRecoveryCode": "Gửi mã khôi phục",
+  "strengthWeak": "Yếu",
+  "strengthMedium": "Trung bình",
+  "strengthGood": "Tốt",
+  "strengthStrong": "Mạnh",
+  "passwordMismatch": "Mật khẩu không khớp",
+  "setNewPassword": "Đặt mật khẩu mới",
+  "newPasswordHint": "Mật khẩu mới phải khác mật khẩu trước đó",
+  "newPassword": "Mật khẩu mới",
+  "passwordStrength": "Độ mạnh: {level}",
+  "@passwordStrength": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmNewPassword": "Xác nhận mật khẩu mới",
+  "ruleMin8": "Ít nhất 8 ký tự",
+  "ruleUppercase": "Có chữ hoa",
+  "ruleNumber": "Có số",
+  "resetPassword": "Đặt lại mật khẩu",
+  "resetSuccessTitle": "Đặt lại thành công!",
+  "resetSuccessMessage": "Mật khẩu đã được thay đổi. Đăng nhập để lướt cùng Kids Care!",
+  "loginNow": "Đăng nhập ngay",
+  "emailTaken": "Địa chỉ email đã được sử dụng",
+  "createNewAccount": "Tạo tài khoản mới",
+  "registerSubtitle": "Bắt đầu hành trình nuôi dưỡng cùng bé yêu 🌟",
+  "parentFullName": "Họ và tên bố/mẹ",
+  "passwordConfirmMismatch": "Mật khẩu xác nhận không khớp",
+  "usernameTaken": "Tên đăng nhập đã được sử dụng",
+  "createChildAccount": "Tạo tài khoản cho con",
+  "createChildSubtitle": "Bắt đầu hành trình làm bạn cùng bé yêu",
+  "usernameLabelCaps": "TÊN ĐĂNG NHẬP",
+  "childUsernameHint": "tên/ nickname của bé",
+  "passwordLabelCaps": "MẬT KHẨU",
+  "confirmPasswordLabelCaps": "XÁC NHẬN MẬT KHẨU",
+  "startNow": "BẮT ĐẦU NGAY →",
+  "callDad": "Bố",
+  "connecting": "Đang kết nối...",
+  "micOn": "Bật mic",
+  "micOff": "Tắt mic",
+  "speaker": "Loa ngoài",
+  "video": "Video",
+  "endCall": "Kết thúc cuộc gọi",
+  "toldParents": "Đã báo bố mẹ: {status}",
+  "@toldParents": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "zoneSchool": "Trường học",
+  "zonePlayground": "Sân chơi",
+  "zoneHome": "Nhà",
+  "howAreYouToday": "Hôm nay con thế nào?",
+  "pickButtonToTell": "Chọn một nút để báo cho bố mẹ biết nhé!",
+  "statusGoSchool": "Con đi học",
+  "statusGoPlay": "Con đi chơi",
+  "statusArrived": "Con đã tới",
+  "statusBackHome": "Con đã về",
+  "callParents": "GỌI BỐ MẸ",
+  "callParentsHint": "Nhấn nút xanh nếu con cần bố mẹ giúp ngay!",
+  "helloCaps": "XIN CHÀO",
+  "childGreeting": "{name} của Bố Mẹ nha! 👋",
+  "@childGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "statusLabelSchool": "Đi học",
+  "statusLabelPlaying": "Đang chơi",
+  "statusLabelHome": "Về nhà",
+  "statusLabelArrived": "Đã đến",
+  "statusLabelLeft": "Rời khỏi",
+  "linkCodeFormatError": "Nhập mã 6 ký tự (VD: ABC-123)",
+  "notSignedIn": "Chưa đăng nhập",
+  "linkSuccessTitle": "Liên kết thành công!",
+  "linkSuccessMessage": "Tài khoản đã được liên kết. Bắt đầu sử dụng ngay?",
+  "linkAccountTitle": "Liên kết tài khoản",
+  "enterLinkCode": "Nhập mã liên kết",
+  "enterLinkCodeDescription": "Nhập mã 6 ký tự của bố/mẹ hoặc con để liên kết hai tài khoản với nhau.",
+  "linkCodeHint": "VD: ABC-123",
+  "linkCode": "Mã liên kết",
+  "linkAction": "Liên kết",
+  "errLinkOtherParent": "Mã này thuộc về tài khoản bố/mẹ khác, không thể liên kết",
+  "errLinkNotParent": "Mã này không thuộc về tài khoản bố/mẹ",
+  "errOwnAccountNotFound": "Không tìm thấy tài khoản của bạn",
+  "errLinkCodeNotFound": "Không tìm thấy mã liên kết",
+  "errOwnCode": "Đây là mã của chính bạn",
+  "errMaxZones": "Tối đa 3 vùng an toàn",
+  "helloParents": "Chào bố mẹ! 👋",
+  "whatToDoToday": "Hôm nay bạn muốn làm gì?",
+  "menuNotificationsTitle": "Thông báo từ con",
+  "menuNotificationsDesc": "Con đang ở đâu, vừa báo gì, gọi khẩn cho con",
+  "menuMapTitle": "Bản đồ & vùng an toàn",
+  "menuMapDesc": "Đánh dấu trường, nhà, nơi chơi của con",
+  "menuTasksTitle": "Nhiệm vụ của con",
+  "menuTasksDesc": "Giao việc hằng ngày và xem con đã làm xong chưa",
+  "addSafeZone": "Thêm vùng an toàn",
+  "zoneNameHint": "Tên vùng (VD: Trường học)",
+  "zoneLimitReached": "Đã đạt giới hạn 3 vùng",
+  "childMapTitle": "Bản đồ của con",
+  "mapHintParent": "Nhấn giữ một điểm trên bản đồ để thêm vùng an toàn mới.",
+  "mapHintChild": "Đây là những nơi an toàn bố mẹ đã chọn cho con 💛",
+  "linkCodeLabel": "Mã liên kết: ",
+  "safeZonesCount": "Vùng an toàn ({count}/{max})",
+  "@safeZonesCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "noSafeZones": "Chưa có vùng an toàn nào được thiết lập.",
+  "deleteZoneSemantic": "Xoá vùng {name}",
+  "@deleteZoneSemantic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "zoneLimitHint": "Đã đạt giới hạn 3 vùng. Xoá một vùng để thêm mới.",
+  "deleteZoneTitle": "Xoá vùng an toàn?",
+  "deleteZoneMessage": "Vùng \"{name}\" sẽ bị xoá khỏi bản đồ.",
+  "@deleteZoneMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recent": "Gần đây",
+  "updatedAtToday": "Cập nhật lúc {time} hôm nay",
+  "@updatedAtToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "childIsNear": "{name} đang ở gần",
+  "@childIsNear": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "statusSafe": "✅ An toàn",
+  "emergencyCallChild": "Gọi khẩn cho con",
+  "voiceCallVia": "Cuộc gọi thoại qua ZegoCloud",
+  "noNotifications": "Chưa có thông báo",
+  "childNoStatusYet": "Con chưa cập nhật trạng thái nào",
+  "accountSecurity": "Tài khoản & bảo mật",
+  "logout": "Đăng xuất",
+  "logoutSubtitle": "Đăng xuất khỏi tài khoản hiện tại",
+  "logoutConfirmTitle": "Đăng xuất?",
+  "logoutGuestWarning": "Đây là tài khoản dùng thử. Nếu đăng xuất, dữ liệu có thể bị mất. Hãy nhờ bố mẹ trước nhé!",
+  "logoutConfirmMessage": "Bạn có chắc muốn đăng xuất không?",
+  "stay": "Ở lại",
+  "upgradeAccount": "Nâng cấp tài khoản",
+  "upgradeAccountSubtitle": "Liên kết với Google để không mất dữ liệu",
+  "accountUpgraded": "Tài khoản đã được nâng cấp!",
+  "googleAccountInUse": "Tài khoản Google này đã được dùng cho tài khoản khác",
+  "yourLinkCode": "Mã liên kết của bạn",
+  "copy": "Sao chép",
+  "linkCodeCopied": "Đã sao chép mã liên kết",
+  "linkedAddMore": "Đã liên kết — nhập mã để liên kết thêm",
+  "enterChildCode": "Nhập mã của con để liên kết",
+  "enterParentCode": "Nhập mã của bố/mẹ để liên kết",
+  "pendingCount": "Cần làm ({count})",
+  "@pendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "doneCount": "Đã hoàn thành ({count})",
+  "@doneCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "childTasksLoadError": "Ôi, chưa tải được nhiệm vụ 😢\nCon thử lại sau một chút nhé!",
+  "myTasksTitle": "Nhiệm vụ của mình 🌟",
+  "tapTaskWhenDone": "Chạm vào nhiệm vụ khi con làm xong nhé!",
+  "doneOfTotalToday": "Đã xong {done}/{total} nhiệm vụ hôm nay!",
+  "@doneOfTotalToday": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "greatJobDone": "🎉 Giỏi lắm! Hoàn thành \"{title}\"!",
+  "@greatJobDone": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "dueShort": "Hạn {date}",
+  "@dueShort": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "doneAt": "Xong lúc {time}",
+  "@doneAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "noTasksYetChild": "Chưa có nhiệm vụ nào!",
+  "parentWillAssign": "Bố/mẹ sẽ giao nhiệm vụ cho mình sớm nhé 😊",
+  "parentTasksLoadError": "Không tải được danh sách nhiệm vụ.\n{message}",
+  "@parentTasksLoadError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "parentTasksTitle": "📋 Nhiệm vụ của con",
+  "tasksCompleted": "{done}/{total} nhiệm vụ hoàn thành",
+  "@tasksCompleted": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteTaskTitle": "Xoá nhiệm vụ?",
+  "deleteTaskMessage": "Bạn muốn xoá \"{title}\"?",
+  "@deleteTaskMessage": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "taskDone": "Xong",
+  "taskPending": "Chờ",
+  "addTask": "Thêm nhiệm vụ",
+  "addNewTask": "✨ Thêm nhiệm vụ mới",
+  "chooseIcon": "Chọn biểu tượng",
+  "taskNameHint": "Tên nhiệm vụ (ví dụ: Làm bài tập)",
+  "taskDescriptionHint": "Mô tả thêm (không bắt buộc)",
+  "dueDateLabel": "Hạn: {date}",
+  "@dueDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "pickDueDate": "Chọn ngày hết hạn (không bắt buộc)",
+  "assignTask": "Giao nhiệm vụ 🚀",
+  "noTasksYetParent": "Chưa có nhiệm vụ nào",
+  "tapPlusToAssign": "Bấm + để giao nhiệm vụ cho con nhé!",
+  "geofenceChannelName": "Thông báo vùng an toàn",
+  "geofenceChannelDesc": "Thông báo khi con vào/ra khỏi vùng an toàn",
+  "geofenceLeft": "{name} vừa rời khỏi {zone}",
+  "@geofenceLeft": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "zone": {
+        "type": "String"
+      }
+    }
+  },
+  "geofenceEntered": "{name} đã vào {zone}",
+  "@geofenceEntered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "zone": {
+        "type": "String"
+      }
+    }
+  }
+}

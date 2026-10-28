@@ -1,0 +1,40 @@
+default_platform(:ios)
+
+ROOT = File.expand_path("../..", __dir__)
+SECRETS = File.expand_path("~/.kidscare-secrets")
+
+# App Store Connect API key — files live OUTSIDE the repo.
+# ~/.kidscare-secrets/asc.env must define ASC_KEY_ID and ASC_ISSUER_ID,
+# and ~/.kidscare-secrets/AuthKey_<ASC_KEY_ID>.p8 must exist.
+def asc_key
+  env_file = File.join(SECRETS, "asc.env")
+  File.readlines(env_file).each do |l|
+    k, v = l.strip.split("=", 2)
+    ENV[k] ||= v if k && v && !k.start_with?("#")
+  end if File.exist?(env_file)
+  UI.user_error!("Missing ASC_KEY_ID / ASC_ISSUER_ID in #{env_file}") unless ENV["ASC_KEY_ID"] && ENV["ASC_ISSUER_ID"]
+  @p8 = File.join(SECRETS, "AuthKey_#{ENV['ASC_KEY_ID']}.p8")
+  app_store_connect_api_key(key_id: ENV["ASC_KEY_ID"], issuer_id: ENV["ASC_ISSUER_ID"], key_filepath: @p8)
+end
+
+platform :ios do
+  desc "Build signed IPA (Flutter + automatic signing)"
+  lane :build do
+    asc_key
+    sh("cd #{ROOT} && flutter build ios --release --no-codesign")
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      configuration: "Release",
+      export_method: "app-store",
+      output_directory: "#{ROOT}/build/ios/fastlane",
+      xcargs: "-allowProvisioningUpdates -authenticationKeyPath #{@p8} -authenticationKeyID #{ENV['ASC_KEY_ID']} -authenticationKeyIssuerID #{ENV['ASC_ISSUER_ID']}"
+    )
+  end
+
+  desc "Build and upload to TestFlight"
+  lane :beta do
+    build
+    upload_to_testflight(skip_waiting_for_build_processing: true)
+  end
+end

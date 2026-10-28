@@ -1,0 +1,1102 @@
+diff --git a/.metadata b/.metadata
+index 87ba2b3..3e79a8d 100644
+--- a/.metadata
++++ b/.metadata
+@@ -15,7 +15,7 @@ migration:
+     - platform: root
+       create_revision: ff37bef603469fb030f2b72995ab929ccfc227f0
+       base_revision: ff37bef603469fb030f2b72995ab929ccfc227f0
+-    - platform: web
++    - platform: ios
+       create_revision: ff37bef603469fb030f2b72995ab929ccfc227f0
+       base_revision: ff37bef603469fb030f2b72995ab929ccfc227f0
+ 
+diff --git a/analysis_options.yaml b/analysis_options.yaml
+index 0d29021..f80c971 100644
+--- a/analysis_options.yaml
++++ b/analysis_options.yaml
+@@ -7,6 +7,12 @@
+ 
+ # The following line activates a set of recommended lints for Flutter apps,
+ # packages, and plugins designed to encourage good coding practices.
++analyzer:
++  exclude:
++    - build/**
++    - android/**
++    - ios/**
++    - web/**
+ include: package:flutter_lints/flutter.yaml
+ 
+ linter:
+diff --git a/ios/Podfile b/ios/Podfile
+index c2c1dc5..2412584 100644
+--- a/ios/Podfile
++++ b/ios/Podfile
+@@ -1,5 +1,5 @@
+ # Uncomment this line to define a global platform for your project
+-platform :ios, '14.0'
++platform :ios, '15.0'
+ 
+ # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+ ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+@@ -39,5 +39,9 @@ end
+ post_install do |installer|
+   installer.pods_project.targets.each do |target|
+     flutter_additional_ios_build_settings(target)
++    target.build_configurations.each do |config|
++      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
++      config.build_settings['DEFINES_MODULE'] = 'YES'
++    end
+   end
+ end
+diff --git a/ios/Podfile.lock b/ios/Podfile.lock
+index 86dbf5b..5cd0c35 100644
+--- a/ios/Podfile.lock
++++ b/ios/Podfile.lock
+@@ -1194,10 +1194,12 @@ PODS:
+   - AppAuth/Core (1.7.6)
+   - AppAuth/ExternalUserAgent (1.7.6):
+     - AppAuth/Core
+-  - AppCheckCore (11.2.0):
++  - AppCheckCore (11.3.2):
+     - GoogleUtilities/Environment (~> 8.0)
+     - GoogleUtilities/UserDefaults (~> 8.0)
+     - PromisesObjC (~> 2.4)
++    - PromisesSwift (~> 2.4)
++    - RecaptchaInterop (~> 101.0)
+   - audio_session (0.0.1):
+     - Flutter
+   - audioplayers_darwin (0.0.1):
+@@ -1215,7 +1217,7 @@ PODS:
+     - Flutter
+   - connectivity_plus (0.0.1):
+     - Flutter
+-  - CryptoSwift (1.8.4)
++  - CryptoSwift (1.10.0)
+   - device_info_plus (0.0.1):
+     - Flutter
+   - DKImagePickerController/Core (4.3.9):
+@@ -1334,7 +1336,9 @@ PODS:
+   - flutter_callkit_incoming (0.0.1):
+     - CryptoSwift
+     - Flutter
+-  - flutter_logs_yoer (0.0.1):
++  - flutter_local_notifications (0.0.1):
++    - Flutter
++  - flutter_logs_yoer (2.2.8):
+     - Flutter
+     - ZIPFoundation
+   - flutter_ringtone_player (0.0.1):
+@@ -1352,7 +1356,7 @@ PODS:
+     - FlutterMacOS
+     - GoogleSignIn (~> 8.0)
+     - GTMSessionFetcher (>= 3.4.0)
+-  - GoogleDataTransport (10.1.0):
++  - GoogleDataTransport (10.1.1):
+     - nanopb (~> 3.30910.0)
+     - PromisesObjC (~> 2.4)
+   - GoogleSignIn (8.0.0):
+@@ -1360,28 +1364,28 @@ PODS:
+     - AppCheckCore (~> 11.0)
+     - GTMAppAuth (< 5.0, >= 4.1.1)
+     - GTMSessionFetcher/Core (~> 3.3)
+-  - GoogleUtilities/AppDelegateSwizzler (8.1.0):
++  - GoogleUtilities/AppDelegateSwizzler (8.1.4):
+     - GoogleUtilities/Environment
+     - GoogleUtilities/Logger
+     - GoogleUtilities/Network
+     - GoogleUtilities/Privacy
+-  - GoogleUtilities/Environment (8.1.0):
++  - GoogleUtilities/Environment (8.1.4):
+     - GoogleUtilities/Privacy
+-  - GoogleUtilities/Logger (8.1.0):
++  - GoogleUtilities/Logger (8.1.4):
+     - GoogleUtilities/Environment
+     - GoogleUtilities/Privacy
+-  - GoogleUtilities/Network (8.1.0):
++  - GoogleUtilities/Network (8.1.4):
+     - GoogleUtilities/Logger
+     - "GoogleUtilities/NSData+zlib"
+     - GoogleUtilities/Privacy
+     - GoogleUtilities/Reachability
+-  - "GoogleUtilities/NSData+zlib (8.1.0)":
++  - "GoogleUtilities/NSData+zlib (8.1.4)":
+     - GoogleUtilities/Privacy
+-  - GoogleUtilities/Privacy (8.1.0)
+-  - GoogleUtilities/Reachability (8.1.0):
++  - GoogleUtilities/Privacy (8.1.4)
++  - GoogleUtilities/Reachability (8.1.4):
+     - GoogleUtilities/Logger
+     - GoogleUtilities/Privacy
+-  - GoogleUtilities/UserDefaults (8.1.0):
++  - GoogleUtilities/UserDefaults (8.1.4):
+     - GoogleUtilities/Logger
+     - GoogleUtilities/Privacy
+   - "gRPC-C++ (1.69.0)":
+@@ -1498,9 +1502,11 @@ PODS:
+     - Flutter
+   - package_info_plus (0.4.5):
+     - Flutter
+-  - permission_handler_apple (9.3.0):
++  - permission_handler_apple (9.4.8):
+     - Flutter
+-  - PromisesObjC (2.4.0)
++  - PromisesObjC (2.4.1)
++  - PromisesSwift (2.4.1):
++    - PromisesObjC (= 2.4.1)
+   - proximity_sensor (0.0.1):
+     - Flutter
+   - RecaptchaInterop (101.0.0)
+@@ -1524,29 +1530,29 @@ PODS:
+     - Flutter
+   - wakelock_plus (0.0.1):
+     - Flutter
+-  - zego_callkit (1.0.0):
++  - zego_callkit_for_uikit (1.0.0):
+     - Flutter
+-  - zego_express_engine (3.23.0):
++  - "zego_express_engine_for_uikit (3.25.0+1)":
+     - Flutter
+-  - zego_uikit (2.28.44):
++  - zego_uikit (2.29.3):
+     - Flutter
+     - Masonry
+-    - zego_express_engine
++    - zego_express_engine_for_uikit
+     - ZegoUIKitReport (= 0.2.10)
+-  - zego_uikit_prebuilt_call (4.22.3):
++  - zego_uikit_prebuilt_call (4.24.4):
+     - Flutter
+-  - zego_uikit_signaling_plugin (2.8.19):
++  - zego_uikit_signaling_plugin (2.8.23):
+     - Flutter
+-  - zego_zim (2.26.0):
++  - zego_zim (3.2.0):
+     - Flutter
+-    - ZIM (= 2.27.0)
++    - ZIM (= 3.2.0)
+   - zego_zpns (2.6.0):
+     - Flutter
+-    - ZPNs (= 2.6.0)
++    - ZPNs (= 2.7.0)
+   - ZegoUIKitReport (0.2.10)
+-  - ZIM (2.27.0)
++  - ZIM (3.2.0)
+   - ZIPFoundation (0.9.20)
+-  - ZPNs (2.6.0)
++  - ZPNs (2.7.0)
+ 
+ DEPENDENCIES:
+   - audio_session (from `.symlinks/plugins/audio_session/ios`)
+@@ -1561,6 +1567,7 @@ DEPENDENCIES:
+   - fl_location (from `.symlinks/plugins/fl_location/ios`)
+   - Flutter (from `Flutter`)
+   - flutter_callkit_incoming (from `.symlinks/plugins/flutter_callkit_incoming/ios`)
++  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+   - flutter_logs_yoer (from `.symlinks/plugins/flutter_logs_yoer/ios`)
+   - flutter_ringtone_player (from `.symlinks/plugins/flutter_ringtone_player/ios`)
+   - flutter_volume_controller (from `.symlinks/plugins/flutter_volume_controller/ios`)
+@@ -1579,8 +1586,8 @@ DEPENDENCIES:
+   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+   - vibration (from `.symlinks/plugins/vibration/ios`)
+   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
+-  - zego_callkit (from `.symlinks/plugins/zego_callkit/ios`)
+-  - zego_express_engine (from `.symlinks/plugins/zego_express_engine/ios`)
++  - zego_callkit_for_uikit (from `.symlinks/plugins/zego_callkit_for_uikit/ios`)
++  - zego_express_engine_for_uikit (from `.symlinks/plugins/zego_express_engine_for_uikit/ios`)
+   - zego_uikit (from `.symlinks/plugins/zego_uikit/ios`)
+   - zego_uikit_prebuilt_call (from `.symlinks/plugins/zego_uikit_prebuilt_call/ios`)
+   - zego_uikit_signaling_plugin (from `.symlinks/plugins/zego_uikit_signaling_plugin/ios`)
+@@ -1619,6 +1626,7 @@ SPEC REPOS:
+     - Masonry
+     - nanopb
+     - PromisesObjC
++    - PromisesSwift
+     - RecaptchaInterop
+     - SDWebImage
+     - SwiftyGif
+@@ -1652,6 +1660,8 @@ EXTERNAL SOURCES:
+     :path: Flutter
+   flutter_callkit_incoming:
+     :path: ".symlinks/plugins/flutter_callkit_incoming/ios"
++  flutter_local_notifications:
++    :path: ".symlinks/plugins/flutter_local_notifications/ios"
+   flutter_logs_yoer:
+     :path: ".symlinks/plugins/flutter_logs_yoer/ios"
+   flutter_ringtone_player:
+@@ -1688,10 +1698,10 @@ EXTERNAL SOURCES:
+     :path: ".symlinks/plugins/vibration/ios"
+   wakelock_plus:
+     :path: ".symlinks/plugins/wakelock_plus/ios"
+-  zego_callkit:
+-    :path: ".symlinks/plugins/zego_callkit/ios"
+-  zego_express_engine:
+-    :path: ".symlinks/plugins/zego_express_engine/ios"
++  zego_callkit_for_uikit:
++    :path: ".symlinks/plugins/zego_callkit_for_uikit/ios"
++  zego_express_engine_for_uikit:
++    :path: ".symlinks/plugins/zego_express_engine_for_uikit/ios"
+   zego_uikit:
+     :path: ".symlinks/plugins/zego_uikit/ios"
+   zego_uikit_prebuilt_call:
+@@ -1706,13 +1716,13 @@ EXTERNAL SOURCES:
+ SPEC CHECKSUMS:
+   abseil: a05cc83bf02079535e17169a73c5be5ba47f714b
+   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
+-  AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
++  AppCheckCore: be8fce5469f68d7f6a29aa94b25f097409ff7fdc
+   audio_session: 19e9480dbdd4e5f6c4543826b2e8b0e4ab6145fe
+   audioplayers_darwin: f15e209a3e856d1a7edcf98dc029f484fead2242
+   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
+   cloud_firestore: 97e42181866db3cba3fe3935895ab779b6acacd6
+   connectivity_plus: 2a701ffec2c0ae28a48cf7540e279787e77c447d
+-  CryptoSwift: e64e11850ede528a02a0f3e768cec8e9d92ecb90
++  CryptoSwift: e2e7776512f250e66205955da748e7a4e4abffe0
+   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
+   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
+   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
+@@ -1733,17 +1743,18 @@ SPEC CHECKSUMS:
+   FirebaseMessaging: 3b26e2cee503815e01c3701236b020aa9b576f09
+   FirebaseSharedSwift: e17c654ef1f1a616b0b33054e663ad1035c8fd40
+   fl_location: 68b4a6c4aad2a453493ff66f196e0748280cf43e
+-  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
++  Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
+   flutter_callkit_incoming: 417dd1b46541cdd5d855ad795ccbe97d1c18155e
+-  flutter_logs_yoer: 4295f0100d82945b8cb0807a67e586357dde5ea8
++  flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
++  flutter_logs_yoer: 0afdfaf221a0bb178a8fc4dfaecc7fc7bf6f9dfb
+   flutter_ringtone_player: 15eba85187230b87b2512f0e1b92225618bc03e7
+   flutter_volume_controller: e4d5832f08008180f76e30faf671ffd5a425e529
+   geofencing_api: a187066009ca33669c1e8b47913dc27c2a9505ea
+   geolocator_apple: 66b711889fd333205763b83c9dcf0a57a28c7afd
+   google_sign_in_ios: 7411fab6948df90490dc4620ecbcabdc3ca04017
+-  GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
++  GoogleDataTransport: a24e58982ab3ba2f64d79613e027fe7f57e88539
+   GoogleSignIn: ce8c89bb9b37fb624b92e7514cc67335d1e277e4
+-  GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
++  GoogleUtilities: db34c1c11c6f2eccb6fab2340cb8ceb1451299dc
+   "gRPC-C++": cc207623316fb041a7a3e774c252cf68a058b9e8
+   gRPC-Core: 860978b7db482de8b4f5e10677216309b5ff6330
+   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
+@@ -1752,11 +1763,12 @@ SPEC CHECKSUMS:
+   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
+   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
+-  native_device_orientation: 42487b19c552fb5a6a2b51e61b93366f628113df
++  native_device_orientation: 20b8d8e5b82b8df9e0900614fe9c61eaac3ba460
+   package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
+-  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
+-  PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+-  proximity_sensor: 87bc974f9d94b03b4b5911ff1f93a61e561e6183
++  permission_handler_apple: ee2fe0fd04551b304eb002714ff067c371c822ed
++  PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
++  PromisesSwift: 217dea0fd5d2ad65222a109c48698add13cc1c5b
++  proximity_sensor: d7d189176a53b85f606c8bd11893c2f7b0227cc5
+   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
+   screen_brightness_ios: 715ca807df953bf676d339f11464e438143ee625
+   SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
+@@ -1767,18 +1779,18 @@ SPEC CHECKSUMS:
+   url_launcher_ios: bb13df5870e8c4234ca12609d04010a21be43dfa
+   vibration: 8e4d81c3e73ab229a9fb5ab2692f789c4a46d74d
+   wakelock_plus: 76957ab028e12bfa4e66813c99e46637f367fc7e
+-  zego_callkit: 72593f46ed01779c4cee6bc65d2e0e1cde86b42c
+-  zego_express_engine: 08ce2209d3c8af8182fbae5bdb391c477f5630a4
+-  zego_uikit: 10f7ca8ba1514c0b6fe436e518f82ad24a9e4688
+-  zego_uikit_prebuilt_call: cacec37b50db5ab19900400225e62c2bff364089
+-  zego_uikit_signaling_plugin: bd3608619d2424e4fe956786805ce81502bfcb88
+-  zego_zim: ed55464a8eb4089124050086b0e2ad4ab1c9cf27
+-  zego_zpns: 282d9f9926ea5dff87efbafae8cf33fdada41f4f
++  zego_callkit_for_uikit: 8516fa9606b2f4077fe4de59aa041e8d7c946ff7
++  zego_express_engine_for_uikit: 2b811edec6837d446882790f9559d8e8ee3dca23
++  zego_uikit: be69a8517167af6cecf87f9c54a48d3d60af0a25
++  zego_uikit_prebuilt_call: 7c055582e2536aeb73c156267e0ba85f798512cc
++  zego_uikit_signaling_plugin: 65678b5f23b71739e35cb4ebf0ac27c29870698a
++  zego_zim: 484d185d657e6af2335099cb85b0420097d6d628
++  zego_zpns: 98eb4d23322bbcc76ff80ff0e474768eb7384503
+   ZegoUIKitReport: a993f7ccc5d243998a7e601a60e16fcd6c084417
+-  ZIM: b39b9a5a2ddff4d60de51c3bd6a5574cedbcdf03
++  ZIM: 85dd65c5e8efd015ff6a8bc864036e6437e562ae
+   ZIPFoundation: dfd3d681c4053ff7e2f7350bc4e53b5dba3f5351
+-  ZPNs: 73bad0046a74e37315201053f9a0e7ac625d9436
++  ZPNs: d0b2f60087ee72756d18a59642bae87b77bdc6ce
+ 
+-PODFILE CHECKSUM: e30f02f9d1c72c47bb6344a0a748c9d268180865
++PODFILE CHECKSUM: dd0b1c108fbc7b79469e7bc39029965ead2cf6ee
+ 
+ COCOAPODS: 1.16.2
+diff --git a/ios/Runner.xcodeproj/project.pbxproj b/ios/Runner.xcodeproj/project.pbxproj
+index d3fee52..3ec0db3 100644
+--- a/ios/Runner.xcodeproj/project.pbxproj
++++ b/ios/Runner.xcodeproj/project.pbxproj
+@@ -18,6 +18,7 @@
+ 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+ 		ABF09FE1500599CCF50ED5D6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D439A81E00007A6DE5580349 /* GoogleService-Info.plist */; };
+ 		EA9EDAE7E3B9573354BF457E /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDDF84E70C17CDF481BBB2EA /* Pods_RunnerTests.framework */; };
++		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
+ /* End PBXBuildFile section */
+ 
+ /* Begin PBXContainerItemProxy section */
+@@ -69,6 +70,7 @@
+ 		E5FE9F7B778D5F592D50C47E /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+ 		FDDF84E70C17CDF481BBB2EA /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		FE2D86C1F688172E4A842C23 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
++		78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FlutterGeneratedPluginSwiftPackage; path = Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage; sourceTree = "<group>"; };
+ /* End PBXFileReference section */
+ 
+ /* Begin PBXFrameworksBuildPhase section */
+@@ -84,6 +86,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
++				78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */,
+ 				5B06B08E52B654A40E4C882D /* Pods_Runner.framework in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+@@ -124,6 +127,7 @@
+ 		9740EEB11CF90186004384FC /* Flutter */ = {
+ 			isa = PBXGroup;
+ 			children = (
++				78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */,
+ 				3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */,
+ 				9740EEB21CF90195004384FC /* Debug.xcconfig */,
+ 				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
+@@ -193,6 +197,9 @@
+ 			productType = "com.apple.product-type.bundle.unit-test";
+ 		};
+ 		97C146ED1CF9000F007C117D /* Runner */ = {
++			packageProductDependencies = (
++				78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */,
++			);
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
+ 			buildPhases = (
+@@ -219,6 +226,9 @@
+ 
+ /* Begin PBXProject section */
+ 		97C146E61CF9000F007C117D /* Project object */ = {
++			packageReferences = (
++				781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */,
++			);
+ 			isa = PBXProject;
+ 			attributes = {
+ 				BuildIndependentTargetsInParallel = YES;
+@@ -480,7 +490,7 @@
+ 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+ 				GCC_WARN_UNUSED_FUNCTION = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = YES;
+-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
++				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+ 				MTL_ENABLE_DEBUG_INFO = NO;
+ 				SDKROOT = iphoneos;
+ 				SUPPORTED_PLATFORMS = iphoneos;
+@@ -610,7 +620,7 @@
+ 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+ 				GCC_WARN_UNUSED_FUNCTION = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = YES;
+-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
++				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+ 				MTL_ENABLE_DEBUG_INFO = YES;
+ 				ONLY_ACTIVE_ARCH = YES;
+ 				SDKROOT = iphoneos;
+@@ -661,7 +671,7 @@
+ 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+ 				GCC_WARN_UNUSED_FUNCTION = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = YES;
+-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
++				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+ 				MTL_ENABLE_DEBUG_INFO = NO;
+ 				SDKROOT = iphoneos;
+ 				SUPPORTED_PLATFORMS = iphoneos;
+@@ -751,6 +761,18 @@
+ 			defaultConfigurationName = Release;
+ 		};
+ /* End XCConfigurationList section */
++/* Begin XCLocalSwiftPackageReference section */
++		781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */ = {
++			isa = XCLocalSwiftPackageReference;
++			relativePath = Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage;
++		};
++/* End XCLocalSwiftPackageReference section */
++/* Begin XCSwiftPackageProductDependency section */
++		78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */ = {
++			isa = XCSwiftPackageProductDependency;
++			productName = FlutterGeneratedPluginSwiftPackage;
++		};
++/* End XCSwiftPackageProductDependency section */
+ 	};
+ 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
+ }
+diff --git a/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme b/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+index e3773d4..c3fedb2 100644
+--- a/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
++++ b/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+@@ -5,6 +5,24 @@
+    <BuildAction
+       parallelizeBuildables = "YES"
+       buildImplicitDependencies = "YES">
++      <PreActions>
++         <ExecutionAction
++            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
++            <ActionContent
++               title = "Run Prepare Flutter Framework Script"
++               scriptText = "/bin/sh &quot;$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh&quot; prepare&#10;">
++               <EnvironmentBuildable>
++                  <BuildableReference
++                     BuildableIdentifier = "primary"
++                     BlueprintIdentifier = "97C146ED1CF9000F007C117D"
++                     BuildableName = "Runner.app"
++                     BlueprintName = "Runner"
++                     ReferencedContainer = "container:Runner.xcodeproj">
++                  </BuildableReference>
++               </EnvironmentBuildable>
++            </ActionContent>
++         </ExecutionAction>
++      </PreActions>
+       <BuildActionEntries>
+          <BuildActionEntry
+             buildForTesting = "YES"
+diff --git a/lib/core/theme/app_theme.dart b/lib/core/theme/app_theme.dart
+index ec53237..d4c1755 100644
+--- a/lib/core/theme/app_theme.dart
++++ b/lib/core/theme/app_theme.dart
+@@ -4,38 +4,39 @@ import 'package:google_fonts/google_fonts.dart';
+ /// Kite & String — warm, playful family safety design system.
+ class AppTheme {
+   // ── Primary palette ──────────────────────────────────────────
+-  static const Color primaryColor = Color(0xFFFF8C00);      // amber orange
+-  static const Color primaryDark  = Color(0xFFE67700);
+-  static const Color primaryLight = Color(0xFFFFF3E0);      // warm cream
++  static const Color primaryColor = Color(0xFFFF8C00); // amber orange
++  static const Color primaryDark = Color(0xFFE67700);
++  static const Color primaryLight = Color(0xFFFFF3E0); // warm cream
+ 
+   // ── Status colours ───────────────────────────────────────────
+-  static const Color schoolColor  = Color(0xFF42A5F5);      // blue
+-  static const Color playColor    = Color(0xFF66BB6A);      // green
+-  static const Color homeColor    = Color(0xFFFF8C00);      // same as primary
+-  static const Color arrivedColor = Color(0xFFAB47BC);      // purple
+-  static const Color dangerColor  = Color(0xFFEF5350);      // red
++  static const Color schoolColor = Color(0xFF42A5F5); // blue
++  static const Color playColor = Color(0xFF66BB6A); // green
++  static const Color homeColor = Color(0xFFFF8C00); // same as primary
++  static const Color arrivedColor = Color(0xFFAB47BC); // purple
++  static const Color dangerColor = Color(0xFFEF5350); // red
+ 
+   // ── Surfaces ─────────────────────────────────────────────────
+-  static const Color backgroundGrey = Color(0xFFFFF8F0);   // warm off-white
+-  static const Color cardColor      = Colors.white;
++  static const Color backgroundGrey = Color(0xFFFFF8F0); // warm off-white
++  static const Color cardColor = Colors.white;
+   static const Color surfaceVariant = Color(0xFFF5F0E8);
+ 
+   // ── Text ─────────────────────────────────────────────────────
+-  static const Color textPrimary   = Color(0xFF2D2013);
++  static const Color textPrimary = Color(0xFF2D2013);
+   static const Color textSecondary = Color(0xFF7A6652);
+-  static const Color textHint      = Color(0xFFB0A090);
++  static const Color textHint = Color(0xFFB0A090);
+ 
+   static ThemeData get lightTheme {
+     final base = ThemeData(
+       useMaterial3: true,
+-      colorScheme: ColorScheme.fromSeed(
+-        seedColor: primaryColor,
+-        brightness: Brightness.light,
+-      ).copyWith(
+-        primary: primaryColor,
+-        surface: Colors.white,
+-        onPrimary: Colors.white,
+-      ),
++      colorScheme:
++          ColorScheme.fromSeed(
++            seedColor: primaryColor,
++            brightness: Brightness.light,
++          ).copyWith(
++            primary: primaryColor,
++            surface: Colors.white,
++            onPrimary: Colors.white,
++          ),
+     );
+ 
+     return base.copyWith(
+@@ -76,7 +77,10 @@ class AppTheme {
+       inputDecorationTheme: InputDecorationTheme(
+         filled: true,
+         fillColor: surfaceVariant,
+-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
++        contentPadding: const EdgeInsets.symmetric(
++          horizontal: 16,
++          vertical: 14,
++        ),
+         border: OutlineInputBorder(
+           borderRadius: BorderRadius.circular(14),
+           borderSide: BorderSide.none,
+diff --git a/lib/features/auth/login_screen.dart b/lib/features/auth/login_screen.dart
+index afe5363..9a5ec32 100644
+--- a/lib/features/auth/login_screen.dart
++++ b/lib/features/auth/login_screen.dart
+@@ -1,3 +1,4 @@
++import 'package:firebase_auth/firebase_auth.dart';
+ import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:go_router/go_router.dart';
+@@ -30,30 +31,67 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
+     super.dispose();
+   }
+ 
++  bool _isEmail(String input) => input.contains('@');
++
+   Future<void> _login() async {
++    final input = _emailCtrl.text.trim();
++    final password = _passwordCtrl.text;
++
++    if (input.isEmpty || password.isEmpty) {
++      _showError('Vui lòng điền đầy đủ thông tin');
++      return;
++    }
++
+     ref.read(loginLoadingProvider.notifier).state = true;
+-    await Future.delayed(const Duration(seconds: 1)); // TODO: Email login
+ 
+-    if (mounted) {
+-      ref.read(loginLoadingProvider.notifier).state = false;
++    try {
++      // Email → parent, username → child (appended with @kidscare.app)
++      final email = _isEmail(input) ? input : '$input@kidscare.app';
++
++      await FirebaseAuth.instance
++          .signInWithEmailAndPassword(email: email, password: password);
++
++      if (!mounted) return;
+ 
+-      // Check user role and route accordingly
+       final userService = ref.read(userServiceProvider);
+       final userData = await userService.getCurrentUserData();
+ 
+-      if (userData != null) {
+-        if (userData.role == 'parent') {
+-          context.go('/parent-home');
+-        } else {
+-          context.go('/child');
+-        }
+-      } else {
+-        // New user - go to child registration
++      if (!mounted) return;
++
++      if (userData == null) {
++        // First-time login with no Firestore doc → register child
+         context.go('/register-child');
++      } else if (userData.role == 'parent') {
++        context.go('/parent-home');
++      } else {
++        context.go('/child');
+       }
++    } on FirebaseAuthException catch (e) {
++      if (!mounted) return;
++      final msg = switch (e.code) {
++        'user-not-found' => 'Không tìm thấy tài khoản',
++        'wrong-password' => 'Mật khẩu không đúng',
++        'invalid-credential' => 'Email/tên đăng nhập hoặc mật khẩu không đúng',
++        _ => 'Đăng nhập thất bại: ${e.message}',
++      };
++      _showError(msg);
++    } finally {
++      if (mounted) ref.read(loginLoadingProvider.notifier).state = false;
+     }
+   }
+ 
++  void _showError(String msg) {
++    ScaffoldMessenger.of(context).showSnackBar(
++      SnackBar(
++        content: Text(msg,
++            style: GoogleFonts.nunito(fontWeight: FontWeight.w700)),
++        backgroundColor: AppTheme.dangerColor,
++        behavior: SnackBarBehavior.floating,
++        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
++      ),
++    );
++  }
++
+   Future<void> _signInWithGoogle() async {
+     ref.read(googleSignInLoadingProvider.notifier).state = true;
+     try {
+@@ -159,11 +197,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
+ 
+                 const SizedBox(height: 44),
+ 
+-                // "Chào mừng ba mẹ!" – the Kite & String signature
+                 Align(
+                   alignment: Alignment.centerLeft,
+                   child: Text(
+-                    'Chào mừng ba mẹ! 👋',
++                    'Xin chào! 👋',
+                     style: GoogleFonts.nunito(
+                       fontSize: 22,
+                       fontWeight: FontWeight.w800,
+@@ -175,10 +212,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
+                 Align(
+                   alignment: Alignment.centerLeft,
+                   child: Text(
+-                    'Bắt đầu hành trình nuôi dưỡng con yêu',
++                    'Đăng nhập bằng email (bố/mẹ) hoặc tên đăng nhập (bé)',
+                     style: GoogleFonts.nunito(
+-                      fontSize: 14,
++                      fontSize: 13,
+                       color: AppTheme.textSecondary,
++                      fontWeight: FontWeight.w600,
+                     ),
+                   ),
+                 ),
+@@ -203,9 +241,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
+                     children: [
+                       AuthTextField(
+                         controller: _emailCtrl,
+-                        hint: 'Email hoặc số điện thoại',
+-                        prefixIcon: Icons.email_outlined,
+-                        keyboardType: TextInputType.emailAddress,
++                        hint: 'Email (bố/mẹ) hoặc tên đăng nhập (bé)',
++                        prefixIcon: Icons.person_outline_rounded,
+                       ),
+                       const SizedBox(height: 14),
+                       AuthTextField(
+diff --git a/lib/features/auth/register_child_screen.dart b/lib/features/auth/register_child_screen.dart
+index 16238d0..470546f 100644
+--- a/lib/features/auth/register_child_screen.dart
++++ b/lib/features/auth/register_child_screen.dart
+@@ -1,5 +1,3 @@
+-import 'dart:developer';
+-
+ import 'package:cloud_firestore/cloud_firestore.dart';
+ import 'package:firebase_auth/firebase_auth.dart';
+ import 'package:flutter/material.dart';
+@@ -10,15 +8,22 @@ import 'package:kids_care/core/theme/app_theme.dart';
+ import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
+ import 'package:kids_care/features/auth/widgets/primary_button.dart';
+ 
+-final registerChildLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
+-final registerChildObscureProvider = StateProvider.autoDispose<bool>((ref) => true);
+-final registerChildConfirmObscureProvider = StateProvider.autoDispose<bool>((ref) => true);
++final registerChildLoadingProvider = StateProvider.autoDispose<bool>(
++  (ref) => false,
++);
++final registerChildObscureProvider = StateProvider.autoDispose<bool>(
++  (ref) => true,
++);
++final registerChildConfirmObscureProvider = StateProvider.autoDispose<bool>(
++  (ref) => true,
++);
+ 
+ class RegisterChildScreen extends ConsumerStatefulWidget {
+   const RegisterChildScreen({super.key});
+ 
+   @override
+-  ConsumerState<RegisterChildScreen> createState() => _RegisterChildScreenState();
++  ConsumerState<RegisterChildScreen> createState() =>
++      _RegisterChildScreenState();
+ }
+ 
+ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
+@@ -56,21 +61,47 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
+     ref.read(registerChildLoadingProvider.notifier).state = true;
+ 
+     try {
+-      // Logic for creating a child account
+-      // This is a placeholder for actual backend logic (e.g. creating a child profile under the parent)
+-      await Future.delayed(const Duration(seconds: 1));
++      final email = '$username@kidscare.app';
++      final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
++        email: email,
++        password: password,
++      );
+ 
+-      if (mounted) {
+-        ref.read(registerChildLoadingProvider.notifier).state = false;
+-        context.go('/home'); // Go to parent home or where it's appropriate
+-      }
++      await FirebaseFirestore.instance
++          .collection('users')
++          .doc(cred.user!.uid)
++          .set({
++            'uid': cred.user!.uid,
++            'name': username,
++            'role': 'child',
++            'createdAt': FieldValue.serverTimestamp(),
++          });
++
++      if (mounted) context.go('/child');
++    } on FirebaseAuthException catch (e) {
++      if (!mounted) return;
++      final msg = e.code == 'email-already-in-use'
++          ? 'Tên đăng nhập đã được sử dụng'
++          : 'Đăng ký thất bại: ${e.message}';
++      ScaffoldMessenger.of(context).showSnackBar(
++        SnackBar(
++          content: Text(
++            msg,
++            style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
++          ),
++          backgroundColor: AppTheme.dangerColor,
++          behavior: SnackBarBehavior.floating,
++        ),
++      );
+     } catch (e) {
+       if (mounted) {
+-        ref.read(registerChildLoadingProvider.notifier).state = false;
+         ScaffoldMessenger.of(
+           context,
+         ).showSnackBar(SnackBar(content: Text('Đã có lỗi xảy ra: $e')));
+       }
++    } finally {
++      if (mounted)
++        ref.read(registerChildLoadingProvider.notifier).state = false;
+     }
+   }
+ 
+@@ -99,7 +130,9 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
+   Widget build(BuildContext context) {
+     final isLoading = ref.watch(registerChildLoadingProvider);
+     final obscurePassword = ref.watch(registerChildObscureProvider);
+-    final obscureConfirmPassword = ref.watch(registerChildConfirmObscureProvider);
++    final obscureConfirmPassword = ref.watch(
++      registerChildConfirmObscureProvider,
++    );
+ 
+     return Scaffold(
+       backgroundColor: AppTheme.backgroundGrey,
+@@ -214,9 +247,13 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
+                                 : Icons.visibility_outlined,
+                             color: AppTheme.textHint,
+                           ),
+-                          onPressed: () => ref
+-                              .read(registerChildObscureProvider.notifier)
+-                              .state = !obscurePassword,
++                          onPressed: () =>
++                              ref
++                                      .read(
++                                        registerChildObscureProvider.notifier,
++                                      )
++                                      .state =
++                                  !obscurePassword,
+                         ),
+                       ),
+                       const SizedBox(height: 20),
+@@ -236,9 +273,14 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
+                                 : Icons.visibility_outlined,
+                             color: AppTheme.textHint,
+                           ),
+-                          onPressed: () => ref
+-                              .read(registerChildConfirmObscureProvider.notifier)
+-                              .state = !obscureConfirmPassword,
++                          onPressed: () =>
++                              ref
++                                      .read(
++                                        registerChildConfirmObscureProvider
++                                            .notifier,
++                                      )
++                                      .state =
++                                  !obscureConfirmPassword,
+                         ),
+                       ),
+                       const SizedBox(height: 36),
+diff --git a/lib/features/auth/register_screen.dart b/lib/features/auth/register_screen.dart
+index 1fcf5b6..5c39d8d 100644
+--- a/lib/features/auth/register_screen.dart
++++ b/lib/features/auth/register_screen.dart
+@@ -66,7 +66,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
+ 
+       if (mounted) {
+         ref.read(registerLoadingProvider.notifier).state = false;
+-        context.go('/');
++        context.go('/parent-home');
+       }
+     } on FirebaseAuthException catch (e) {
+       if (mounted) {
+diff --git a/lib/features/parent/notifications/parent_notifications_screen.dart b/lib/features/parent/notifications/parent_notifications_screen.dart
+index f77b6d3..73ab6cb 100644
+--- a/lib/features/parent/notifications/parent_notifications_screen.dart
++++ b/lib/features/parent/notifications/parent_notifications_screen.dart
+@@ -122,7 +122,7 @@ class _ParentNotificationsScreenState
+             color: AppTheme.primaryColor,
+           ),
+           IconButton(
+-            onPressed: () => context.go('/'),
++            onPressed: () => context.go('/settings'),
+             icon: const Icon(Icons.settings_outlined),
+             color: AppTheme.textHint,
+           ),
+@@ -139,7 +139,7 @@ class _ParentNotificationsScreenState
+         ref.read(parentBottomNavProvider.notifier).state = i;
+         if (i == 1) context.go('/map');
+         if (i == 2) context.go('/parent-todo');
+-        if (i == 3) context.go('/');
++        if (i == 3) context.go('/settings');
+       },
+       items: const [
+         BottomNavigationBarItem(
+@@ -207,7 +207,10 @@ class _StatusCard extends StatelessWidget {
+                 ),
+                 const SizedBox(height: 8),
+                 Container(
+-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
++                  padding: const EdgeInsets.symmetric(
++                    horizontal: 10,
++                    vertical: 4,
++                  ),
+                   decoration: BoxDecoration(
+                     color: Colors.white.withValues(alpha: 0.2),
+                     borderRadius: BorderRadius.circular(20),
+@@ -290,10 +293,14 @@ class _EmergencyCallButton extends StatelessWidget {
+               ZegoUIKitUser(
+                 id: AppConstants.zegoChildUserId,
+                 name: AppConstants.zegoChildUserName,
+-              )
++              ),
+             ],
+             icon: ButtonIcon(
+-              icon: const Icon(Icons.phone_rounded, color: Colors.white, size: 20),
++              icon: const Icon(
++                Icons.phone_rounded,
++                color: Colors.white,
++                size: 20,
++              ),
+               backgroundColor: AppTheme.dangerColor,
+             ),
+             iconSize: const Size(46, 46),
+diff --git a/lib/features/todo/child/child_todo_screen.dart b/lib/features/todo/child/child_todo_screen.dart
+index 9613378..a6cda83 100644
+--- a/lib/features/todo/child/child_todo_screen.dart
++++ b/lib/features/todo/child/child_todo_screen.dart
+@@ -1,8 +1,10 @@
+ import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
++import 'package:go_router/go_router.dart';
+ import 'package:google_fonts/google_fonts.dart';
+ import 'package:intl/intl.dart';
+ import 'package:kids_care/core/theme/app_theme.dart';
++import 'package:kids_care/features/auth/providers/auth_providers.dart';
+ import 'package:kids_care/features/todo/providers/todo_provider.dart';
+ import 'package:kids_care/models/todo_model.dart';
+ 
+@@ -11,10 +13,52 @@ class ChildTodoScreen extends ConsumerWidget {
+ 
+   @override
+   Widget build(BuildContext context, WidgetRef ref) {
+-    final todosAsync = ref.watch(defaultTodosStreamProvider);
++    final userAsync = ref.watch(currentUserProvider);
++    final uid = userAsync.valueOrNull?.uid;
++    final todosAsync = uid != null
++        ? ref.watch(todosStreamProvider(uid))
++        : const AsyncValue<List<TodoModel>>.loading();
+ 
+     return Scaffold(
+       backgroundColor: const Color(0xFFFFF3E0),
++      bottomNavigationBar: BottomNavigationBar(
++        currentIndex: 1,
++        onTap: (i) {
++          if (i == 0) context.go('/child');
++          if (i == 2) context.go('/map');
++        },
++        selectedItemColor: AppTheme.primaryColor,
++        unselectedItemColor: AppTheme.textHint,
++        showUnselectedLabels: true,
++        selectedLabelStyle: GoogleFonts.nunito(
++          fontWeight: FontWeight.w800,
++          fontSize: 12,
++        ),
++        unselectedLabelStyle: GoogleFonts.nunito(
++          fontWeight: FontWeight.w700,
++          fontSize: 12,
++        ),
++        type: BottomNavigationBarType.fixed,
++        backgroundColor: Colors.white,
++        items: const [
++          BottomNavigationBarItem(
++            icon: Icon(Icons.home_rounded),
++            label: 'Trang chủ',
++          ),
++          BottomNavigationBarItem(
++            icon: Icon(Icons.checklist_rounded),
++            label: 'Nhiệm vụ',
++          ),
++          BottomNavigationBarItem(
++            icon: Icon(Icons.map_outlined),
++            label: 'Bản đồ',
++          ),
++          BottomNavigationBarItem(
++            icon: Icon(Icons.chat_bubble_outline_rounded),
++            label: 'Tin nhắn',
++          ),
++        ],
++      ),
+       body: SafeArea(
+         child: Column(
+           children: [
+@@ -54,11 +98,14 @@ class ChildTodoScreen extends ConsumerWidget {
+                 },
+                 loading: () => const Center(
+                   child: CircularProgressIndicator(
+-                      color: AppTheme.primaryColor),
++                    color: AppTheme.primaryColor,
++                  ),
+                 ),
+                 error: (e, _) => Center(
+-                  child: Text('Lỗi: $e',
+-                      style: GoogleFonts.nunito(color: AppTheme.dangerColor)),
++                  child: Text(
++                    'Lỗi: $e',
++                    style: GoogleFonts.nunito(color: AppTheme.dangerColor),
++                  ),
+                 ),
+               ),
+             ),
+@@ -128,8 +175,11 @@ class _SectionHeader extends StatelessWidget {
+   final String label;
+   final Color color;
+ 
+-  const _SectionHeader(
+-      {required this.emoji, required this.label, required this.color});
++  const _SectionHeader({
++    required this.emoji,
++    required this.label,
++    required this.color,
++  });
+ 
+   @override
+   Widget build(BuildContext context) {
+@@ -173,7 +223,8 @@ class _ChildTodoCard extends ConsumerWidget {
+               backgroundColor: AppTheme.playColor,
+               behavior: SnackBarBehavior.floating,
+               shape: RoundedRectangleBorder(
+-                  borderRadius: BorderRadius.circular(14)),
++                borderRadius: BorderRadius.circular(14),
++              ),
+               duration: const Duration(seconds: 2),
+             ),
+           );
+@@ -189,7 +240,9 @@ class _ChildTodoCard extends ConsumerWidget {
+           borderRadius: BorderRadius.circular(22),
+           border: todo.isCompleted
+               ? Border.all(
+-                  color: AppTheme.playColor.withValues(alpha: 0.3), width: 1.5)
++                  color: AppTheme.playColor.withValues(alpha: 0.3),
++                  width: 1.5,
++                )
+               : null,
+           boxShadow: [
+             BoxShadow(
+@@ -259,7 +312,9 @@ class _ChildTodoCard extends ConsumerWidget {
+                       const SizedBox(height: 5),
+                       Container(
+                         padding: const EdgeInsets.symmetric(
+-                            horizontal: 8, vertical: 3),
++                          horizontal: 8,
++                          vertical: 3,
++                        ),
+                         decoration: BoxDecoration(
+                           color: AppTheme.primaryLight,
+                           borderRadius: BorderRadius.circular(20),
+@@ -267,8 +322,11 @@ class _ChildTodoCard extends ConsumerWidget {
+                         child: Row(
+                           mainAxisSize: MainAxisSize.min,
+                           children: [
+-                            const Icon(Icons.schedule_rounded,
+-                                size: 11, color: AppTheme.primaryColor),
++                            const Icon(
++                              Icons.schedule_rounded,
++                              size: 11,
++                              color: AppTheme.primaryColor,
++                            ),
+                             const SizedBox(width: 3),
+                             Text(
+                               'Hạn ${DateFormat('dd/MM').format(todo.dueDate!)}',
+@@ -314,8 +372,11 @@ class _ChildTodoCard extends ConsumerWidget {
+                   ),
+                 ),
+                 child: todo.isCompleted
+-                    ? const Icon(Icons.check_rounded,
+-                        color: Colors.white, size: 18)
++                    ? const Icon(
++                        Icons.check_rounded,
++                        color: Colors.white,
++                        size: 18,
++                      )
+                     : null,
+               ),
+             ],
+diff --git a/web/index.html b/web/index.html
+index 49277da..85027a1 100644
+--- a/web/index.html
++++ b/web/index.html
+@@ -1,7 +1,7 @@
+-<!DOCTYPE html>
++<!doctype html>
+ <html>
+-<head>
+-  <!--
++  <head>
++    <!--
+     If you are serving your web app in a path other than the root, change the
+     href value below to reflect the base path you are serving from.
+ 
+@@ -14,26 +14,32 @@
+     This is a placeholder for base href that will be replaced by the value of
+     the `--base-href` argument provided to `flutter build`.
+   -->
+-  <base href="$FLUTTER_BASE_HREF">
+-
+-  <meta charset="UTF-8">
+-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+-  <meta name="description" content="A new Flutter project.">
+-
+-  <!-- iOS meta tags & icons -->
+-  <meta name="mobile-web-app-capable" content="yes">
+-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+-  <meta name="apple-mobile-web-app-title" content="kids_care">
+-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+-
+-  <!-- Favicon -->
+-  <link rel="icon" type="image/png" href="favicon.png"/>
+-
+-  <title>kids_care</title>
+-  <link rel="manifest" href="manifest.json">
+-</head>
+-<body>
+-  <!--
++    <base href="$FLUTTER_BASE_HREF" />
++
++    <meta charset="UTF-8" />
++    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
++    <meta name="description" content="A new Flutter project." />
++
++    <!-- Google Sign-In Client ID -->
++    <meta
++      name="google-signin-client_id"
++      content="AIzaSyAeO1cjrKKKp_t0HaozifZiKVTJb5bZPr8"
++    />
++
++    <!-- iOS meta tags & icons -->
++    <meta name="mobile-web-app-capable" content="yes" />
++    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
++    <meta name="apple-mobile-web-app-title" content="kids_care" />
++    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
++
++    <!-- Favicon -->
++    <link rel="icon" type="image/png" href="favicon.png" />
++
++    <title>kids_care</title>
++    <link rel="manifest" href="manifest.json" />
++  </head>
++  <body>
++    <!--
+     You can customize the "flutter_bootstrap.js" script.
+     This is useful to provide a custom configuration to the Flutter loader
+     or to give the user feedback during the initialization process.
+@@ -41,6 +47,6 @@
+     For more details:
+     * https://docs.flutter.dev/platform-integration/web/initialization
+   -->
+-  <script src="flutter_bootstrap.js" async></script>
+-</body>
++    <script src="flutter_bootstrap.js" async></script>
++  </body>
+ </html>

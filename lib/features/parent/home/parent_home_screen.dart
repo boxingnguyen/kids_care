@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
+import 'package:kids_care/core/widgets/app_top_bar.dart';
 import 'package:kids_care/providers/notifications_provider.dart';
+import 'package:kids_care/l10n/l10n.dart';
 
 class ParentHomeScreen extends ConsumerWidget {
   const ParentHomeScreen({super.key});
@@ -14,85 +17,139 @@ class ParentHomeScreen extends ConsumerWidget {
     ref.listen(notificationsProvider, (_, _) {});
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nhà'),
-        backgroundColor: AppTheme.primaryColor,
-        foregroundColor: Colors.white,
+      backgroundColor: AppTheme.backgroundGrey,
+      appBar: AppTopBar(
+        title: context.l10n.appTitle,
+        showBack: false,
+        actions: [
+          IconButton(
+            tooltip: context.l10n.settings,
+            onPressed: () => context.push('/settings'),
+            icon: const Icon(Icons.settings_rounded),
+            color: AppTheme.textSecondary,
+          ),
+        ],
       ),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
           children: [
-            // Map Setup Card
-            _buildMenuCard(
-              context: context,
-              title: 'Thiết lập bản đồ',
-              description: 'Quản lý vùng an toàn và theo dõi vị trí',
-              icon: Icons.map,
-              onTap: () => context.go('/map'),
+            Text(
+              context.l10n.helloParents,
+              style: GoogleFonts.nunito(
+                fontSize: 24,
+                fontWeight: FontWeight.w900,
+                color: AppTheme.textPrimary,
+              ),
             ),
-            const SizedBox(height: 16),
-            // Notifications Card
-            _buildMenuCard(
-              context: context,
-              title: 'Thông báo',
-              description: 'Xem thông báo từ con yêu',
-              icon: Icons.notifications,
-              onTap: () => context.go('/parent'),
+            const SizedBox(height: 4),
+            Text(
+              context.l10n.whatToDoToday,
+              style: GoogleFonts.nunito(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textSecondary,
+              ),
             ),
-            const SizedBox(height: 16),
-            // Todo Card
-            _buildMenuCard(
-              context: context,
-              title: 'Danh sách việc cần làm',
-              description: 'Quản lý công việc hàng ngày',
-              icon: Icons.checklist,
-              onTap: () => context.go('/parent-todo'),
+            const SizedBox(height: 20),
+            _MenuCard(
+              emoji: '🔔',
+              color: AppTheme.dangerColor,
+              title: context.l10n.menuNotificationsTitle,
+              description: context.l10n.menuNotificationsDesc,
+              onTap: () => context.push('/parent'),
+            ),
+            const SizedBox(height: 14),
+            _MenuCard(
+              emoji: '🗺️',
+              color: AppTheme.schoolColor,
+              title: context.l10n.menuMapTitle,
+              description: context.l10n.menuMapDesc,
+              onTap: () => context.push('/map'),
+            ),
+            const SizedBox(height: 14),
+            _MenuCard(
+              emoji: '📋',
+              color: AppTheme.playColor,
+              title: context.l10n.menuTasksTitle,
+              description: context.l10n.menuTasksDesc,
+              onTap: () => context.push('/parent-todo'),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildMenuCard({
-    required BuildContext context,
-    required String title,
-    required String description,
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+class _MenuCard extends StatelessWidget {
+  final String emoji;
+  final Color color;
+  final String title;
+  final String description;
+  final VoidCallback onTap;
+
+  const _MenuCard({
+    required this.emoji,
+    required this.color,
+    required this.title,
+    required this.description,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              Icon(icon, size: 40, color: AppTheme.primaryColor),
-              const SizedBox(width: 16),
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Center(
+                  child: Text(emoji, style: const TextStyle(fontSize: 28)),
+                ),
+              ),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      style: GoogleFonts.nunito(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w800,
+                        color: AppTheme.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
                       description,
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      style: GoogleFonts.nunito(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.textSecondary,
+                      ),
                     ),
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios, size: 16),
+              const Icon(
+                Icons.chevron_right_rounded,
+                size: 28,
+                color: AppTheme.textHint,
+              ),
             ],
           ),
         ),
