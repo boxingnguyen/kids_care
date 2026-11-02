@@ -38,10 +38,11 @@ dependencies:
   latlong2: ^0.9.0
   geofencing_api: ^2.0.0
 
-  # Voice/Video Calling
-  zego_uikit: ^2.28.44
-  zego_uikit_prebuilt_call: ^4.22.3
-  zego_uikit_signaling_plugin: ^2.8.20
+  # Voice/Video Calling — disabled for first release (no camera/mic permissions).
+  # Re-enable together with lib/providers/zego_service.dart (moved to docs/disabled/).
+  # zego_uikit: ^2.28.44
+  # zego_uikit_prebuilt_call: ^4.22.3
+  # zego_uikit_signaling_plugin: ^2.8.20
 
   # Notifications
   flutter_local_notifications: ^18.0.1

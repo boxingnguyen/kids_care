@@ -3,14 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:kids_care/core/constants/app_constants.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
 import 'package:kids_care/core/widgets/app_back_button.dart';
 import 'package:kids_care/models/location_event_model.dart';
 import 'package:kids_care/providers/notifications_provider.dart';
-import 'package:kids_care/providers/zego_service.dart';
-import 'package:zego_uikit/zego_uikit.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:kids_care/l10n/l10n.dart';
 
 class ParentNotificationsScreen extends ConsumerStatefulWidget {
@@ -23,23 +19,6 @@ class ParentNotificationsScreen extends ConsumerStatefulWidget {
 
 class _ParentNotificationsScreenState
     extends ConsumerState<ParentNotificationsScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ZegoService.instance.init(
-        userId: AppConstants.zegoParentUserId,
-        userName: AppConstants.zegoParentUserName,
-      );
-    });
-  }
-
-  @override
-  void dispose() {
-    ZegoService.instance.uninit();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final events = ref.watch(notificationsProvider);
@@ -61,9 +40,9 @@ class _ParentNotificationsScreenState
                     _StatusCard(),
                     const SizedBox(height: 20),
 
-                    // Emergency call button
-                    _EmergencyCallButton(),
-                    const SizedBox(height: 24),
+                    // Emergency call button — disabled until calling feature ships
+                    // _EmergencyCallButton(),
+                    const SizedBox(height: 4),
 
                     Row(
                       children: [
@@ -205,84 +184,6 @@ class _StatusCard extends StatelessWidget {
             ),
           ),
           const Text('🗺️', style: TextStyle(fontSize: 52)),
-        ],
-      ),
-    );
-  }
-}
-
-class _EmergencyCallButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFEEEE),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: const Center(
-              child: Text('📞', style: TextStyle(fontSize: 24)),
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  context.l10n.emergencyCallChild,
-                  style: GoogleFonts.nunito(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    color: AppTheme.textPrimary,
-                  ),
-                ),
-                Text(
-                  context.l10n.voiceCallVia,
-                  style: GoogleFonts.nunito(
-                    fontSize: 12,
-                    color: AppTheme.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ZegoSendCallInvitationButton(
-            isVideoCall: false,
-            resourceID: 'zegouikit_call',
-            invitees: [
-              ZegoUIKitUser(
-                id: AppConstants.zegoChildUserId,
-                name: AppConstants.zegoChildUserName,
-              ),
-            ],
-            icon: ButtonIcon(
-              icon: const Icon(
-                Icons.phone_rounded,
-                color: Colors.white,
-                size: 20,
-              ),
-              backgroundColor: AppTheme.dangerColor,
-            ),
-            iconSize: const Size(46, 46),
-            buttonSize: const Size(54, 54),
-          ),
         ],
       ),
     );

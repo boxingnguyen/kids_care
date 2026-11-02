@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kids_care/core/constants/app_constants.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
 import 'package:kids_care/core/widgets/child_bottom_nav.dart';
 import 'package:kids_care/features/auth/providers/auth_providers.dart';
@@ -13,9 +12,6 @@ import 'package:kids_care/models/location_event_model.dart';
 import 'package:kids_care/providers/geofence_provider.dart';
 import 'package:kids_care/providers/notifications_provider.dart';
 import 'package:kids_care/providers/user_provider.dart';
-import 'package:kids_care/providers/zego_service.dart';
-import 'package:zego_uikit/zego_uikit.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:kids_care/l10n/l10n.dart';
 
 class ChildHomeScreen extends ConsumerStatefulWidget {
@@ -30,10 +26,6 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ZegoService.instance.init(
-        userId: AppConstants.zegoChildUserId,
-        userName: AppConstants.zegoChildUserName,
-      );
       _startGeofencing();
     });
   }
@@ -47,12 +39,6 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
       childName: user.name,
       zonesNotifier: ref.read(geofenceZonesProvider.notifier),
     );
-  }
-
-  @override
-  void dispose() {
-    ZegoService.instance.uninit();
-    super.dispose();
   }
 
   void _updateStatus(ChildStatusType status) {
@@ -187,75 +173,7 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
 
                     const SizedBox(height: 40),
 
-                    // Emergency call section
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        // Glow rings
-                        Container(
-                          width: 150,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(
-                              0xFF22C55E,
-                            ).withValues(alpha: 0.1),
-                          ),
-                        ),
-                        Container(
-                          width: 110,
-                          height: 110,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(
-                              0xFF22C55E,
-                            ).withValues(alpha: 0.2),
-                          ),
-                        ),
-                        // Actual button
-                        ZegoSendCallInvitationButton(
-                          isVideoCall: false,
-                          resourceID: 'zegouikit_call',
-                          invitees: [
-                            ZegoUIKitUser(
-                              id: AppConstants.zegoParentUserId,
-                              name: AppConstants.zegoParentUserName,
-                            ),
-                          ],
-                          icon: ButtonIcon(
-                            icon: const Icon(
-                              Icons.phone_rounded,
-                              color: Colors.white,
-                              size: 40,
-                            ),
-                            backgroundColor: const Color(0xFF22C55E),
-                          ),
-                          iconSize: const Size(86, 86),
-                          buttonSize: const Size(86, 86),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      context.l10n.callParents,
-                      style: GoogleFonts.nunito(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w900,
-                        color: const Color(0xFF22C55E),
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      context.l10n.callParentsHint,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.nunito(
-                        fontSize: 15,
-                        color: AppTheme.textSecondary,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
+                    // Emergency call section — disabled until calling feature ships
                   ],
                 ),
               ),

@@ -37,16 +37,12 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Kids Care uses the camera for video calls between parents and children.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to location in the background to monitor safe zones and alert you when your child enters or leaves them.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location in the background to monitor safe zones and alert you when your child enters or leaves them.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location to show your child's position on the map and trigger geofence alerts.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Kids Care uses the microphone for voice and video calls between parents and children.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
