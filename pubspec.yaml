@@ -69,6 +69,7 @@ dev_dependencies:
 
   # Testing
   mocktail: ^1.0.4
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
@@ -76,3 +77,17 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+
+flutter_launcher_icons:
+  image_path: "assets/icons/app/app_icon.png"
+  android: "ic_launcher"
+  adaptive_icon_background: "#FFF3E0"
+  adaptive_icon_foreground: "assets/icons/app/app_icon_foreground.png"
+  min_sdk_android: 21
+  ios: true
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/icons/app/app_icon.png"
+    background_color: "#FFF3E0"
+    theme_color: "#FF8C00"
