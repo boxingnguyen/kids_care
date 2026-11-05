@@ -28,7 +28,9 @@ class ParentHomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final events = ref.watch(notificationsProvider);
+    // Mới nhất lên đầu.
+    final events = [...ref.watch(notificationsProvider)]
+      ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
     final kidsAsync = ref.watch(linkedChildrenProvider);
     final kids = kidsAsync.valueOrNull ?? const <UserModel>[];
 
@@ -171,21 +173,16 @@ class _ChildLocationCardState extends ConsumerState<_ChildLocationCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(
-            height: 170,
-            child: loc == null
-                ? Container(
-                    color: AppTheme.surfaceVariant,
-                    child: const Center(
-                      child: Text('🗺️', style: TextStyle(fontSize: 48)),
-                    ),
-                  )
-                : _MiniMap(
-                    point: LatLng(loc.lat, loc.lng),
-                    live: live,
-                    name: kid.name,
-                  ),
-          ),
+          // Chỉ hiện bản đồ khi bé đang chia sẻ vị trí.
+          if (live)
+            SizedBox(
+              height: 170,
+              child: _MiniMap(
+                point: LatLng(loc!.lat, loc.lng),
+                live: live,
+                name: kid.name,
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
             child: Column(
@@ -425,6 +422,10 @@ class _EventTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = describeChildEvent(context.l10n, event);
     final emoji = text.title.characters.first;
+    final time = event.timestamp.toLocal();
+    final now = DateTime.now();
+    final isToday =
+        time.year == now.year && time.month == now.month && time.day == now.day;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -478,13 +479,32 @@ class _EventTile extends StatelessWidget {
               ],
             ),
           ),
-          Text(
-            _formatWhen(context, event.timestamp.toLocal()),
-            style: GoogleFonts.nunito(
-              fontSize: 12,
-              color: AppTheme.textHint,
-              fontWeight: FontWeight.w600,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                DateFormat('HH:mm').format(time),
+                style: GoogleFonts.nunito(
+                  fontSize: 12,
+                  color: AppTheme.textHint,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              // Hôm nay thì chỉ cần giờ.
+              if (!isToday) ...[
+                const SizedBox(height: 2),
+                Text(
+                  DateFormat(
+                    time.year == now.year ? 'dd/MM' : 'dd/MM/yyyy',
+                  ).format(time),
+                  style: GoogleFonts.nunito(
+                    fontSize: 11,
+                    color: AppTheme.textHint,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ],
           ),
         ],
       ),

@@ -1068,7 +1068,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Toque em \"Escrever recado\" para pedir algo aos pais 😊';
 
   @override
-  String get parentNotesTitle => 'Pendências';
+  String get parentNotesTitle => 'Pedidos do seu filho';
 
   @override
   String get parentNotesAllDone =>

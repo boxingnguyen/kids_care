@@ -1064,7 +1064,7 @@ class AppLocalizationsId extends AppLocalizations {
       'Ketuk \"Tulis pesan\" untuk minta bantuan orang tua 😊';
 
   @override
-  String get parentNotesTitle => 'Daftar tugas';
+  String get parentNotesTitle => 'Pesan dari anak';
 
   @override
   String get parentNotesAllDone => 'Semua pesan anak sudah dikerjakan 🎉';

@@ -304,7 +304,7 @@
   "noteWaiting": "Waiting for your parents…",
   "noNotesYet": "No notes yet",
   "noNotesHint": "Tap \"Write a note\" to ask your parents for something 😊",
-  "parentNotesTitle": "To-do",
+  "parentNotesTitle": "Notes from your child",
   "parentNotesAllDone": "All of your child’s notes are done 🎉",
   "parentNotesWaiting": "{count} requests from your child — tap to mark done",
   "parentNotesEmpty": "No notes from your child yet",

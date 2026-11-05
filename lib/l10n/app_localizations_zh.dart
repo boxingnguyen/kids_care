@@ -1019,7 +1019,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noNotesHint => '点“写留言”请爸爸妈妈帮忙吧 😊';
 
   @override
-  String get parentNotesTitle => '待办';
+  String get parentNotesTitle => '孩子的留言';
 
   @override
   String get parentNotesAllDone => '孩子的留言都完成了 🎉';

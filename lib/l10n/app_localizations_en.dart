@@ -1063,7 +1063,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tap \"Write a note\" to ask your parents for something 😊';
 
   @override
-  String get parentNotesTitle => 'To-do';
+  String get parentNotesTitle => 'Notes from your child';
 
   @override
   String get parentNotesAllDone => 'All of your child’s notes are done 🎉';

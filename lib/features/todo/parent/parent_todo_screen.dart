@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
 import 'package:kids_care/core/widgets/app_top_bar.dart';
+import 'package:kids_care/core/widgets/progress_circle.dart';
 import 'package:kids_care/features/link/providers/link_providers.dart';
 import 'package:kids_care/features/todo/providers/todo_provider.dart';
 import 'package:kids_care/models/todo_model.dart';
@@ -117,43 +118,8 @@ class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
               ],
             ),
           ),
-          if (total > 0) _ProgressCircle(done: done, total: total),
+          if (total > 0) ProgressCircle(done: done, total: total),
           const SettingsAction(),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Progress circle ───────────────────────────────────────────────────────
-class _ProgressCircle extends StatelessWidget {
-  final int done;
-  final int total;
-  const _ProgressCircle({required this.done, required this.total});
-
-  @override
-  Widget build(BuildContext context) {
-    final pct = total == 0 ? 0.0 : done / total;
-    return SizedBox(
-      width: 56,
-      height: 56,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CircularProgressIndicator(
-            value: pct,
-            backgroundColor: AppTheme.surfaceVariant,
-            color: AppTheme.playColor,
-            strokeWidth: 5,
-          ),
-          Text(
-            '${(pct * 100).round()}%',
-            style: GoogleFonts.nunito(
-              fontSize: 12,
-              fontWeight: FontWeight.w900,
-              color: AppTheme.textPrimary,
-            ),
-          ),
         ],
       ),
     );

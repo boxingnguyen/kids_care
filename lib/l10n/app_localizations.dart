@@ -1933,7 +1933,7 @@ abstract class AppLocalizations {
   /// No description provided for @parentNotesTitle.
   ///
   /// In vi, this message translates to:
-  /// **'Việc cần làm'**
+  /// **'Việc con nhắn gửi'**
   String get parentNotesTitle;
 
   /// No description provided for @parentNotesAllDone.

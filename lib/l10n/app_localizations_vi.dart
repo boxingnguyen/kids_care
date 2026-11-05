@@ -1060,7 +1060,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Bấm \"Viết lời nhắn\" để nhờ bố mẹ làm giúp con nhé 😊';
 
   @override
-  String get parentNotesTitle => 'Việc cần làm';
+  String get parentNotesTitle => 'Việc con nhắn gửi';
 
   @override
   String get parentNotesAllDone => 'Đã làm hết lời nhắn của con 🎉';

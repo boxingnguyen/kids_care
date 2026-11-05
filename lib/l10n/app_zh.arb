@@ -304,7 +304,7 @@
   "noteWaiting": "等待爸爸妈妈…",
   "noNotesYet": "还没有留言",
   "noNotesHint": "点“写留言”请爸爸妈妈帮忙吧 😊",
-  "parentNotesTitle": "待办",
+  "parentNotesTitle": "孩子的留言",
   "parentNotesAllDone": "孩子的留言都完成了 🎉",
   "parentNotesWaiting": "孩子有 {count} 个请求 — 点按标记完成",
   "parentNotesEmpty": "孩子还没有留言",

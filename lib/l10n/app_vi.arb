@@ -664,7 +664,7 @@
   "noteWaiting": "Đang chờ bố mẹ…",
   "noNotesYet": "Chưa có lời nhắn nào",
   "noNotesHint": "Bấm \"Viết lời nhắn\" để nhờ bố mẹ làm giúp con nhé 😊",
-  "parentNotesTitle": "Việc cần làm",
+  "parentNotesTitle": "Việc con nhắn gửi",
   "parentNotesAllDone": "Đã làm hết lời nhắn của con 🎉",
   "parentNotesWaiting": "Con nhờ {count} việc — chạm để đánh dấu đã làm",
   "@parentNotesWaiting": {

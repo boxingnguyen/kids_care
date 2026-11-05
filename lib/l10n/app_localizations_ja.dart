@@ -1024,7 +1024,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get noNotesHint => '「おてがみを書く」でおうちの人にお願いしよう 😊';
 
   @override
-  String get parentNotesTitle => 'やること';
+  String get parentNotesTitle => '子どもからのお願い';
 
   @override
   String get parentNotesAllDone => 'お子さまのおてがみはすべて完了 🎉';
