@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Âm báo thông báo chỉ được tham chiếu bằng tên → giữ lại khi shrink resources. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@raw/child_alert" />

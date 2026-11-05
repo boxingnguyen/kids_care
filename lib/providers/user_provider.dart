@@ -27,7 +27,9 @@ class UserModeNotifier extends StateNotifier<String> {
 }
 
 // Child name
-final childNameProvider = StateNotifierProvider<ChildNameNotifier, String>((ref) {
+final childNameProvider = StateNotifierProvider<ChildNameNotifier, String>((
+  ref,
+) {
   return ChildNameNotifier();
 });
 
@@ -51,8 +53,8 @@ class ChildNameNotifier extends StateNotifier<String> {
 // Current child status provider
 final childStatusProvider =
     StateNotifierProvider<ChildStatusNotifier, ChildStatusType>((ref) {
-  return ChildStatusNotifier();
-});
+      return ChildStatusNotifier();
+    });
 
 class ChildStatusNotifier extends StateNotifier<ChildStatusType> {
   ChildStatusNotifier() : super(ChildStatusType.unknown);

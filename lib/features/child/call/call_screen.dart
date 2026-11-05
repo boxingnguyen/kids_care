@@ -227,7 +227,10 @@ class _CallControl extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             label,
-            style: GoogleFonts.nunito(fontSize: 12, color: Colors.grey.shade500),
+            style: GoogleFonts.nunito(
+              fontSize: 12,
+              color: Colors.grey.shade500,
+            ),
           ),
         ],
       ),

@@ -7,18 +7,21 @@
     {
       "name": "kids_care",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "toolArgs": ["--dart-define-from-file=config/env.json"]
     },
     {
       "name": "kids_care (profile mode)",
       "request": "launch",
       "type": "dart",
+      "toolArgs": ["--dart-define-from-file=config/env.json"],
       "flutterMode": "profile"
     },
     {
       "name": "kids_care (release mode)",
       "request": "launch",
       "type": "dart",
+      "toolArgs": ["--dart-define-from-file=config/env.json"],
       "flutterMode": "release"
     }
   ]

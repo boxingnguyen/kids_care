@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +19,8 @@ class UserService {
       }
       return null;
     } catch (e) {
-      // Xử lý lỗi - có thể user chưa có dữ liệu trong Firestore
+      // Lỗi quyền (rules) cũng rơi vào đây — log để không bị nhầm là "chưa có user".
+      log('getUserData($uid) failed: $e', name: 'UserService');
       return null;
     }
   }

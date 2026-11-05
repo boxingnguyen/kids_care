@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -7,16 +8,26 @@ import '../core/constants/app_constants.dart';
 import '../models/geofence_zone_model.dart';
 
 final geofenceZonesProvider =
-    StateNotifierProvider<GeofenceZonesNotifier, List<GeofenceZoneModel>>((ref) {
-  return GeofenceZonesNotifier();
-});
+    StateNotifierProvider<GeofenceZonesNotifier, List<GeofenceZoneModel>>((
+      ref,
+    ) {
+      return GeofenceZonesNotifier();
+    });
 
+/// Vùng an toàn của một bé (users/{childId}/zones), realtime — mọi bố/mẹ đang
+/// liên kết cùng thêm/xoá. Tối đa [maxZones], mỗi vùng chiếm một ô cố định
+/// ([slotIds]); rules không cho ghi đè ô đã có.
 class GeofenceZonesNotifier extends StateNotifier<List<GeofenceZoneModel>> {
   static const int maxZones = 3;
+  static const slotIds = ['z1', 'z2', 'z3'];
 
   FirebaseFirestore get _db => FirebaseFirestore.instance;
-  String? _parentId;
+  String? _childId;
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _sub;
   bool _listenersAttached = false;
+
+  /// Đăng ký vùng với Geofencing chạy nối tiếp (start() lần 2 song song sẽ throw).
+  Future<void> _monitorQueue = Future.value();
 
   GeofenceZonesNotifier() : super([]);
 
@@ -30,20 +41,52 @@ class GeofenceZonesNotifier extends StateNotifier<List<GeofenceZoneModel>> {
     }
   }
 
-  CollectionReference<Map<String, dynamic>> _zonesRef(String parentId) => _db
+  /// Ô trống đầu tiên, hoặc null nếu đã đủ [maxZones].
+  static String? freeSlot(Iterable<String> taken) {
+    final used = taken.toSet();
+    for (final id in slotIds) {
+      if (!used.contains(id)) return id;
+    }
+    return null;
+  }
+
+  CollectionReference<Map<String, dynamic>> _zonesRef(String childId) => _db
       .collection(AppConstants.usersCollection)
-      .doc(parentId)
+      .doc(childId)
       .collection(AppConstants.zonesSubcollection);
 
-  /// Loads the parent's zones from Firestore.
+  /// Theo dõi realtime vùng của bé [childId] (thay cho bé đang theo dõi trước đó).
   /// [monitor] = true chỉ dùng ở máy con: đăng ký các vùng để theo dõi vị trí.
-  Future<void> loadZonesForParent(String parentId, {bool monitor = false}) async {
-    _parentId = parentId;
-    final snap = await _zonesRef(parentId).get();
-    final zones =
-        snap.docs.map((d) => GeofenceZoneModel.fromJson(d.data())).toList();
-    state = zones;
-    if (monitor) await _startMonitoring(zones);
+  void watchZones(String childId, {bool monitor = false}) {
+    if (_childId == childId && _sub != null) return;
+    _sub?.cancel();
+    _childId = childId;
+    state = [];
+    _sub = _zonesRef(childId).snapshots().listen((snap) {
+      final zones = snap.docs
+          .map((d) => GeofenceZoneModel.fromJson({...d.data(), 'id': d.id}))
+          .toList();
+      state = zones;
+      if (monitor) {
+        _monitorQueue = _monitorQueue
+            .then((_) => _startMonitoring(zones))
+            .catchError((Object e) => debugPrint('GEOFENCE monitor: $e'));
+      }
+    }, onError: (Object e) => debugPrint('GEOFENCE zones stream: $e'));
+  }
+
+  /// Ngừng theo dõi vùng (vd. bé vừa gỡ hết liên kết, bố/mẹ đổi tài khoản).
+  void stopWatching() {
+    _sub?.cancel();
+    _sub = null;
+    _childId = null;
+    state = [];
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
   }
 
   Future<void> _startMonitoring(List<GeofenceZoneModel> zones) async {
@@ -77,11 +120,11 @@ class GeofenceZonesNotifier extends StateNotifier<List<GeofenceZoneModel>> {
   }
 
   GeofenceRegion _createRegion(GeofenceZoneModel z) => GeofenceRegion.circular(
-        id: z.id,
-        center: LatLng(z.lat, z.lng),
-        radius: z.radiusMeters,
-        loiteringDelay: 30000,
-      );
+    id: z.id,
+    center: LatLng(z.lat, z.lng),
+    radius: z.radiusMeters,
+    loiteringDelay: 30000,
+  );
 
   Future<void> _onStatusChanged(
     GeofenceRegion region,
@@ -97,8 +140,8 @@ class GeofenceZonesNotifier extends StateNotifier<List<GeofenceZoneModel>> {
 
   Future<bool> _requestLocationPermission() async {
     if (!await Geofencing.instance.isLocationServicesEnabled) return false;
-    LocationPermission permission =
-        await Geofencing.instance.getLocationPermission();
+    LocationPermission permission = await Geofencing.instance
+        .getLocationPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geofencing.instance.requestLocationPermission();
     }
@@ -117,26 +160,34 @@ class GeofenceZonesNotifier extends StateNotifier<List<GeofenceZoneModel>> {
     return true;
   }
 
-  /// Adds a zone and persists it to Firestore. Max [maxZones].
+  /// Thêm vùng vào ô trống đầu tiên. Hai bố/mẹ cùng thêm một lúc mà trùng ô
+  /// thì người sau bị rules từ chối → thử ô kế tiếp.
+  /// Throws [StateError] nếu đã đủ [maxZones] vùng.
   Future<void> addZone(GeofenceZoneModel zone) async {
-    checkZoneLimit(state.length);
-    state = [...state, zone];
-    if (_parentId != null) {
-      await _zonesRef(_parentId!).doc(zone.id).set(zone.toJson());
-    }
-    if (Geofencing.instance.isRunningService) {
-      Geofencing.instance.addRegion(_createRegion(zone));
+    final childId = _childId;
+    if (childId == null) throw StateError('Chưa chọn bé');
+    final taken = (await _zonesRef(
+      childId,
+    ).get()).docs.map((d) => d.id).toSet();
+    while (true) {
+      final slot = freeSlot(taken);
+      if (slot == null) throw StateError('Tối đa 3 vùng an toàn');
+      try {
+        await _zonesRef(
+          childId,
+        ).doc(slot).set(zone.copyWith(id: slot).toJson());
+        return;
+      } on FirebaseException catch (e) {
+        if (e.code != 'permission-denied') rethrow;
+        taken.add(slot);
+      }
     }
   }
 
-  /// Removes a zone and deletes it from Firestore.
+  /// Xoá vùng (snapshot realtime sẽ cập nhật danh sách và vùng theo dõi).
   Future<void> removeZone(String id) async {
-    state = state.where((z) => z.id != id).toList();
-    if (_parentId != null) {
-      await _zonesRef(_parentId!).doc(id).delete();
-    }
-    if (Geofencing.instance.isRunningService) {
-      Geofencing.instance.removeRegionById(id);
-    }
+    final childId = _childId;
+    if (childId == null) return;
+    await _zonesRef(childId).doc(id).delete();
   }
 }

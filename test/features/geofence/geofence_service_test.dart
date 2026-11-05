@@ -5,10 +5,10 @@ import 'package:kids_care/providers/geofence_provider.dart';
 
 void main() {
   group('GeofenceService start guard', () {
-    test('does nothing when parentId is null', () async {
+    test('does nothing when no parent is linked', () async {
       final notifier = GeofenceZonesNotifier();
       final started = await GeofenceService.instance.start(
-        parentId: null,
+        parentIds: const [],
         childUid: 'child-uid',
         childName: 'Bon',
         zonesNotifier: notifier,

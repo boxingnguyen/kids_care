@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
 import 'package:kids_care/core/widgets/app_back_button.dart';
+import 'package:kids_care/core/constants/app_constants.dart';
+import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
 import 'package:kids_care/l10n/l10n.dart';
@@ -47,9 +48,9 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
     final confirmPassword = _confirmPasswordCtrl.text;
 
     if (username.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.fillAllFields)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.fillAllFields)));
       return;
     }
 
@@ -63,21 +64,20 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
     ref.read(registerChildLoadingProvider.notifier).state = true;
 
     try {
-      final email = '$username@kidscare.app';
+      final email = '$username@${AppConstants.childUsernameDomain}';
       final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(cred.user!.uid)
-          .set({
-            'uid': cred.user!.uid,
-            'name': username,
-            'role': 'child',
-            'createdAt': FieldValue.serverTimestamp(),
-          });
+      await ref
+          .read(guestAuthServiceProvider)
+          .createProfile(
+            uid: cred.user!.uid,
+            name: username,
+            nameSet: true,
+            role: 'child',
+          );
 
       if (mounted) context.go('/child');
     } on FirebaseAuthException catch (e) {
@@ -97,9 +97,9 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(context.l10n.errorGeneric('$e'))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.errorGeneric('$e'))),
+        );
       }
     } finally {
       if (mounted)
@@ -143,9 +143,7 @@ class _RegisterChildScreenState extends ConsumerState<RegisterChildScreen> {
         elevation: 0,
         automaticallyImplyLeading: false,
         leadingWidth: 64,
-        leading: const Center(
-          child: AppBackButton(fallbackLocation: '/login'),
-        ),
+        leading: const Center(child: AppBackButton(fallbackLocation: '/login')),
       ),
       extendBodyBehindAppBar: true,
       body: Container(

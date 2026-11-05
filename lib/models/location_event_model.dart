@@ -3,12 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'location_event_model.freezed.dart';
 part 'location_event_model.g.dart';
 
-enum LocationEventType {
-  arrived,
-  left,
-  statusUpdate,
-  emergency,
-}
+enum LocationEventType { arrived, left, statusUpdate, emergency }
 
 extension LocationEventTypeExt on LocationEventType {
   String get label {

@@ -12,9 +12,9 @@ final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await initLocalNotifications();
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await initLocalNotifications();
 
   // Calling (ZegoCloud) disabled for first release — see docs/disabled/.
 

@@ -13,6 +13,7 @@
 - [Development Workflow](#development-workflow)
 - [Configuration](#configuration)
 - [Running the App](#running-the-app)
+- [Releasing with Fastlane](#releasing-with-fastlane)
 - [Testing](#testing)
 
 ---
@@ -139,7 +140,6 @@ Path-based declarative navigation with automatic redirect logic:
 
 - **Location Tracking**: Uses `geolocator` + `geofence_service` for background location updates
 - **Geofencing**: Automatically detects when child enters/exits zones using location distance calculations
-- **Calling**: Integrated with Zego Cloud for peer-to-peer voice/video calls
 
 ---
 
@@ -218,6 +218,7 @@ All data models are in `lib/models/`:
 - **Firebase Project**: For backend services
 - **Zego Cloud**: For voice/video calling
 - **Google Sign-In**: OAuth credentials
+- **Mapbox**: Map tiles and place search
 
 ### Tools
 
@@ -283,14 +284,50 @@ flutter pub run build_runner watch
 const String ZEGO_APP_ID = 'YOUR_ZEGO_APP_ID';
 ```
 
-### 7. Configure Google Maps (Optional)
+### 7. Configure Mapbox (map tiles + place search)
 
-1. Get an API key from [Google Cloud Console](https://console.cloud.google.com/)
-2. Enable Maps JavaScript API and Maps SDK for Android/iOS
-3. Update in `lib/core/constants/app_constants.dart`:
+Runtime config is passed via `--dart-define-from-file` from `config/env.json` (gitignored):
 
-```dart
-const String GOOGLE_MAPS_API_KEY = 'YOUR_API_KEY';
+1. Sign up at [Mapbox](https://account.mapbox.com/) and add a payment method (unlocks the full free tier)
+2. Copy your **public** token (`pk.…`)
+3. Create the env file:
+
+```bash
+cp config/env.example.json config/env.json
+# then set "MAPBOX_ACCESS_TOKEN": "pk.…"
+```
+
+4. Run with the file (VS Code launch configs already pass it):
+
+```bash
+flutter run --dart-define-from-file=config/env.json
+```
+
+Without a token the app falls back to OpenStreetMap tiles (dev only) and hides place search.
+Fastlane builds fail fast if `config/env.json` or the token is missing.
+
+### 8. Firestore security rules
+
+Rules (`firestore.rules`) keep each linked parent ↔ child pair isolated: users can only read
+their own profile and profiles they are linked to. Linking is request → accept: entering the other
+person's link code (`link_codes/{code}`, get-only) creates a `link_requests` doc, and the link is
+written only when the recipient accepts it (each request can be consumed once). A child can be
+linked to up to 3 guardians (parents, grandparents…); either side can unlink. Safe zones belong to
+the child (`users/{child}/zones`, max 3 via fixed ids `z1`–`z3`) and todos belong to the child too:
+every currently linked guardian can view and edit them. Also enable **Email/Password** in Firebase Console → Authentication.
+
+Run the rules tests on the emulator (needs Java 21):
+
+```bash
+cd firestore-tests && npm install && npm run test:emulator
+```
+
+Rules and app ship **together**: the current app reads `link_codes` and queries todos by `createdBy`,
+so deploy rules + indexes before testing a new build (wait for the index to finish building).
+Builds older than the `link_codes` change can no longer create or link guests after this deploy:
+
+```bash
+firebase deploy --only firestore:rules,firestore:indexes
 ```
 
 ---
@@ -386,7 +423,7 @@ class AppConstants {
   // Default geofence (Ho Chi Minh City)
   static const double DEFAULT_LAT = 10.7769;
   static const double DEFAULT_LNG = 106.7009;
-  static const double DEFAULT_RADIUS = 500; // meters
+  static const double DEFAULT_RADIUS = 200; // meters
 
   // APIs
   static const String ZEGO_APP_ID = 'mapsApiKeyPlaceholder';
@@ -477,6 +514,39 @@ flutter build appbundle --release
 
 ```bash
 flutter build ios --release
+```
+
+---
+
+## 🚢 Releasing with Fastlane
+
+Fastlane lanes live in `ios/fastlane/` and `android/fastlane/`. Each `build` lane runs `flutter build` itself, so there is no need to build Flutter first. There is no Gemfile, so call `fastlane` directly (not `bundle exec`).
+
+### iOS
+
+**Setup** (files stay outside the repo):
+
+- `~/.kidscare-secrets/asc.env` defining `ASC_KEY_ID=...` and `ASC_ISSUER_ID=...`
+- `~/.kidscare-secrets/AuthKey_<ASC_KEY_ID>.p8` (App Store Connect API key)
+
+```bash
+cd ios
+fastlane build   # signed IPA → build/ios/fastlane/
+fastlane beta    # build + upload to TestFlight
+```
+
+### Android
+
+**Setup**:
+
+- `android/key.properties` with the release keystore (the `build` lane fails without it, to avoid signing with the debug key)
+- Play Console service account JSON at `~/.kidscare-secrets/play-service-account.json`, or set `PLAY_JSON_KEY` to its path (only needed for upload lanes)
+
+```bash
+cd android
+fastlane build                # AAB → build/app/outputs/bundle/release/app-release.aab
+fastlane internal             # build + upload to the internal testing track (draft)
+fastlane promote_production   # promote internal → production, 20% staged rollout
 ```
 
 ---

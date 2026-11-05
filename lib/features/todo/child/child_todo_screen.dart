@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
-import 'package:kids_care/core/widgets/app_back_button.dart';
-import 'package:kids_care/core/widgets/child_bottom_nav.dart';
+import 'package:kids_care/core/widgets/app_top_bar.dart';
+import 'package:kids_care/core/widgets/emoji_title_sheet.dart';
 import 'package:kids_care/features/auth/providers/auth_providers.dart';
+import 'package:kids_care/features/child/child_events.dart';
+import 'package:kids_care/models/geofence_event_model.dart';
 import 'package:kids_care/features/todo/providers/todo_provider.dart';
 import 'package:kids_care/models/todo_model.dart';
 import 'package:kids_care/l10n/l10n.dart';
@@ -16,17 +18,21 @@ class ChildTodoScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userAsync = ref.watch(currentUserProvider);
-    final uid = userAsync.valueOrNull?.uid;
-    final todosAsync = uid != null
-        ? ref.watch(todosStreamProvider(uid))
-        : const AsyncValue<List<TodoModel>>.loading();
+    final todosAsync = ref.watch(childTodosStreamProvider);
 
-    return AppBackScope(
-      fallbackLocation: '/child',
-      child: Scaffold(
+    return Scaffold(
       backgroundColor: AppTheme.primaryLight,
-      bottomNavigationBar: const ChildBottomNav(current: ChildTab.todo),
+      floatingActionButton: FloatingActionButton.extended(
+        heroTag: null,
+        onPressed: () => _showAddTodoSheet(context, ref),
+        backgroundColor: AppTheme.primaryColor,
+        foregroundColor: Colors.white,
+        icon: const Icon(Icons.add_rounded, size: 28),
+        label: Text(
+          context.l10n.addTodo,
+          style: GoogleFonts.nunito(fontSize: 16, fontWeight: FontWeight.w900),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -40,7 +46,7 @@ class ChildTodoScreen extends ConsumerWidget {
                   if (todos.isEmpty) return _EmptyState();
 
                   return ListView(
-                    padding: const EdgeInsets.fromLTRB(18, 12, 18, 30),
+                    padding: const EdgeInsets.fromLTRB(18, 12, 18, 100),
                     children: [
                       if (pending.isNotEmpty) ...[
                         _SectionHeader(
@@ -88,7 +94,6 @@ class ChildTodoScreen extends ConsumerWidget {
           ],
         ),
       ),
-    ),
     );
   }
 
@@ -114,11 +119,6 @@ class ChildTodoScreen extends ConsumerWidget {
         children: [
           Row(
             children: [
-              AppBackButton(
-                fallbackLocation: '/child',
-                color: Colors.white,
-                backgroundColor: Colors.white.withValues(alpha: 0.25),
-              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -130,6 +130,7 @@ class ChildTodoScreen extends ConsumerWidget {
                   ),
                 ),
               ),
+              const SettingsAction(color: Colors.white),
             ],
           ),
           const SizedBox(height: 4),
@@ -165,9 +166,7 @@ class ChildTodoScreen extends ConsumerWidget {
                 child: LinearProgressIndicator(
                   value: total == 0 ? 0 : done / total,
                   backgroundColor: Colors.white.withValues(alpha: 0.3),
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                    Colors.white,
-                  ),
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
                   minHeight: 12,
                 ),
               ),
@@ -215,32 +214,73 @@ class _ChildTodoCard extends ConsumerWidget {
   final TodoModel todo;
   const _ChildTodoCard({required this.todo});
 
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
+    HapticFeedback.mediumImpact();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          ctx.l10n.deleteTaskTitle,
+          style: GoogleFonts.nunito(fontWeight: FontWeight.w800),
+        ),
+        content: Text(ctx.l10n.deleteTaskMessage(todo.title)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(ctx.l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              ctx.l10n.delete,
+              style: const TextStyle(color: AppTheme.dangerColor),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) await ref.read(todoActionsProvider).deleteTodo(todo.id);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final actions = ref.read(todoActionsProvider);
 
+    final uid = ref.watch(authUidProvider).valueOrNull;
+    final isMine = uid != null && todo.createdBy == uid;
+
     return GestureDetector(
+      // Việc bé tự thêm: giữ lâu để xoá.
+      onLongPress: isMine ? () => _confirmDelete(context, ref) : null,
       onTap: () async {
         HapticFeedback.mediumImpact();
         await actions.toggleTodo(todo);
+        if (!todo.isCompleted) {
+          final user = await ref.read(currentUserProvider.future);
+          ChildEvents.publishFor(
+            user,
+            type: ChildEventType.todoDone,
+            zoneName: todo.title,
+          );
+        }
         if (context.mounted && !todo.isCompleted) {
           // Show celebration when completing
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-            SnackBar(
-              content: Text(
-                context.l10n.greatJobDone(todo.title),
-                style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
+              SnackBar(
+                content: Text(
+                  context.l10n.greatJobDone(todo.title),
+                  style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
+                ),
+                backgroundColor: AppTheme.playColor,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                duration: const Duration(seconds: 2),
               ),
-              backgroundColor: AppTheme.playColor,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-              duration: const Duration(seconds: 2),
-            ),
-          );
+            );
         }
       },
       child: AnimatedContainer(
@@ -424,7 +464,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            context.l10n.parentWillAssign,
+            context.l10n.childCanAddTodo,
             style: GoogleFonts.nunito(
               fontSize: 16,
               color: AppTheme.textSecondary,
@@ -435,4 +475,32 @@ class _EmptyState extends StatelessWidget {
       ),
     );
   }
+}
+
+// ── Bé tự thêm việc ───────────────────────────────────────────────────────
+const _kChildEmojis = ['📚', '🧹', '🛁', '🎨', '🏃', '🎹', '🌱', '🐶'];
+
+Future<void> _showAddTodoSheet(BuildContext context, WidgetRef ref) async {
+  final result = await showEmojiTitleSheet(
+    context,
+    title: context.l10n.addTodoTitle,
+    hint: context.l10n.addTodoHint,
+    submitLabel: context.l10n.addTodo,
+    emojis: _kChildEmojis,
+  );
+  if (result == null) return;
+  final user = await ref.read(currentUserProvider.future);
+  if (user == null) return;
+  await ref
+      .read(todoActionsProvider)
+      .addTodo(
+        title: result.title,
+        emoji: result.emoji,
+        assignedChildId: user.uid,
+      );
+  ChildEvents.publishFor(
+    user,
+    type: ChildEventType.todoCreated,
+    zoneName: result.title,
+  );
 }

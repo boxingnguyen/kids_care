@@ -1,16 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geofencing_api/geofencing_api.dart';
-import 'package:kids_care/core/constants/app_constants.dart';
+import 'package:kids_care/features/child/child_events.dart';
+import 'package:kids_care/features/location/live_location_service.dart';
 import 'package:kids_care/models/geofence_event_model.dart';
 import 'package:kids_care/providers/geofence_provider.dart';
 
-/// Child-side geofencing: theo dõi các vùng của bố/mẹ và ghi sự kiện
-/// vào users/{parentId}/geofence_events.
+/// Child-side geofencing: theo dõi các vùng của chính bé (users/{bé}/zones) và
+/// ghi sự kiện vào users/{parentId}/geofence_events của từng bố/mẹ đang liên kết.
 class GeofenceService {
-  FirebaseFirestore get _db => FirebaseFirestore.instance;
-  String? _parentId;
+  List<String> _parentIds = const [];
   String? _childUid;
   String? _childName;
   GeofenceZonesNotifier? _zonesNotifier;
@@ -31,24 +32,25 @@ class GeofenceService {
     }
   }
 
-  /// Starts child-side geofencing. No-op (returns false) if parentId is null.
+  /// Starts child-side geofencing. Chưa liên kết ai → dừng, trả về false.
   Future<bool> start({
-    required String? parentId,
+    required List<String> parentIds,
     required String childUid,
     required String childName,
     required GeofenceZonesNotifier zonesNotifier,
   }) async {
-    if (parentId == null) {
-      debugPrint('GeofenceService: no parent linked, skipping start');
+    _zonesNotifier = zonesNotifier;
+    if (parentIds.isEmpty) {
+      debugPrint('GeofenceService: no parent linked, stopping');
+      await stop();
       return false;
     }
-    _parentId = parentId;
+    _parentIds = List.of(parentIds);
     _childUid = childUid;
     _childName = childName;
-    _zonesNotifier = zonesNotifier;
 
-    // Load parent's zones + start location monitoring
-    await zonesNotifier.loadZonesForParent(parentId, monitor: true);
+    // Vùng của bé (realtime, bố/mẹ nào sửa cũng cập nhật) + theo dõi vị trí
+    zonesNotifier.watchZones(childUid, monitor: true);
 
     if (!_listenerAttached) {
       Geofencing.instance.addGeofenceStatusChangedListener(_onStatusChanged);
@@ -57,46 +59,51 @@ class GeofenceService {
     return true;
   }
 
+  /// Dừng theo dõi (vd. vừa gỡ hết liên kết) — không ghi sự kiện nữa.
+  Future<void> stop() async {
+    _parentIds = const [];
+    _zonesNotifier?.stopWatching();
+    if (Geofencing.instance.isRunningService) {
+      await Geofencing.instance.stop();
+    }
+  }
+
   Future<void> _onStatusChanged(
     GeofenceRegion region,
     GeofenceStatus status,
     Location location,
   ) async {
-    if (_parentId == null || _childUid == null) return;
+    if (_parentIds.isEmpty || _childUid == null) return;
 
     final statusStr = eventStatusFor(status);
     if (statusStr == null) return;
 
-    final zoneName = _zonesNotifier?.zones
+    final zoneName =
+        _zonesNotifier?.zones
             .where((z) => z.id == region.id)
             .map((z) => z.name)
             .firstOrNull ??
         region.id;
 
-    final now = DateTime.now().toUtc();
-    final eventId = '${_childUid}_${region.id}_${now.millisecondsSinceEpoch}';
-
-    final event = GeofenceEventModel(
-      id: eventId,
-      zoneId: region.id,
-      zoneName: zoneName,
-      childUid: _childUid!,
-      childName: _childName ?? 'Con',
-      status: statusStr,
-      timestamp: now,
+    // Vị trí lúc vào/ra vùng cũng là "vị trí gần nhất" bố/mẹ thấy ở trang chủ.
+    unawaited(
+      LiveShareNotifier.writeLastLocation(
+        _childUid!,
+        lat: location.latitude,
+        lng: location.longitude,
+        accuracy: location.accuracy,
+      ),
     );
 
-    try {
-      await _db
-          .collection(AppConstants.usersCollection)
-          .doc(_parentId)
-          .collection(AppConstants.geofenceEventsSubcollection)
-          .doc(eventId)
-          .set(event.toJson());
-      debugPrint('GeofenceService: wrote event $statusStr for zone ${region.id}');
-    } catch (e) {
-      debugPrint('GeofenceService: failed to write event: $e');
-    }
+    await ChildEvents.publish(
+      parentIds: _parentIds,
+      childUid: _childUid!,
+      childName: _childName ?? 'Con',
+      type: ChildEventType.geofence,
+      status: statusStr,
+      zoneId: region.id,
+      zoneName: zoneName,
+    );
   }
 }
 

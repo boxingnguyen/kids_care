@@ -18,7 +18,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get home => '首页';
 
   @override
-  String get tasks => '任务';
+  String get tasks => '待办';
 
   @override
   String get map => '地图';
@@ -478,10 +478,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get voiceCallVia => '通过 ZegoCloud 语音通话';
 
   @override
-  String get noNotifications => '暂无通知';
+  String get noNotifications => '暂无更新';
 
   @override
-  String get childNoStatusYet => '孩子还没有更新状态';
+  String get childNoStatusYet => '孩子的状态、位置共享和完成的待办会显示在这里';
 
   @override
   String get accountSecurity => '账号与安全';
@@ -548,7 +548,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get childTasksLoadError => '哎呀，任务加载失败了 😢\n等一会儿再试试吧！';
 
   @override
-  String get myTasksTitle => '我的任务 🌟';
+  String get myTasksTitle => '我的待办 🌟';
 
   @override
   String get tapTaskWhenDone => '做完后点一下任务吧！';
@@ -652,5 +652,396 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String geofenceEntered(String name, String zone) {
     return '$name 已到达 $zone';
+  }
+
+  @override
+  String get searchPlaceHint => '搜索学校、家、公园…';
+
+  @override
+  String get searchNoResults => '未找到地点';
+
+  @override
+  String get searchFailed => '搜索失败，请重试';
+
+  @override
+  String get locationPermissionDenied => '未授予定位权限，无法在您的位置打开地图。';
+
+  @override
+  String get locationServiceDisabled => '定位服务已关闭。';
+
+  @override
+  String get openSettings => '打开设置';
+
+  @override
+  String get myLocation => '我的位置';
+
+  @override
+  String get linkChildToAssign => '尚未关联孩子。请让孩子输入关联码后再分配任务。';
+
+  @override
+  String get assignTo => '分配给';
+
+  @override
+  String get linkEmailTitle => '绑定邮箱';
+
+  @override
+  String get linkEmailSubtitle => '绑定邮箱后，换手机或重装应用也能保留数据并重新登录。';
+
+  @override
+  String get linkEmailAction => '绑定并发送验证邮件';
+
+  @override
+  String get passwordTooShort => '密码至少需要6个字符';
+
+  @override
+  String get invalidEmail => '邮箱地址无效';
+
+  @override
+  String get tooManyRequests => '操作过于频繁，请几分钟后再试。';
+
+  @override
+  String get verifyEmailTitle => '验证邮箱';
+
+  @override
+  String verifyEmailMessage(String email) {
+    return '验证链接已发送至 $email。请打开邮件点击链接，然后返回应用。';
+  }
+
+  @override
+  String get verifyEmailCheck => '我已完成验证';
+
+  @override
+  String get verifyEmailResend => '重新发送';
+
+  @override
+  String verifyEmailResendIn(int seconds) {
+    return '$seconds秒后可重新发送';
+  }
+
+  @override
+  String get verifyEmailSent => '验证邮件已重新发送';
+
+  @override
+  String get verifyEmailNotYet => '邮箱尚未验证，请点击邮件中的链接。';
+
+  @override
+  String get emailLinkedLoggedOut => '邮箱已绑定。下次用此邮箱登录即可找回数据。';
+
+  @override
+  String get logoutGuestLinkTitle => '数据将会丢失';
+
+  @override
+  String get logoutGuestLinkMessage =>
+      '你正在使用访客账号。退出登录后，所有数据和关联将永久丢失。请绑定邮箱以保留数据。';
+
+  @override
+  String get logoutAnyway => '仍然退出';
+
+  @override
+  String get setNameTitle => '你叫什么名字？';
+
+  @override
+  String get setNameParentHint => '例如：兰妈妈';
+
+  @override
+  String get setNameChildHint => '例如：小宾';
+
+  @override
+  String get save => '保存';
+
+  @override
+  String get regenerateLinkCode => '生成新码';
+
+  @override
+  String get regenerateLinkCodeConfirm => '旧码将无法再使用，已关联的账号不受影响。';
+
+  @override
+  String get linkCodeRegenerated => '已生成新的关联码';
+
+  @override
+  String get confirmPasswordHint => '确认密码';
+
+  @override
+  String get sendLinkRequest => '发送关联请求';
+
+  @override
+  String get linkRequestSent => '关联请求已发送，请等待对方接受！';
+
+  @override
+  String linkRequestFromParent(String name) {
+    return '$name（家长）想与你关联';
+  }
+
+  @override
+  String linkRequestFromChild(String name) {
+    return '$name（孩子）想与你关联';
+  }
+
+  @override
+  String get linkRequestHint => '接受后将同步安全区域、任务和通知。';
+
+  @override
+  String get accept => '接受';
+
+  @override
+  String get reject => '拒绝';
+
+  @override
+  String linkRequestAccepted(String name) {
+    return '已与$name关联';
+  }
+
+  @override
+  String get pendingRequestsTitle => '等待接受';
+
+  @override
+  String pendingRequestCode(String code) {
+    return '关联码 $code';
+  }
+
+  @override
+  String get cancelRequest => '取消请求';
+
+  @override
+  String get linkedAccountsTitle => '已关联账号';
+
+  @override
+  String get unlink => '解除关联';
+
+  @override
+  String unlinkConfirmTitle(String name) {
+    return '要解除与$name的关联吗？';
+  }
+
+  @override
+  String get unlinkConfirmMessageParent =>
+      '孩子将无法再看到你的安全区域和任务，你也不会再收到孩子的通知。之后可用关联码重新关联。';
+
+  @override
+  String get unlinkConfirmMessageChild => '到达或离开安全区域时，家长将不再收到通知。请先问问家长哦！';
+
+  @override
+  String get unlinked => '已解除关联';
+
+  @override
+  String get errRequestPending => '请求已发送，正在等待对方接受';
+
+  @override
+  String get errAlreadyLinked => '这两个账号已经关联';
+
+  @override
+  String get errRequestGone => '该请求已失效，或孩子已关联3位家人。';
+
+  @override
+  String get errChildHasParent => '已与其他家长关联，请先解除关联。';
+
+  @override
+  String get zonesNeedChild => '请先与孩子关联，再为孩子创建安全区域。';
+
+  @override
+  String get errMaxGuardians => '孩子已关联3位家人，请先解除其中一位。';
+
+  @override
+  String eventShareStarted(String name) {
+    return '$name 正在实时共享位置';
+  }
+
+  @override
+  String eventShareStopped(String name) {
+    return '$name 已停止共享位置';
+  }
+
+  @override
+  String eventTodoCreated(String name, String title) {
+    return '$name 添加了待办：$title';
+  }
+
+  @override
+  String eventTodoDone(String name, String title) {
+    return '$name 完成了：$title';
+  }
+
+  @override
+  String get locationRequestTitle => '共享位置';
+
+  @override
+  String locationRequestBody(String name) {
+    return '$name 想看看你在哪里';
+  }
+
+  @override
+  String get locationRequestHint => '点击下方的“实时共享位置”';
+
+  @override
+  String locationRequestSent(String name) {
+    return '已请 $name 共享位置';
+  }
+
+  @override
+  String locationRequestPending(String time) {
+    return '已于 $time 询问，等待回应';
+  }
+
+  @override
+  String get liveShareNotifTitle => '正在共享位置';
+
+  @override
+  String get liveShareNotifText => '爸爸妈妈可以看到你的位置';
+
+  @override
+  String get noLocationYet => '暂无位置 — 请孩子共享';
+
+  @override
+  String liveSharingRemaining(String minutes) {
+    return '实时共享中 · 剩余 $minutes 分钟';
+  }
+
+  @override
+  String lastSeenAt(String time) {
+    return '最近位置：$time';
+  }
+
+  @override
+  String childLocationTitle(String name) {
+    return '$name 在这里';
+  }
+
+  @override
+  String askChildLocation(String name) {
+    return '请 $name 共享位置';
+  }
+
+  @override
+  String get askAgain => '再次询问';
+
+  @override
+  String get liveBadge => '实时';
+
+  @override
+  String get noChildLinkedTitle => '与孩子关联以查看位置并接收通知';
+
+  @override
+  String get linkWithChild => '关联孩子';
+
+  @override
+  String get notLinkedYetHint => '还没有和爸爸妈妈关联 — 去设置里关联吧';
+
+  @override
+  String get dismiss => '忽略';
+
+  @override
+  String get locationServiceOff => '定位服务已关闭，请打开后重试。';
+
+  @override
+  String get locationPermissionNeeded => '需要位置权限才能与爸爸妈妈共享。';
+
+  @override
+  String get locationPermissionSettings => '位置权限已关闭，请在设置中开启。';
+
+  @override
+  String get locationNoFix => '无法获取位置，请到开阔处再试一次。';
+
+  @override
+  String minutesRemaining(String minutes) {
+    return '剩余 $minutes 分钟';
+  }
+
+  @override
+  String get liveShareHint => '爸爸妈妈会在 60 分钟内看到你的位置';
+
+  @override
+  String get startLiveShare => '实时共享位置';
+
+  @override
+  String get stopLiveShare => '停止共享位置';
+
+  @override
+  String get addTodo => '添加待办';
+
+  @override
+  String get addTodoTitle => '你想做什么？ ✨';
+
+  @override
+  String get addTodoHint => '例如：给花浇水';
+
+  @override
+  String get childCanAddTodo => '点“添加待办”自己添加，或者等爸爸妈妈布置 😊';
+
+  @override
+  String get assignTab => '布置';
+
+  @override
+  String get notesTab => '留言';
+
+  @override
+  String get notesTitle => '给爸爸妈妈的留言 💌';
+
+  @override
+  String get notesSubtitle => '你想请爸爸妈妈做什么？';
+
+  @override
+  String notesWaiting(String count) {
+    return '$count 条留言等待爸爸妈妈';
+  }
+
+  @override
+  String notesDoneCount(String count) {
+    return '已完成（$count）';
+  }
+
+  @override
+  String get writeNote => '写留言';
+
+  @override
+  String get addNoteTitle => '你想对爸爸妈妈说什么？ 💌';
+
+  @override
+  String get addNoteHint => '例如：帮我买彩色铅笔';
+
+  @override
+  String get sendNote => '发给爸爸妈妈';
+
+  @override
+  String get deleteNoteTitle => '删除留言？';
+
+  @override
+  String noteDoneBy(String name, String time) {
+    return '$name 于 $time 完成';
+  }
+
+  @override
+  String get noteWaiting => '等待爸爸妈妈…';
+
+  @override
+  String get noNotesYet => '还没有留言';
+
+  @override
+  String get noNotesHint => '点“写留言”请爸爸妈妈帮忙吧 😊';
+
+  @override
+  String get parentNotesTitle => '待办';
+
+  @override
+  String get parentNotesAllDone => '孩子的留言都完成了 🎉';
+
+  @override
+  String parentNotesWaiting(String count) {
+    return '孩子有 $count 个请求 — 点按标记完成';
+  }
+
+  @override
+  String get parentNotesEmpty => '孩子还没有留言';
+
+  @override
+  String get parentNotesEmptyHint => '孩子请你帮忙时，会显示在这里';
+
+  @override
+  String eventNoteCreated(String name, String title) {
+    return '$name 留言：$title';
+  }
+
+  @override
+  String noteDoneNotif(String name, String title) {
+    return '$name 已完成：$title';
   }
 }

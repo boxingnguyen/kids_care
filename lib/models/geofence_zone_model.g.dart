@@ -12,7 +12,9 @@ _GeofenceZoneModel _$GeofenceZoneModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       lat: (json['lat'] as num).toDouble(),
       lng: (json['lng'] as num).toDouble(),
-      radiusMeters: (json['radiusMeters'] as num?)?.toDouble() ?? 1000.0,
+      radiusMeters:
+          (json['radiusMeters'] as num?)?.toDouble() ??
+          AppConstants.defaultGeofenceRadius,
       emoji: json['emoji'] as String? ?? '🏠',
     );
 

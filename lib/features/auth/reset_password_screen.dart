@@ -11,14 +11,19 @@ import 'package:kids_care/l10n/l10n.dart';
 final resetLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
 final resetSuccessProvider = StateProvider.autoDispose<bool>((ref) => false);
 final resetObscurePwProvider = StateProvider.autoDispose<bool>((ref) => true);
-final resetObscureConfirmProvider = StateProvider.autoDispose<bool>((ref) => true);
-final resetPasswordTextProvider = StateProvider.autoDispose<String>((ref) => '');
+final resetObscureConfirmProvider = StateProvider.autoDispose<bool>(
+  (ref) => true,
+);
+final resetPasswordTextProvider = StateProvider.autoDispose<String>(
+  (ref) => '',
+);
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
   const ResetPasswordScreen({super.key});
 
   @override
-  ConsumerState<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+  ConsumerState<ResetPasswordScreen> createState() =>
+      _ResetPasswordScreenState();
 }
 
 class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
@@ -72,7 +77,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           content: Text(context.l10n.passwordMismatch),
           backgroundColor: AppTheme.dangerColor,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       );
       return;
@@ -100,9 +107,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         leadingWidth: 64,
-        leading: const Center(
-          child: AppBackButton(fallbackLocation: '/login'),
-        ),
+        leading: const Center(child: AppBackButton(fallbackLocation: '/login')),
       ),
       extendBodyBehindAppBar: true,
       body: Container(
@@ -135,7 +140,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                             color: AppTheme.primaryColor.withValues(alpha: 0.2),
                             blurRadius: 16,
                             offset: const Offset(0, 6),
-                          )
+                          ),
                         ],
                       ),
                       child: const Center(
@@ -214,7 +219,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                             color: AppTheme.textHint,
                           ),
                           onPressed: () =>
-                              ref.read(resetObscurePwProvider.notifier).state = !obscurePw,
+                              ref.read(resetObscurePwProvider.notifier).state =
+                                  !obscurePw,
                         ),
                       ),
 
@@ -240,7 +246,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          context.l10n.passwordStrength(_strengthLabel(strength)),
+                          context.l10n.passwordStrength(
+                            _strengthLabel(strength),
+                          ),
                           style: GoogleFonts.nunito(
                             fontSize: 13,
                             color: _strengthColor(strength),
@@ -263,7 +271,12 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                             color: AppTheme.textHint,
                           ),
                           onPressed: () =>
-                              ref.read(resetObscureConfirmProvider.notifier).state = !obscureConfirm,
+                              ref
+                                      .read(
+                                        resetObscureConfirmProvider.notifier,
+                                      )
+                                      .state =
+                                  !obscureConfirm,
                         ),
                       ),
 
@@ -303,7 +316,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     decoration: BoxDecoration(
                       color: AppTheme.playColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: AppTheme.playColor.withValues(alpha: 0.2)),
+                      border: Border.all(
+                        color: AppTheme.playColor.withValues(alpha: 0.2),
+                      ),
                     ),
                     child: Column(
                       children: [

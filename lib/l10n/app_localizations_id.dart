@@ -493,10 +493,11 @@ class AppLocalizationsId extends AppLocalizations {
   String get voiceCallVia => 'Panggilan suara via ZegoCloud';
 
   @override
-  String get noNotifications => 'Belum ada notifikasi';
+  String get noNotifications => 'Belum ada kabar';
 
   @override
-  String get childNoStatusYet => 'Anak belum mengirim kabar';
+  String get childNoStatusYet =>
+      'Status, berbagi lokasi, dan tugas yang selesai dari anak akan muncul di sini';
 
   @override
   String get accountSecurity => 'Akun & keamanan';
@@ -672,5 +673,421 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String geofenceEntered(String name, String zone) {
     return '$name sudah tiba di $zone';
+  }
+
+  @override
+  String get searchPlaceHint => 'Cari sekolah, rumah, taman…';
+
+  @override
+  String get searchNoResults => 'Tempat tidak ditemukan';
+
+  @override
+  String get searchFailed => 'Pencarian gagal, coba lagi';
+
+  @override
+  String get locationPermissionDenied =>
+      'Izin lokasi belum diberikan, jadi peta tidak bisa dibuka di posisi Anda.';
+
+  @override
+  String get locationServiceDisabled => 'Layanan lokasi sedang mati.';
+
+  @override
+  String get openSettings => 'Buka pengaturan';
+
+  @override
+  String get myLocation => 'Lokasi saya';
+
+  @override
+  String get linkChildToAssign =>
+      'Belum ada anak yang terhubung. Minta anak memasukkan kode tautan untuk memberi tugas.';
+
+  @override
+  String get assignTo => 'Tugaskan ke';
+
+  @override
+  String get linkEmailTitle => 'Tautkan email';
+
+  @override
+  String get linkEmailSubtitle =>
+      'Tambahkan email agar data tetap aman dan bisa masuk lagi di ponsel baru atau setelah instal ulang.';
+
+  @override
+  String get linkEmailAction => 'Tautkan dan kirim email verifikasi';
+
+  @override
+  String get passwordTooShort => 'Kata sandi minimal 6 karakter';
+
+  @override
+  String get invalidEmail => 'Email tidak valid';
+
+  @override
+  String get tooManyRequests =>
+      'Terlalu banyak percobaan, coba lagi beberapa menit lagi.';
+
+  @override
+  String get verifyEmailTitle => 'Verifikasi email';
+
+  @override
+  String verifyEmailMessage(String email) {
+    return 'Tautan verifikasi telah dikirim ke $email. Buka email, ketuk tautannya, lalu kembali ke aplikasi.';
+  }
+
+  @override
+  String get verifyEmailCheck => 'Saya sudah verifikasi';
+
+  @override
+  String get verifyEmailResend => 'Kirim ulang email';
+
+  @override
+  String verifyEmailResendIn(int seconds) {
+    return 'Kirim ulang dalam $seconds dtk';
+  }
+
+  @override
+  String get verifyEmailSent => 'Email verifikasi dikirim ulang';
+
+  @override
+  String get verifyEmailNotYet =>
+      'Email belum terverifikasi. Ketuk tautan di email.';
+
+  @override
+  String get emailLinkedLoggedOut =>
+      'Email tertaut. Lain kali masuk dengan email ini untuk memulihkan data.';
+
+  @override
+  String get logoutGuestLinkTitle => 'Data akan hilang';
+
+  @override
+  String get logoutGuestLinkMessage =>
+      'Anda memakai akun tamu. Jika keluar, semua data dan tautan akan hilang selamanya. Tautkan email untuk menyimpannya.';
+
+  @override
+  String get logoutAnyway => 'Tetap keluar';
+
+  @override
+  String get setNameTitle => 'Siapa namamu?';
+
+  @override
+  String get setNameParentHint => 'Mis: Ibu Lan';
+
+  @override
+  String get setNameChildHint => 'Mis: Bin';
+
+  @override
+  String get save => 'Simpan';
+
+  @override
+  String get regenerateLinkCode => 'Kode baru';
+
+  @override
+  String get regenerateLinkCodeConfirm =>
+      'Kode lama tidak bisa dipakai lagi. Akun yang sudah tertaut tetap tertaut.';
+
+  @override
+  String get linkCodeRegenerated => 'Kode tautan baru dibuat';
+
+  @override
+  String get confirmPasswordHint => 'Ulangi kata sandi';
+
+  @override
+  String get sendLinkRequest => 'Kirim permintaan tautan';
+
+  @override
+  String get linkRequestSent =>
+      'Permintaan tautan terkirim. Tunggu pihak lain menerima!';
+
+  @override
+  String linkRequestFromParent(String name) {
+    return '$name (orang tua) ingin terhubung denganmu';
+  }
+
+  @override
+  String linkRequestFromChild(String name) {
+    return '$name (anak) ingin terhubung denganmu';
+  }
+
+  @override
+  String get linkRequestHint =>
+      'Terima untuk menyinkronkan zona aman, tugas, dan notifikasi.';
+
+  @override
+  String get accept => 'Terima';
+
+  @override
+  String get reject => 'Tolak';
+
+  @override
+  String linkRequestAccepted(String name) {
+    return 'Terhubung dengan $name';
+  }
+
+  @override
+  String get pendingRequestsTitle => 'Menunggu diterima';
+
+  @override
+  String pendingRequestCode(String code) {
+    return 'Kode $code';
+  }
+
+  @override
+  String get cancelRequest => 'Batalkan permintaan';
+
+  @override
+  String get linkedAccountsTitle => 'Akun terhubung';
+
+  @override
+  String get unlink => 'Putuskan tautan';
+
+  @override
+  String unlinkConfirmTitle(String name) {
+    return 'Putuskan tautan dengan $name?';
+  }
+
+  @override
+  String get unlinkConfirmMessageParent =>
+      'Anak tidak akan lagi melihat zona aman dan tugas Anda, dan Anda tidak menerima notifikasi dari anak. Bisa terhubung lagi dengan kode.';
+
+  @override
+  String get unlinkConfirmMessageChild =>
+      'Orang tua tidak akan diberi tahu lagi saat kamu tiba atau meninggalkan zona aman. Tanya orang tua dulu ya!';
+
+  @override
+  String get unlinked => 'Tautan diputus';
+
+  @override
+  String get errRequestPending => 'Permintaan sudah dikirim, menunggu diterima';
+
+  @override
+  String get errAlreadyLinked => 'Kedua akun sudah terhubung';
+
+  @override
+  String get errRequestGone =>
+      'Permintaan sudah tidak berlaku, atau anak sudah terhubung dengan 3 orang.';
+
+  @override
+  String get errChildHasParent =>
+      'Sudah terhubung dengan orang tua lain. Putuskan tautan dulu.';
+
+  @override
+  String get zonesNeedChild =>
+      'Hubungkan dengan anak dulu untuk membuat zona amannya.';
+
+  @override
+  String get errMaxGuardians =>
+      'Anak sudah terhubung dengan 3 orang. Putuskan salah satu dulu.';
+
+  @override
+  String eventShareStarted(String name) {
+    return '$name sedang membagikan lokasi langsung';
+  }
+
+  @override
+  String eventShareStopped(String name) {
+    return '$name berhenti membagikan lokasi';
+  }
+
+  @override
+  String eventTodoCreated(String name, String title) {
+    return '$name menambahkan tugas: $title';
+  }
+
+  @override
+  String eventTodoDone(String name, String title) {
+    return '$name selesai: $title';
+  }
+
+  @override
+  String get locationRequestTitle => 'Bagikan lokasi';
+
+  @override
+  String locationRequestBody(String name) {
+    return '$name ingin melihat lokasimu';
+  }
+
+  @override
+  String get locationRequestHint =>
+      'Ketuk \"Bagikan lokasi langsung\" di bawah';
+
+  @override
+  String locationRequestSent(String name) {
+    return 'Sudah meminta $name membagikan lokasi';
+  }
+
+  @override
+  String locationRequestPending(String time) {
+    return 'Diminta pukul $time, menunggu balasan';
+  }
+
+  @override
+  String get liveShareNotifTitle => 'Membagikan lokasi';
+
+  @override
+  String get liveShareNotifText => 'Orang tuamu bisa melihat lokasimu';
+
+  @override
+  String get noLocationYet => 'Belum ada lokasi — minta anak membagikannya';
+
+  @override
+  String liveSharingRemaining(String minutes) {
+    return 'Berbagi langsung · sisa $minutes menit';
+  }
+
+  @override
+  String lastSeenAt(String time) {
+    return 'Lokasi terakhir pukul $time';
+  }
+
+  @override
+  String childLocationTitle(String name) {
+    return '$name ada di sini';
+  }
+
+  @override
+  String askChildLocation(String name) {
+    return 'Minta lokasi $name';
+  }
+
+  @override
+  String get askAgain => 'Minta lagi';
+
+  @override
+  String get liveBadge => 'LANGSUNG';
+
+  @override
+  String get noChildLinkedTitle =>
+      'Hubungkan dengan anak untuk melihat lokasi dan menerima kabar';
+
+  @override
+  String get linkWithChild => 'Hubungkan dengan anak';
+
+  @override
+  String get notLinkedYetHint =>
+      'Belum terhubung dengan orang tua — hubungkan di Pengaturan';
+
+  @override
+  String get dismiss => 'Abaikan';
+
+  @override
+  String get locationServiceOff =>
+      'Layanan lokasi mati. Nyalakan lalu coba lagi.';
+
+  @override
+  String get locationPermissionNeeded =>
+      'Izin lokasi diperlukan untuk berbagi dengan orang tua.';
+
+  @override
+  String get locationPermissionSettings =>
+      'Izin lokasi mati. Buka Pengaturan untuk mengizinkan.';
+
+  @override
+  String get locationNoFix =>
+      'Lokasi belum didapat. Coba lagi di tempat terbuka.';
+
+  @override
+  String minutesRemaining(String minutes) {
+    return 'Sisa $minutes menit';
+  }
+
+  @override
+  String get liveShareHint =>
+      'Orang tuamu bisa melihat lokasimu selama 60 menit';
+
+  @override
+  String get startLiveShare => 'Bagikan lokasi langsung';
+
+  @override
+  String get stopLiveShare => 'Berhenti berbagi lokasi';
+
+  @override
+  String get addTodo => 'Tambah tugas';
+
+  @override
+  String get addTodoTitle => 'Mau melakukan apa? ✨';
+
+  @override
+  String get addTodoHint => 'mis. Menyiram tanaman';
+
+  @override
+  String get childCanAddTodo =>
+      'Ketuk \"Tambah tugas\" untuk menambah sendiri, atau tunggu orang tua 😊';
+
+  @override
+  String get assignTab => 'Beri tugas';
+
+  @override
+  String get notesTab => 'Pesan';
+
+  @override
+  String get notesTitle => 'Pesan untuk orang tua 💌';
+
+  @override
+  String get notesSubtitle => 'Mau minta orang tua melakukan apa?';
+
+  @override
+  String notesWaiting(String count) {
+    return '$count pesan menunggu orang tua';
+  }
+
+  @override
+  String notesDoneCount(String count) {
+    return 'Selesai ($count)';
+  }
+
+  @override
+  String get writeNote => 'Tulis pesan';
+
+  @override
+  String get addNoteTitle => 'Mau bilang apa ke orang tua? 💌';
+
+  @override
+  String get addNoteHint => 'mis. Belikan pensil warna';
+
+  @override
+  String get sendNote => 'Kirim ke orang tua';
+
+  @override
+  String get deleteNoteTitle => 'Hapus pesan?';
+
+  @override
+  String noteDoneBy(String name, String time) {
+    return 'Dikerjakan $name pukul $time';
+  }
+
+  @override
+  String get noteWaiting => 'Menunggu orang tua…';
+
+  @override
+  String get noNotesYet => 'Belum ada pesan';
+
+  @override
+  String get noNotesHint =>
+      'Ketuk \"Tulis pesan\" untuk minta bantuan orang tua 😊';
+
+  @override
+  String get parentNotesTitle => 'Daftar tugas';
+
+  @override
+  String get parentNotesAllDone => 'Semua pesan anak sudah dikerjakan 🎉';
+
+  @override
+  String parentNotesWaiting(String count) {
+    return '$count permintaan dari anak — ketuk untuk tandai selesai';
+  }
+
+  @override
+  String get parentNotesEmpty => 'Belum ada pesan dari anak';
+
+  @override
+  String get parentNotesEmptyHint =>
+      'Saat anak meminta sesuatu, akan muncul di sini';
+
+  @override
+  String eventNoteCreated(String name, String title) {
+    return '$name minta: $title';
+  }
+
+  @override
+  String noteDoneNotif(String name, String title) {
+    return '$name sudah mengerjakan: $title';
   }
 }

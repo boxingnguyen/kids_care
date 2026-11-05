@@ -46,24 +46,24 @@ class AuthTextField extends StatelessWidget {
         hintText: hint,
         labelText: label,
         errorText: errorText,
-        hintStyle: GoogleFonts.nunito(
-          fontSize: 14,
-          color: AppTheme.textHint,
-        ),
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon, size: 20, color: AppTheme.textHint) : null,
+        hintStyle: GoogleFonts.nunito(fontSize: 14, color: AppTheme.textHint),
+        prefixIcon: prefixIcon != null
+            ? Icon(prefixIcon, size: 20, color: AppTheme.textHint)
+            : null,
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: AppTheme.surfaceVariant,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide:
-              const BorderSide(color: AppTheme.primaryColor, width: 2),
+          borderSide: const BorderSide(color: AppTheme.primaryColor, width: 2),
         ),
       ),
     );

@@ -15,8 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GeofenceEventModel {
 
- String get id; String get zoneId; String get zoneName; String get childUid; String get childName; String get status;// 'enter' | 'exit'
- DateTime get timestamp;
+ String get id;// Doc cũ (build ≤ 3) không có type → mặc định là sự kiện vùng an toàn.
+ String get type; String get zoneId;// Tên vùng, hoặc tiêu đề việc cần làm với todo_*.
+ String get zoneName; String get childUid; String get childName; String get status; DateTime get timestamp;
 /// Create a copy of GeofenceEventModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +30,16 @@ $GeofenceEventModelCopyWith<GeofenceEventModel> get copyWith => _$GeofenceEventM
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GeofenceEventModel&&(identical(other.id, id) || other.id == id)&&(identical(other.zoneId, zoneId) || other.zoneId == zoneId)&&(identical(other.zoneName, zoneName) || other.zoneName == zoneName)&&(identical(other.childUid, childUid) || other.childUid == childUid)&&(identical(other.childName, childName) || other.childName == childName)&&(identical(other.status, status) || other.status == status)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GeofenceEventModel&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.zoneId, zoneId) || other.zoneId == zoneId)&&(identical(other.zoneName, zoneName) || other.zoneName == zoneName)&&(identical(other.childUid, childUid) || other.childUid == childUid)&&(identical(other.childName, childName) || other.childName == childName)&&(identical(other.status, status) || other.status == status)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,zoneId,zoneName,childUid,childName,status,timestamp);
+int get hashCode => Object.hash(runtimeType,id,type,zoneId,zoneName,childUid,childName,status,timestamp);
 
 @override
 String toString() {
-  return 'GeofenceEventModel(id: $id, zoneId: $zoneId, zoneName: $zoneName, childUid: $childUid, childName: $childName, status: $status, timestamp: $timestamp)';
+  return 'GeofenceEventModel(id: $id, type: $type, zoneId: $zoneId, zoneName: $zoneName, childUid: $childUid, childName: $childName, status: $status, timestamp: $timestamp)';
 }
 
 
@@ -49,7 +50,7 @@ abstract mixin class $GeofenceEventModelCopyWith<$Res>  {
   factory $GeofenceEventModelCopyWith(GeofenceEventModel value, $Res Function(GeofenceEventModel) _then) = _$GeofenceEventModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String zoneId, String zoneName, String childUid, String childName, String status, DateTime timestamp
+ String id, String type, String zoneId, String zoneName, String childUid, String childName, String status, DateTime timestamp
 });
 
 
@@ -66,9 +67,10 @@ class _$GeofenceEventModelCopyWithImpl<$Res>
 
 /// Create a copy of GeofenceEventModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? zoneId = null,Object? zoneName = null,Object? childUid = null,Object? childName = null,Object? status = null,Object? timestamp = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? type = null,Object? zoneId = null,Object? zoneName = null,Object? childUid = null,Object? childName = null,Object? status = null,Object? timestamp = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,zoneId: null == zoneId ? _self.zoneId : zoneId // ignore: cast_nullable_to_non_nullable
 as String,zoneName: null == zoneName ? _self.zoneName : zoneName // ignore: cast_nullable_to_non_nullable
 as String,childUid: null == childUid ? _self.childUid : childUid // ignore: cast_nullable_to_non_nullable
@@ -160,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String zoneId,  String zoneName,  String childUid,  String childName,  String status,  DateTime timestamp)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String type,  String zoneId,  String zoneName,  String childUid,  String childName,  String status,  DateTime timestamp)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GeofenceEventModel() when $default != null:
-return $default(_that.id,_that.zoneId,_that.zoneName,_that.childUid,_that.childName,_that.status,_that.timestamp);case _:
+return $default(_that.id,_that.type,_that.zoneId,_that.zoneName,_that.childUid,_that.childName,_that.status,_that.timestamp);case _:
   return orElse();
 
 }
@@ -181,10 +183,10 @@ return $default(_that.id,_that.zoneId,_that.zoneName,_that.childUid,_that.childN
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String zoneId,  String zoneName,  String childUid,  String childName,  String status,  DateTime timestamp)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String type,  String zoneId,  String zoneName,  String childUid,  String childName,  String status,  DateTime timestamp)  $default,) {final _that = this;
 switch (_that) {
 case _GeofenceEventModel():
-return $default(_that.id,_that.zoneId,_that.zoneName,_that.childUid,_that.childName,_that.status,_that.timestamp);case _:
+return $default(_that.id,_that.type,_that.zoneId,_that.zoneName,_that.childUid,_that.childName,_that.status,_that.timestamp);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +203,10 @@ return $default(_that.id,_that.zoneId,_that.zoneName,_that.childUid,_that.childN
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String zoneId,  String zoneName,  String childUid,  String childName,  String status,  DateTime timestamp)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String type,  String zoneId,  String zoneName,  String childUid,  String childName,  String status,  DateTime timestamp)?  $default,) {final _that = this;
 switch (_that) {
 case _GeofenceEventModel() when $default != null:
-return $default(_that.id,_that.zoneId,_that.zoneName,_that.childUid,_that.childName,_that.status,_that.timestamp);case _:
+return $default(_that.id,_that.type,_that.zoneId,_that.zoneName,_that.childUid,_that.childName,_that.status,_that.timestamp);case _:
   return null;
 
 }
@@ -216,16 +218,18 @@ return $default(_that.id,_that.zoneId,_that.zoneName,_that.childUid,_that.childN
 @JsonSerializable()
 
 class _GeofenceEventModel implements GeofenceEventModel {
-  const _GeofenceEventModel({required this.id, required this.zoneId, required this.zoneName, required this.childUid, required this.childName, required this.status, required this.timestamp});
+  const _GeofenceEventModel({required this.id, this.type = ChildEventType.geofence, this.zoneId = '', this.zoneName = '', required this.childUid, required this.childName, this.status = '', required this.timestamp});
   factory _GeofenceEventModel.fromJson(Map<String, dynamic> json) => _$GeofenceEventModelFromJson(json);
 
 @override final  String id;
-@override final  String zoneId;
-@override final  String zoneName;
+// Doc cũ (build ≤ 3) không có type → mặc định là sự kiện vùng an toàn.
+@override@JsonKey() final  String type;
+@override@JsonKey() final  String zoneId;
+// Tên vùng, hoặc tiêu đề việc cần làm với todo_*.
+@override@JsonKey() final  String zoneName;
 @override final  String childUid;
 @override final  String childName;
-@override final  String status;
-// 'enter' | 'exit'
+@override@JsonKey() final  String status;
 @override final  DateTime timestamp;
 
 /// Create a copy of GeofenceEventModel
@@ -241,16 +245,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GeofenceEventModel&&(identical(other.id, id) || other.id == id)&&(identical(other.zoneId, zoneId) || other.zoneId == zoneId)&&(identical(other.zoneName, zoneName) || other.zoneName == zoneName)&&(identical(other.childUid, childUid) || other.childUid == childUid)&&(identical(other.childName, childName) || other.childName == childName)&&(identical(other.status, status) || other.status == status)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GeofenceEventModel&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.zoneId, zoneId) || other.zoneId == zoneId)&&(identical(other.zoneName, zoneName) || other.zoneName == zoneName)&&(identical(other.childUid, childUid) || other.childUid == childUid)&&(identical(other.childName, childName) || other.childName == childName)&&(identical(other.status, status) || other.status == status)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,zoneId,zoneName,childUid,childName,status,timestamp);
+int get hashCode => Object.hash(runtimeType,id,type,zoneId,zoneName,childUid,childName,status,timestamp);
 
 @override
 String toString() {
-  return 'GeofenceEventModel(id: $id, zoneId: $zoneId, zoneName: $zoneName, childUid: $childUid, childName: $childName, status: $status, timestamp: $timestamp)';
+  return 'GeofenceEventModel(id: $id, type: $type, zoneId: $zoneId, zoneName: $zoneName, childUid: $childUid, childName: $childName, status: $status, timestamp: $timestamp)';
 }
 
 
@@ -261,7 +265,7 @@ abstract mixin class _$GeofenceEventModelCopyWith<$Res> implements $GeofenceEven
   factory _$GeofenceEventModelCopyWith(_GeofenceEventModel value, $Res Function(_GeofenceEventModel) _then) = __$GeofenceEventModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String zoneId, String zoneName, String childUid, String childName, String status, DateTime timestamp
+ String id, String type, String zoneId, String zoneName, String childUid, String childName, String status, DateTime timestamp
 });
 
 
@@ -278,9 +282,10 @@ class __$GeofenceEventModelCopyWithImpl<$Res>
 
 /// Create a copy of GeofenceEventModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? zoneId = null,Object? zoneName = null,Object? childUid = null,Object? childName = null,Object? status = null,Object? timestamp = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? type = null,Object? zoneId = null,Object? zoneName = null,Object? childUid = null,Object? childName = null,Object? status = null,Object? timestamp = null,}) {
   return _then(_GeofenceEventModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,zoneId: null == zoneId ? _self.zoneId : zoneId // ignore: cast_nullable_to_non_nullable
 as String,zoneName: null == zoneName ? _self.zoneName : zoneName // ignore: cast_nullable_to_non_nullable
 as String,childUid: null == childUid ? _self.childUid : childUid // ignore: cast_nullable_to_non_nullable

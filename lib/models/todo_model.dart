@@ -43,15 +43,16 @@ abstract class TodoModel with _$TodoModel {
 
 extension TodoModelFirestore on TodoModel {
   Map<String, dynamic> toFirestore() => {
-        'title': title,
-        'description': description,
-        'emoji': emoji,
-        'assignedChildId': assignedChildId,
-        'createdBy': createdBy,
-        'isCompleted': isCompleted,
-        'dueDate': dueDate != null ? Timestamp.fromDate(dueDate!) : null,
-        'completedAt':
-            completedAt != null ? Timestamp.fromDate(completedAt!) : null,
-        'createdAt': Timestamp.fromDate(createdAt),
-      };
+    'title': title,
+    'description': description,
+    'emoji': emoji,
+    'assignedChildId': assignedChildId,
+    'createdBy': createdBy,
+    'isCompleted': isCompleted,
+    'dueDate': dueDate != null ? Timestamp.fromDate(dueDate!) : null,
+    'completedAt': completedAt != null
+        ? Timestamp.fromDate(completedAt!)
+        : null,
+    'createdAt': Timestamp.fromDate(createdAt),
+  };
 }

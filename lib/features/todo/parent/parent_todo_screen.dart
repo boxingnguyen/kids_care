@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
-import 'package:kids_care/core/widgets/app_back_button.dart';
+import 'package:kids_care/core/widgets/app_top_bar.dart';
+import 'package:kids_care/features/link/providers/link_providers.dart';
 import 'package:kids_care/features/todo/providers/todo_provider.dart';
 import 'package:kids_care/models/todo_model.dart';
+import 'package:kids_care/models/user_model.dart';
 import 'package:kids_care/l10n/l10n.dart';
 
 // ── Emoji options for task creation ──────────────────────────────────────
@@ -21,11 +23,9 @@ class ParentTodoScreen extends ConsumerStatefulWidget {
 class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
   @override
   Widget build(BuildContext context) {
-    final todosAsync = ref.watch(defaultTodosStreamProvider);
+    final todosAsync = ref.watch(parentTodosStreamProvider);
 
-    return AppBackScope(
-      fallbackLocation: '/parent-home',
-      child: Scaffold(
+    return Scaffold(
       backgroundColor: AppTheme.backgroundGrey,
       body: SafeArea(
         child: Column(
@@ -34,7 +34,14 @@ class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
             Expanded(
               child: todosAsync.when(
                 data: (todos) => todos.isEmpty
-                    ? _EmptyState()
+                    ? _EmptyState(
+                        hasChild:
+                            ref
+                                .watch(linkedChildrenProvider)
+                                .valueOrNull
+                                ?.isNotEmpty ??
+                            true,
+                      )
                     : ListView.builder(
                         padding: const EdgeInsets.fromLTRB(18, 12, 18, 100),
                         itemCount: todos.length,
@@ -42,7 +49,9 @@ class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
                             _ParentTodoTile(todo: todos[i]),
                       ),
                 loading: () => const Center(
-                  child: CircularProgressIndicator(color: AppTheme.primaryColor),
+                  child: CircularProgressIndicator(
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
                 error: (e, _) => Center(
                   child: Padding(
@@ -60,27 +69,30 @@ class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
         ),
       ),
       floatingActionButton: _AddTodoFab(),
-    ),
     );
   }
 
   Widget _buildHeader(BuildContext context) {
-    final todosAsync = ref.watch(defaultTodosStreamProvider);
+    final todosAsync = ref.watch(parentTodosStreamProvider);
     final total = todosAsync.valueOrNull?.length ?? 0;
-    final done = todosAsync.valueOrNull?.where((t) => t.isCompleted).length ?? 0;
+    final done =
+        todosAsync.valueOrNull?.where((t) => t.isCompleted).length ?? 0;
 
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [
-          BoxShadow(color: Color(0x0A000000), blurRadius: 8, offset: Offset(0, 2)),
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
         ],
       ),
-      padding: const EdgeInsets.fromLTRB(8, 12, 20, 12),
+      padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
       child: Row(
         children: [
-          const AppBackButton(fallbackLocation: '/parent-home'),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,8 +117,8 @@ class _ParentTodoScreenState extends ConsumerState<ParentTodoScreen> {
               ],
             ),
           ),
-          if (total > 0)
-            _ProgressCircle(done: done, total: total),
+          if (total > 0) _ProgressCircle(done: done, total: total),
+          const SettingsAction(),
         ],
       ),
     );
@@ -168,28 +180,42 @@ class _ParentTodoTile extends ConsumerWidget {
           color: AppTheme.dangerColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: const Icon(Icons.delete_outline_rounded,
-            color: AppTheme.dangerColor, size: 28),
+        child: const Icon(
+          Icons.delete_outline_rounded,
+          color: AppTheme.dangerColor,
+          size: 28,
+        ),
       ),
       confirmDismiss: (_) async {
         return await showDialog<bool>(
           context: context,
           builder: (_) => AlertDialog(
-            title: Text(context.l10n.deleteTaskTitle,
-                style: GoogleFonts.nunito(fontWeight: FontWeight.w800)),
-            content: Text(context.l10n.deleteTaskMessage(todo.title),
-                style: GoogleFonts.nunito()),
+            title: Text(
+              context.l10n.deleteTaskTitle,
+              style: GoogleFonts.nunito(fontWeight: FontWeight.w800),
+            ),
+            content: Text(
+              context.l10n.deleteTaskMessage(todo.title),
+              style: GoogleFonts.nunito(),
+            ),
             actions: [
               TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text(context.l10n.cancel,
-                      style: GoogleFonts.nunito(color: AppTheme.textSecondary))),
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(
+                  context.l10n.cancel,
+                  style: GoogleFonts.nunito(color: AppTheme.textSecondary),
+                ),
+              ),
               TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text(context.l10n.delete,
-                      style: GoogleFonts.nunito(
-                          color: AppTheme.dangerColor,
-                          fontWeight: FontWeight.w800))),
+                onPressed: () => Navigator.pop(context, true),
+                child: Text(
+                  context.l10n.delete,
+                  style: GoogleFonts.nunito(
+                    color: AppTheme.dangerColor,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
             ],
           ),
         );
@@ -202,7 +228,10 @@ class _ParentTodoTile extends ConsumerWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: todo.isCompleted
-              ? Border.all(color: AppTheme.playColor.withValues(alpha: 0.4), width: 1.5)
+              ? Border.all(
+                  color: AppTheme.playColor.withValues(alpha: 0.4),
+                  width: 1.5,
+                )
               : null,
           boxShadow: [
             BoxShadow(
@@ -242,8 +271,9 @@ class _ParentTodoTile extends ConsumerWidget {
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
                       color: AppTheme.textPrimary,
-                      decoration:
-                          todo.isCompleted ? TextDecoration.lineThrough : null,
+                      decoration: todo.isCompleted
+                          ? TextDecoration.lineThrough
+                          : null,
                       decorationColor: AppTheme.textHint,
                     ),
                   ),
@@ -263,8 +293,11 @@ class _ParentTodoTile extends ConsumerWidget {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(Icons.schedule_rounded,
-                            size: 12, color: AppTheme.textHint),
+                        Icon(
+                          Icons.schedule_rounded,
+                          size: 12,
+                          color: AppTheme.textHint,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           DateFormat('dd/MM').format(todo.dueDate!),
@@ -283,8 +316,10 @@ class _ParentTodoTile extends ConsumerWidget {
             // Status badge
             if (todo.isCompleted)
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: AppTheme.playColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(30),
@@ -292,8 +327,11 @@ class _ParentTodoTile extends ConsumerWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.check_circle_rounded,
-                        size: 14, color: AppTheme.playColor),
+                    const Icon(
+                      Icons.check_circle_rounded,
+                      size: 14,
+                      color: AppTheme.playColor,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       context.l10n.taskDone,
@@ -308,8 +346,10 @@ class _ParentTodoTile extends ConsumerWidget {
               )
             else
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: AppTheme.primaryLight,
                   borderRadius: BorderRadius.circular(30),
@@ -348,19 +388,29 @@ class _AddTodoFab extends ConsumerWidget {
     );
   }
 
-  void _showAddSheet(BuildContext context, WidgetRef ref) {
+  Future<void> _showAddSheet(BuildContext context, WidgetRef ref) async {
+    final children = await ref.read(linkedChildrenProvider.future);
+    if (!context.mounted) return;
+    if (children.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.linkChildToAssign)));
+      return;
+    }
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => _AddTodoSheet(ref: ref),
+      builder: (_) => _AddTodoSheet(ref: ref, children: children),
     );
   }
 }
 
 class _AddTodoSheet extends StatefulWidget {
   final WidgetRef ref;
-  const _AddTodoSheet({required this.ref});
+  final List<UserModel> children;
+  const _AddTodoSheet({required this.ref, required this.children});
 
   @override
   State<_AddTodoSheet> createState() => _AddTodoSheetState();
@@ -372,6 +422,7 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
   String _selectedEmoji = '📝';
   DateTime? _dueDate;
   bool _isLoading = false;
+  late String _childId = widget.children.first.uid;
 
   @override
   void dispose() {
@@ -384,10 +435,13 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
     if (_titleCtrl.text.trim().isEmpty) return;
     setState(() => _isLoading = true);
     try {
-      await widget.ref.read(todoActionsProvider).addTodo(
+      await widget.ref
+          .read(todoActionsProvider)
+          .addTodo(
             title: _titleCtrl.text.trim(),
             description: _descCtrl.text.trim(),
             emoji: _selectedEmoji,
+            assignedChildId: _childId,
             dueDate: _dueDate,
           );
       if (mounted) Navigator.pop(context);
@@ -431,12 +485,43 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
           ),
           const SizedBox(height: 20),
 
-          // Emoji picker
-          Text(context.l10n.chooseIcon,
+          // Chọn con (chỉ khi có nhiều con)
+          if (widget.children.length > 1) ...[
+            Text(
+              context.l10n.assignTo,
               style: GoogleFonts.nunito(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.textSecondary)),
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: AppTheme.textSecondary,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              children: widget.children.map((c) {
+                return ChoiceChip(
+                  label: Text(
+                    c.name,
+                    style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
+                  ),
+                  selected: c.uid == _childId,
+                  selectedColor: AppTheme.primaryColor.withValues(alpha: 0.2),
+                  onSelected: (_) => setState(() => _childId = c.uid),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 16),
+          ],
+
+          // Emoji picker
+          Text(
+            context.l10n.chooseIcon,
+            style: GoogleFonts.nunito(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textSecondary,
+            ),
+          ),
           const SizedBox(height: 10),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -457,8 +542,8 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Center(
-                        child: Text(e,
-                            style: const TextStyle(fontSize: 22))),
+                      child: Text(e, style: const TextStyle(fontSize: 22)),
+                    ),
                   ),
                 );
               }).toList(),
@@ -514,7 +599,8 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
                 builder: (ctx, child) => Theme(
                   data: Theme.of(ctx).copyWith(
                     colorScheme: const ColorScheme.light(
-                        primary: AppTheme.primaryColor),
+                      primary: AppTheme.primaryColor,
+                    ),
                   ),
                   child: child!,
                 ),
@@ -522,20 +608,24 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
               if (picked != null) setState(() => _dueDate = picked);
             },
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
               decoration: BoxDecoration(
                 color: AppTheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.calendar_today_outlined,
-                      size: 18, color: AppTheme.primaryColor),
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 18,
+                    color: AppTheme.primaryColor,
+                  ),
                   const SizedBox(width: 10),
                   Text(
                     _dueDate != null
-                        ? context.l10n.dueDateLabel(DateFormat('dd/MM/yyyy').format(_dueDate!))
+                        ? context.l10n.dueDateLabel(
+                            DateFormat('dd/MM/yyyy').format(_dueDate!),
+                          )
                         : context.l10n.pickDueDate,
                     style: GoogleFonts.nunito(
                       color: _dueDate != null
@@ -549,8 +639,11 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
                     const Spacer(),
                     GestureDetector(
                       onTap: () => setState(() => _dueDate = null),
-                      child: const Icon(Icons.close_rounded,
-                          size: 16, color: AppTheme.textHint),
+                      child: const Icon(
+                        Icons.close_rounded,
+                        size: 16,
+                        color: AppTheme.textHint,
+                      ),
                     ),
                   ],
                 ],
@@ -569,12 +662,16 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
                       height: 20,
                       width: 20,
                       child: CircularProgressIndicator(
-                          color: Colors.white, strokeWidth: 2.5),
+                        color: Colors.white,
+                        strokeWidth: 2.5,
+                      ),
                     )
                   : Text(
                       context.l10n.assignTask,
                       style: GoogleFonts.nunito(
-                          fontWeight: FontWeight.w800, fontSize: 16),
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                      ),
                     ),
             ),
           ),
@@ -586,6 +683,9 @@ class _AddTodoSheetState extends State<_AddTodoSheet> {
 
 // ── Empty state ───────────────────────────────────────────────────────────
 class _EmptyState extends StatelessWidget {
+  final bool hasChild;
+  const _EmptyState({required this.hasChild});
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -604,7 +704,10 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            context.l10n.tapPlusToAssign,
+            hasChild
+                ? context.l10n.tapPlusToAssign
+                : context.l10n.linkChildToAssign,
+            textAlign: TextAlign.center,
             style: GoogleFonts.nunito(
               fontSize: 14,
               color: AppTheme.textSecondary,

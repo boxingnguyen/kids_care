@@ -65,10 +65,13 @@ void main() {
       expect(true, isTrue);
     });
 
-    test('getCurrentUserData should return UserModel when user is logged in', () {
-      // TODO: Implement after UserService refactoring
-      expect(true, isTrue);
-    });
+    test(
+      'getCurrentUserData should return UserModel when user is logged in',
+      () {
+        // TODO: Implement after UserService refactoring
+        expect(true, isTrue);
+      },
+    );
 
     test('saveUserData should successfully save user data', () {
       // TODO: Implement after UserService refactoring

@@ -20,23 +20,30 @@ void main() {
     test('parent linking to parent throws ArgumentError', () {
       expect(
         () => GuestAuthService.validateLinkRoles('parent', 'parent'),
-        throwsA(isA<ArgumentError>().having(
-          (e) => e.message,
-          'message',
-          contains('bố/mẹ khác'),
-        )),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            contains('bố/mẹ khác'),
+          ),
+        ),
       );
     });
 
-    test('child linking to child throws ArgumentError with correct message', () {
-      expect(
-        () => GuestAuthService.validateLinkRoles('child', 'child'),
-        throwsA(isA<ArgumentError>().having(
-          (e) => e.message,
-          'message',
-          contains('không thuộc về tài khoản bố/mẹ'),
-        )),
-      );
-    });
+    test(
+      'child linking to child throws ArgumentError with correct message',
+      () {
+        expect(
+          () => GuestAuthService.validateLinkRoles('child', 'child'),
+          throwsA(
+            isA<ArgumentError>().having(
+              (e) => e.message,
+              'message',
+              contains('không thuộc về tài khoản bố/mẹ'),
+            ),
+          ),
+        );
+      },
+    );
   });
 }

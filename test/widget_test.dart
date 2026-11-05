@@ -14,7 +14,9 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     final key = GlobalKey<NavigatorState>();
-    await tester.pumpWidget(ProviderScope(child: KidsCareApp(navigatorKey: key)));
+    await tester.pumpWidget(
+      ProviderScope(child: KidsCareApp(navigatorKey: key)),
+    );
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

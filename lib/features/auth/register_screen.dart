@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
 import 'package:kids_care/core/widgets/app_back_button.dart';
+import 'package:kids_care/features/auth/providers/auth_providers.dart';
+import 'package:kids_care/features/auth/services/auth_service.dart';
 import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
 import 'package:kids_care/l10n/l10n.dart';
@@ -41,9 +42,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final password = _passwordCtrl.text;
 
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.fillAllFields)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.fillAllFields)));
       return;
     }
 
@@ -54,21 +55,27 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           .createUserWithEmailAndPassword(email: email, password: password);
 
       if (userCredential.user != null) {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
-              'uid': userCredential.user!.uid,
-              'name': name,
-              'email': email,
-              'createdAt': FieldValue.serverTimestamp(),
-              'role': 'parent',
-            });
+        await ref
+            .read(guestAuthServiceProvider)
+            .createProfile(
+              uid: userCredential.user!.uid,
+              name: name,
+              nameSet: true,
+              email: email,
+              role: 'parent',
+            );
+        if (!mounted) return;
+        await ref
+            .read(authServiceProvider)
+            .sendVerificationEmail(
+              languageCode: Localizations.localeOf(context).languageCode,
+            );
       }
 
       if (mounted) {
         ref.read(registerLoadingProvider.notifier).state = false;
-        context.go('/parent-home');
+        // Xác thực email xong mới vào home (router cũng chặn nếu bỏ qua).
+        context.go('/verify-email');
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
@@ -79,15 +86,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             : null;
         log('${e.message}');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(msgErrAlreadyUsed ?? context.l10n.signUpFailed)),
+          SnackBar(
+            content: Text(msgErrAlreadyUsed ?? context.l10n.signUpFailed),
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
         ref.read(registerLoadingProvider.notifier).state = false;
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(context.l10n.errorGeneric('$e'))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.errorGeneric('$e'))),
+        );
       }
     }
   }
@@ -103,9 +112,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         leadingWidth: 64,
-        leading: const Center(
-          child: AppBackButton(fallbackLocation: '/login'),
-        ),
+        leading: const Center(child: AppBackButton(fallbackLocation: '/login')),
       ),
       extendBodyBehindAppBar: true,
       body: Container(
@@ -212,8 +219,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () =>
-                          context.canPop() ? context.pop() : context.go('/login'),
+                      onTap: () => context.canPop()
+                          ? context.pop()
+                          : context.go('/login'),
                       child: Text(
                         context.l10n.login,
                         style: GoogleFonts.nunito(

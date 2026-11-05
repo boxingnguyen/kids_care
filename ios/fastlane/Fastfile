@@ -2,6 +2,13 @@ default_platform(:ios)
 
 ROOT = File.expand_path("../..", __dir__)
 SECRETS = File.expand_path("~/.kidscare-secrets")
+ENV_JSON = File.join(ROOT, "config/env.json")
+
+# dart-define values (Mapbox token, ...) — copy config/env.example.json.
+def require_env_json
+  UI.user_error!("Missing #{ENV_JSON} — copy config/env.example.json and fill it in") unless File.exist?(ENV_JSON)
+  UI.user_error!("MAPBOX_ACCESS_TOKEN is empty in #{ENV_JSON}") if JSON.parse(File.read(ENV_JSON))["MAPBOX_ACCESS_TOKEN"].to_s.empty?
+end
 
 # App Store Connect API key — files live OUTSIDE the repo.
 # ~/.kidscare-secrets/asc.env must define ASC_KEY_ID and ASC_ISSUER_ID,
@@ -9,8 +16,8 @@ SECRETS = File.expand_path("~/.kidscare-secrets")
 def asc_key
   env_file = File.join(SECRETS, "asc.env")
   File.readlines(env_file).each do |l|
-    k, v = l.strip.split("=", 2)
-    ENV[k] ||= v if k && v && !k.start_with?("#")
+    k, v = l.strip.split("=", 2).map { |s| s&.strip&.delete_prefix('"')&.delete_suffix('"') }
+    ENV[k] ||= v if k && v && !k.empty? && !k.start_with?("#")
   end if File.exist?(env_file)
   UI.user_error!("Missing ASC_KEY_ID / ASC_ISSUER_ID in #{env_file}") unless ENV["ASC_KEY_ID"] && ENV["ASC_ISSUER_ID"]
   @p8 = File.join(SECRETS, "AuthKey_#{ENV['ASC_KEY_ID']}.p8")
@@ -21,7 +28,12 @@ platform :ios do
   desc "Build signed IPA (Flutter + automatic signing)"
   lane :build do
     asc_key
-    sh("cd #{ROOT} && flutter build ios --release --no-codesign")
+    require_env_json
+    # Build number = latest on TestFlight + 1, so uploads never collide.
+    build_number = latest_testflight_build_number(app_identifier: "com.crosstechedu.kidscare", initial_build_number: 0) + 1
+    UI.message("Build number: #{build_number}")
+    # Homebrew fastlane sets GEM_PATH, which breaks Homebrew CocoaPods during `pod install`.
+    sh("cd #{ROOT} && env -u GEM_HOME -u GEM_PATH flutter build ios --release --no-codesign --build-number=#{build_number} --dart-define-from-file=#{ENV_JSON}")
     build_app(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",

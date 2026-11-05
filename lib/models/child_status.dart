@@ -2,13 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'child_status.freezed.dart';
 
-enum ChildStatusType {
-  school,
-  playing,
-  home,
-  arrived,
-  unknown,
-}
+enum ChildStatusType { school, playing, home, arrived, unknown }
 
 extension ChildStatusTypeExt on ChildStatusType {
   String get label {

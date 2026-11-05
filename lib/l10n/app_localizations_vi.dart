@@ -18,7 +18,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get home => 'Trang chủ';
 
   @override
-  String get tasks => 'Nhiệm vụ';
+  String get tasks => 'Việc cần làm';
 
   @override
   String get map => 'Bản đồ';
@@ -309,7 +309,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get statusGoPlay => 'Con đi chơi';
 
   @override
-  String get statusArrived => 'Con đã tới';
+  String get statusArrived => 'Con đã đến';
 
   @override
   String get statusBackHome => 'Con đã về';
@@ -329,16 +329,16 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get statusLabelSchool => 'Đi học';
+  String get statusLabelSchool => 'Con đang đi học';
 
   @override
-  String get statusLabelPlaying => 'Đang chơi';
+  String get statusLabelPlaying => 'Con đang đi chơi';
 
   @override
-  String get statusLabelHome => 'Về nhà';
+  String get statusLabelHome => 'Con đã về nhà';
 
   @override
-  String get statusLabelArrived => 'Đã đến';
+  String get statusLabelArrived => 'Con đã đến trường';
 
   @override
   String get statusLabelLeft => 'Rời khỏi';
@@ -414,7 +414,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get menuMapDesc => 'Đánh dấu trường, nhà, nơi chơi của con';
 
   @override
-  String get menuTasksTitle => 'Nhiệm vụ của con';
+  String get menuTasksTitle => 'Việc cần làm của con';
 
   @override
   String get menuTasksDesc => 'Giao việc hằng ngày và xem con đã làm xong chưa';
@@ -490,10 +490,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get voiceCallVia => 'Cuộc gọi thoại qua ZegoCloud';
 
   @override
-  String get noNotifications => 'Chưa có thông báo';
+  String get noNotifications => 'Chưa có cập nhật nào';
 
   @override
-  String get childNoStatusYet => 'Con chưa cập nhật trạng thái nào';
+  String get childNoStatusYet =>
+      'Khi con báo trạng thái, chia sẻ vị trí hay làm xong việc, bạn sẽ thấy ở đây';
 
   @override
   String get accountSecurity => 'Tài khoản & bảo mật';
@@ -561,17 +562,17 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get childTasksLoadError =>
-      'Ôi, chưa tải được nhiệm vụ 😢\nCon thử lại sau một chút nhé!';
+      'Ôi, chưa tải được việc cần làm 😢\nCon thử lại sau một chút nhé!';
 
   @override
-  String get myTasksTitle => 'Nhiệm vụ của mình 🌟';
+  String get myTasksTitle => 'Việc cần làm 🌟';
 
   @override
-  String get tapTaskWhenDone => 'Chạm vào nhiệm vụ khi con làm xong nhé!';
+  String get tapTaskWhenDone => 'Chạm vào việc khi con làm xong nhé!';
 
   @override
   String doneOfTotalToday(String done, String total) {
-    return 'Đã xong $done/$total nhiệm vụ hôm nay!';
+    return 'Đã xong $done/$total việc hôm nay!';
   }
 
   @override
@@ -590,26 +591,26 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get noTasksYetChild => 'Chưa có nhiệm vụ nào!';
+  String get noTasksYetChild => 'Chưa có việc nào!';
 
   @override
   String get parentWillAssign => 'Bố/mẹ sẽ giao nhiệm vụ cho mình sớm nhé 😊';
 
   @override
   String parentTasksLoadError(String message) {
-    return 'Không tải được danh sách nhiệm vụ.\n$message';
+    return 'Không tải được danh sách việc cần làm.\n$message';
   }
 
   @override
-  String get parentTasksTitle => '📋 Nhiệm vụ của con';
+  String get parentTasksTitle => '📋 Việc cần làm của con';
 
   @override
   String tasksCompleted(String done, String total) {
-    return '$done/$total nhiệm vụ hoàn thành';
+    return '$done/$total việc đã xong';
   }
 
   @override
-  String get deleteTaskTitle => 'Xoá nhiệm vụ?';
+  String get deleteTaskTitle => 'Xoá việc này?';
 
   @override
   String deleteTaskMessage(String title) {
@@ -623,16 +624,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get taskPending => 'Chờ';
 
   @override
-  String get addTask => 'Thêm nhiệm vụ';
+  String get addTask => 'Thêm việc';
 
   @override
-  String get addNewTask => '✨ Thêm nhiệm vụ mới';
+  String get addNewTask => '✨ Thêm việc mới';
 
   @override
   String get chooseIcon => 'Chọn biểu tượng';
 
   @override
-  String get taskNameHint => 'Tên nhiệm vụ (ví dụ: Làm bài tập)';
+  String get taskNameHint => 'Tên việc (ví dụ: Làm bài tập)';
 
   @override
   String get taskDescriptionHint => 'Mô tả thêm (không bắt buộc)';
@@ -646,13 +647,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get pickDueDate => 'Chọn ngày hết hạn (không bắt buộc)';
 
   @override
-  String get assignTask => 'Giao nhiệm vụ 🚀';
+  String get assignTask => 'Giao việc 🚀';
 
   @override
-  String get noTasksYetParent => 'Chưa có nhiệm vụ nào';
+  String get noTasksYetParent => 'Chưa có việc nào';
 
   @override
-  String get tapPlusToAssign => 'Bấm + để giao nhiệm vụ cho con nhé!';
+  String get tapPlusToAssign => 'Bấm + để giao việc cho con nhé!';
 
   @override
   String get geofenceChannelName => 'Thông báo vùng an toàn';
@@ -669,5 +670,420 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String geofenceEntered(String name, String zone) {
     return '$name đã vào $zone';
+  }
+
+  @override
+  String get searchPlaceHint => 'Tìm trường, nhà, công viên…';
+
+  @override
+  String get searchNoResults => 'Không tìm thấy địa điểm nào';
+
+  @override
+  String get searchFailed => 'Không tìm được, vui lòng thử lại';
+
+  @override
+  String get locationPermissionDenied =>
+      'Chưa có quyền vị trí nên không thể mở bản đồ tại chỗ bạn đứng.';
+
+  @override
+  String get locationServiceDisabled => 'Dịch vụ vị trí đang tắt.';
+
+  @override
+  String get openSettings => 'Mở cài đặt';
+
+  @override
+  String get myLocation => 'Vị trí của tôi';
+
+  @override
+  String get linkChildToAssign =>
+      'Chưa liên kết với con. Hãy cho con nhập mã liên kết để giao việc.';
+
+  @override
+  String get assignTo => 'Giao cho';
+
+  @override
+  String get linkEmailTitle => 'Liên kết email';
+
+  @override
+  String get linkEmailSubtitle =>
+      'Gắn email để giữ dữ liệu và đăng nhập lại khi đổi máy hoặc cài lại app.';
+
+  @override
+  String get linkEmailAction => 'Liên kết và gửi email xác thực';
+
+  @override
+  String get passwordTooShort => 'Mật khẩu cần ít nhất 6 ký tự';
+
+  @override
+  String get invalidEmail => 'Email không hợp lệ';
+
+  @override
+  String get tooManyRequests =>
+      'Bạn thao tác quá nhanh, hãy thử lại sau ít phút.';
+
+  @override
+  String get verifyEmailTitle => 'Xác thực email';
+
+  @override
+  String verifyEmailMessage(String email) {
+    return 'Đã gửi link xác thực tới $email. Mở email, bấm vào link rồi quay lại app.';
+  }
+
+  @override
+  String get verifyEmailCheck => 'Tôi đã xác thực';
+
+  @override
+  String get verifyEmailResend => 'Gửi lại email';
+
+  @override
+  String verifyEmailResendIn(int seconds) {
+    return 'Gửi lại sau ${seconds}s';
+  }
+
+  @override
+  String get verifyEmailSent => 'Đã gửi lại email xác thực';
+
+  @override
+  String get verifyEmailNotYet =>
+      'Email chưa được xác thực. Hãy bấm link trong email.';
+
+  @override
+  String get emailLinkedLoggedOut =>
+      'Đã liên kết email. Lần sau đăng nhập bằng email này để lấy lại dữ liệu.';
+
+  @override
+  String get logoutGuestLinkTitle => 'Dữ liệu sẽ bị mất';
+
+  @override
+  String get logoutGuestLinkMessage =>
+      'Bạn đang dùng tài khoản khách. Nếu đăng xuất, toàn bộ dữ liệu và liên kết sẽ mất vĩnh viễn. Hãy liên kết email để giữ lại.';
+
+  @override
+  String get logoutAnyway => 'Vẫn đăng xuất';
+
+  @override
+  String get setNameTitle => 'Bạn tên là gì?';
+
+  @override
+  String get setNameParentHint => 'VD: Mẹ Lan';
+
+  @override
+  String get setNameChildHint => 'VD: Bin';
+
+  @override
+  String get save => 'Lưu';
+
+  @override
+  String get regenerateLinkCode => 'Tạo mã mới';
+
+  @override
+  String get regenerateLinkCodeConfirm =>
+      'Mã cũ sẽ không dùng được nữa. Các tài khoản đã liên kết vẫn giữ nguyên.';
+
+  @override
+  String get linkCodeRegenerated => 'Đã tạo mã liên kết mới';
+
+  @override
+  String get confirmPasswordHint => 'Nhập lại mật khẩu';
+
+  @override
+  String get sendLinkRequest => 'Gửi yêu cầu liên kết';
+
+  @override
+  String get linkRequestSent =>
+      'Đã gửi yêu cầu liên kết. Chờ bên kia chấp nhận nhé!';
+
+  @override
+  String linkRequestFromParent(String name) {
+    return '$name (bố/mẹ) muốn liên kết với bạn';
+  }
+
+  @override
+  String linkRequestFromChild(String name) {
+    return '$name (con) muốn liên kết với bạn';
+  }
+
+  @override
+  String get linkRequestHint =>
+      'Chấp nhận để đồng bộ vùng an toàn, việc cần làm và thông báo.';
+
+  @override
+  String get accept => 'Chấp nhận';
+
+  @override
+  String get reject => 'Từ chối';
+
+  @override
+  String linkRequestAccepted(String name) {
+    return 'Đã liên kết với $name';
+  }
+
+  @override
+  String get pendingRequestsTitle => 'Đang chờ chấp nhận';
+
+  @override
+  String pendingRequestCode(String code) {
+    return 'Mã $code';
+  }
+
+  @override
+  String get cancelRequest => 'Huỷ yêu cầu';
+
+  @override
+  String get linkedAccountsTitle => 'Tài khoản đã liên kết';
+
+  @override
+  String get unlink => 'Gỡ liên kết';
+
+  @override
+  String unlinkConfirmTitle(String name) {
+    return 'Gỡ liên kết với $name?';
+  }
+
+  @override
+  String get unlinkConfirmMessageParent =>
+      'Con sẽ không còn thấy vùng an toàn và việc cần làm của bạn, bạn cũng không nhận thông báo từ con nữa. Có thể liên kết lại bằng mã.';
+
+  @override
+  String get unlinkConfirmMessageChild =>
+      'Bố mẹ sẽ không nhận được thông báo khi con đến hoặc rời vùng an toàn nữa. Hãy hỏi bố mẹ trước nhé!';
+
+  @override
+  String get unlinked => 'Đã gỡ liên kết';
+
+  @override
+  String get errRequestPending => 'Đã gửi yêu cầu, đang chờ bên kia chấp nhận';
+
+  @override
+  String get errAlreadyLinked => 'Hai tài khoản đã liên kết rồi';
+
+  @override
+  String get errRequestGone =>
+      'Yêu cầu không còn hiệu lực, hoặc bé đã đủ 3 người liên kết.';
+
+  @override
+  String get errChildHasParent =>
+      'Đang liên kết với bố/mẹ khác. Hãy gỡ liên kết trước.';
+
+  @override
+  String get zonesNeedChild =>
+      'Liên kết với bé trước để tạo vùng an toàn cho bé.';
+
+  @override
+  String get errMaxGuardians =>
+      'Bé đã có đủ 3 người liên kết. Hãy gỡ bớt một người trước.';
+
+  @override
+  String eventShareStarted(String name) {
+    return '$name đang chia sẻ vị trí trực tiếp';
+  }
+
+  @override
+  String eventShareStopped(String name) {
+    return '$name đã dừng chia sẻ vị trí';
+  }
+
+  @override
+  String eventTodoCreated(String name, String title) {
+    return '$name vừa thêm việc: $title';
+  }
+
+  @override
+  String eventTodoDone(String name, String title) {
+    return '$name đã làm xong: $title';
+  }
+
+  @override
+  String get locationRequestTitle => 'Chia sẻ vị trí';
+
+  @override
+  String locationRequestBody(String name) {
+    return '$name muốn xem con đang ở đâu';
+  }
+
+  @override
+  String get locationRequestHint =>
+      'Bấm nút \"Chia sẻ vị trí trực tiếp\" ở dưới nhé';
+
+  @override
+  String locationRequestSent(String name) {
+    return 'Đã nhờ $name chia sẻ vị trí';
+  }
+
+  @override
+  String locationRequestPending(String time) {
+    return 'Đã hỏi lúc $time, đang chờ con trả lời';
+  }
+
+  @override
+  String get liveShareNotifTitle => 'Đang chia sẻ vị trí';
+
+  @override
+  String get liveShareNotifText => 'Bố mẹ đang thấy vị trí của con';
+
+  @override
+  String get noLocationYet => 'Chưa có vị trí — hãy nhờ con chia sẻ';
+
+  @override
+  String liveSharingRemaining(String minutes) {
+    return 'Đang chia sẻ trực tiếp · còn $minutes phút';
+  }
+
+  @override
+  String lastSeenAt(String time) {
+    return 'Vị trí gần nhất lúc $time';
+  }
+
+  @override
+  String childLocationTitle(String name) {
+    return '$name đang ở đây';
+  }
+
+  @override
+  String askChildLocation(String name) {
+    return 'Hỏi vị trí của $name';
+  }
+
+  @override
+  String get askAgain => 'Hỏi lại';
+
+  @override
+  String get liveBadge => 'TRỰC TIẾP';
+
+  @override
+  String get noChildLinkedTitle =>
+      'Liên kết với con để xem vị trí và nhận thông báo';
+
+  @override
+  String get linkWithChild => 'Liên kết với con';
+
+  @override
+  String get notLinkedYetHint =>
+      'Con chưa liên kết với bố mẹ — vào Cài đặt để liên kết nhé';
+
+  @override
+  String get dismiss => 'Bỏ qua';
+
+  @override
+  String get locationServiceOff =>
+      'Dịch vụ vị trí đang tắt. Hãy bật lên rồi thử lại nhé.';
+
+  @override
+  String get locationPermissionNeeded =>
+      'Cần cho phép vị trí để chia sẻ với bố mẹ.';
+
+  @override
+  String get locationPermissionSettings =>
+      'Quyền vị trí đang bị tắt. Mở Cài đặt để cho phép nhé.';
+
+  @override
+  String get locationNoFix =>
+      'Chưa lấy được vị trí. Thử ra chỗ thoáng rồi bấm lại nhé.';
+
+  @override
+  String minutesRemaining(String minutes) {
+    return 'Còn $minutes phút';
+  }
+
+  @override
+  String get liveShareHint => 'Bố mẹ sẽ thấy con ở đâu trong 60 phút';
+
+  @override
+  String get startLiveShare => 'Chia sẻ vị trí trực tiếp';
+
+  @override
+  String get stopLiveShare => 'Dừng chia sẻ vị trí';
+
+  @override
+  String get addTodo => 'Thêm việc';
+
+  @override
+  String get addTodoTitle => 'Con muốn làm gì? ✨';
+
+  @override
+  String get addTodoHint => 'Ví dụ: Tưới cây';
+
+  @override
+  String get childCanAddTodo =>
+      'Bấm \"Thêm việc\" để tự thêm, hoặc chờ bố mẹ giao nhé 😊';
+
+  @override
+  String get assignTab => 'Giao việc';
+
+  @override
+  String get notesTab => 'Lời nhắn gửi';
+
+  @override
+  String get notesTitle => 'Lời nhắn gửi bố mẹ 💌';
+
+  @override
+  String get notesSubtitle => 'Con muốn bố mẹ làm gì giúp con?';
+
+  @override
+  String notesWaiting(String count) {
+    return '$count lời nhắn đang chờ bố mẹ';
+  }
+
+  @override
+  String notesDoneCount(String count) {
+    return 'Đã làm ($count)';
+  }
+
+  @override
+  String get writeNote => 'Viết lời nhắn';
+
+  @override
+  String get addNoteTitle => 'Con muốn nhắn bố mẹ điều gì? 💌';
+
+  @override
+  String get addNoteHint => 'Ví dụ: Mua giúp con hộp bút chì';
+
+  @override
+  String get sendNote => 'Gửi bố mẹ';
+
+  @override
+  String get deleteNoteTitle => 'Xoá lời nhắn?';
+
+  @override
+  String noteDoneBy(String name, String time) {
+    return '$name đã làm lúc $time';
+  }
+
+  @override
+  String get noteWaiting => 'Đang chờ bố mẹ…';
+
+  @override
+  String get noNotesYet => 'Chưa có lời nhắn nào';
+
+  @override
+  String get noNotesHint =>
+      'Bấm \"Viết lời nhắn\" để nhờ bố mẹ làm giúp con nhé 😊';
+
+  @override
+  String get parentNotesTitle => 'Việc cần làm';
+
+  @override
+  String get parentNotesAllDone => 'Đã làm hết lời nhắn của con 🎉';
+
+  @override
+  String parentNotesWaiting(String count) {
+    return 'Con nhờ $count việc — chạm để đánh dấu đã làm';
+  }
+
+  @override
+  String get parentNotesEmpty => 'Chưa có lời nhắn nào từ con';
+
+  @override
+  String get parentNotesEmptyHint =>
+      'Khi con nhờ bạn làm gì, lời nhắn sẽ hiện ở đây';
+
+  @override
+  String eventNoteCreated(String name, String title) {
+    return '$name nhắn: $title';
+  }
+
+  @override
+  String noteDoneNotif(String name, String title) {
+    return '$name đã làm: $title';
   }
 }

@@ -495,10 +495,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get voiceCallVia => 'Chamada de voz via ZegoCloud';
 
   @override
-  String get noNotifications => 'Nenhuma notificação ainda';
+  String get noNotifications => 'Nenhuma atualização ainda';
 
   @override
-  String get childNoStatusYet => 'Seu filho ainda não enviou atualizações';
+  String get childNoStatusYet =>
+      'Status, compartilhamentos de localização e tarefas concluídas da criança aparecem aqui';
 
   @override
   String get accountSecurity => 'Conta e segurança';
@@ -675,5 +676,423 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String geofenceEntered(String name, String zone) {
     return '$name chegou em $zone';
+  }
+
+  @override
+  String get searchPlaceHint => 'Buscar escola, casa, parque…';
+
+  @override
+  String get searchNoResults => 'Nenhum lugar encontrado';
+
+  @override
+  String get searchFailed => 'Falha na busca, tente novamente';
+
+  @override
+  String get locationPermissionDenied =>
+      'Sem permissão de localização, o mapa não pode abrir na sua posição.';
+
+  @override
+  String get locationServiceDisabled =>
+      'Os serviços de localização estão desligados.';
+
+  @override
+  String get openSettings => 'Abrir configurações';
+
+  @override
+  String get myLocation => 'Minha localização';
+
+  @override
+  String get linkChildToAssign =>
+      'Nenhum filho vinculado ainda. Peça ao seu filho para inserir o código de vínculo para atribuir tarefas.';
+
+  @override
+  String get assignTo => 'Atribuir a';
+
+  @override
+  String get linkEmailTitle => 'Vincular e-mail';
+
+  @override
+  String get linkEmailSubtitle =>
+      'Adicione um e-mail para manter seus dados e entrar de novo em outro celular ou após reinstalar.';
+
+  @override
+  String get linkEmailAction => 'Vincular e enviar e-mail de verificação';
+
+  @override
+  String get passwordTooShort => 'A senha precisa ter pelo menos 6 caracteres';
+
+  @override
+  String get invalidEmail => 'E-mail inválido';
+
+  @override
+  String get tooManyRequests =>
+      'Muitas tentativas, tente novamente em alguns minutos.';
+
+  @override
+  String get verifyEmailTitle => 'Verifique seu e-mail';
+
+  @override
+  String verifyEmailMessage(String email) {
+    return 'Enviamos um link de verificação para $email. Abra o e-mail, toque no link e volte ao app.';
+  }
+
+  @override
+  String get verifyEmailCheck => 'Já verifiquei';
+
+  @override
+  String get verifyEmailResend => 'Reenviar e-mail';
+
+  @override
+  String verifyEmailResendIn(int seconds) {
+    return 'Reenviar em ${seconds}s';
+  }
+
+  @override
+  String get verifyEmailSent => 'E-mail de verificação reenviado';
+
+  @override
+  String get verifyEmailNotYet =>
+      'Seu e-mail ainda não foi verificado. Toque no link do e-mail.';
+
+  @override
+  String get emailLinkedLoggedOut =>
+      'E-mail vinculado. Da próxima vez, entre com este e-mail para recuperar seus dados.';
+
+  @override
+  String get logoutGuestLinkTitle => 'Seus dados serão perdidos';
+
+  @override
+  String get logoutGuestLinkMessage =>
+      'Você está usando uma conta de convidado. Se sair, todos os dados e vínculos serão perdidos para sempre. Vincule um e-mail para mantê-los.';
+
+  @override
+  String get logoutAnyway => 'Sair mesmo assim';
+
+  @override
+  String get setNameTitle => 'Qual é o seu nome?';
+
+  @override
+  String get setNameParentHint => 'Ex.: Mãe Ana';
+
+  @override
+  String get setNameChildHint => 'Ex.: Bia';
+
+  @override
+  String get save => 'Salvar';
+
+  @override
+  String get regenerateLinkCode => 'Novo código';
+
+  @override
+  String get regenerateLinkCodeConfirm =>
+      'O código antigo deixará de funcionar. Contas já vinculadas continuam vinculadas.';
+
+  @override
+  String get linkCodeRegenerated => 'Novo código de vínculo criado';
+
+  @override
+  String get confirmPasswordHint => 'Confirme a senha';
+
+  @override
+  String get sendLinkRequest => 'Enviar pedido de vínculo';
+
+  @override
+  String get linkRequestSent =>
+      'Pedido enviado. Aguarde a outra pessoa aceitar!';
+
+  @override
+  String linkRequestFromParent(String name) {
+    return '$name (responsável) quer se vincular a você';
+  }
+
+  @override
+  String linkRequestFromChild(String name) {
+    return '$name (filho) quer se vincular a você';
+  }
+
+  @override
+  String get linkRequestHint =>
+      'Aceite para sincronizar zonas seguras, tarefas e notificações.';
+
+  @override
+  String get accept => 'Aceitar';
+
+  @override
+  String get reject => 'Recusar';
+
+  @override
+  String linkRequestAccepted(String name) {
+    return 'Vinculado a $name';
+  }
+
+  @override
+  String get pendingRequestsTitle => 'Aguardando aceite';
+
+  @override
+  String pendingRequestCode(String code) {
+    return 'Código $code';
+  }
+
+  @override
+  String get cancelRequest => 'Cancelar pedido';
+
+  @override
+  String get linkedAccountsTitle => 'Contas vinculadas';
+
+  @override
+  String get unlink => 'Desvincular';
+
+  @override
+  String unlinkConfirmTitle(String name) {
+    return 'Desvincular de $name?';
+  }
+
+  @override
+  String get unlinkConfirmMessageParent =>
+      'Seu filho não verá mais suas zonas seguras e tarefas, e você não receberá mais as notificações dele. É possível vincular de novo com um código.';
+
+  @override
+  String get unlinkConfirmMessageChild =>
+      'Seus pais não serão mais avisados quando você chegar ou sair das zonas seguras. Pergunte a eles antes!';
+
+  @override
+  String get unlinked => 'Desvinculado';
+
+  @override
+  String get errRequestPending => 'Pedido já enviado, aguardando aceite';
+
+  @override
+  String get errAlreadyLinked => 'Essas contas já estão vinculadas';
+
+  @override
+  String get errRequestGone =>
+      'Este pedido não é mais válido, ou a criança já tem 3 responsáveis vinculados.';
+
+  @override
+  String get errChildHasParent =>
+      'Já vinculado a outro responsável. Desvincule primeiro.';
+
+  @override
+  String get zonesNeedChild =>
+      'Vincule-se ao seu filho primeiro para criar as zonas seguras dele.';
+
+  @override
+  String get errMaxGuardians =>
+      'Esta criança já tem 3 responsáveis vinculados. Desvincule um primeiro.';
+
+  @override
+  String eventShareStarted(String name) {
+    return '$name está compartilhando a localização ao vivo';
+  }
+
+  @override
+  String eventShareStopped(String name) {
+    return '$name parou de compartilhar a localização';
+  }
+
+  @override
+  String eventTodoCreated(String name, String title) {
+    return '$name adicionou uma tarefa: $title';
+  }
+
+  @override
+  String eventTodoDone(String name, String title) {
+    return '$name concluiu: $title';
+  }
+
+  @override
+  String get locationRequestTitle => 'Compartilhar localização';
+
+  @override
+  String locationRequestBody(String name) {
+    return '$name quer ver onde você está';
+  }
+
+  @override
+  String get locationRequestHint =>
+      'Toque em \"Compartilhar localização ao vivo\" abaixo';
+
+  @override
+  String locationRequestSent(String name) {
+    return 'Pedido enviado para $name compartilhar a localização';
+  }
+
+  @override
+  String locationRequestPending(String time) {
+    return 'Pedido às $time, aguardando resposta';
+  }
+
+  @override
+  String get liveShareNotifTitle => 'Compartilhando localização';
+
+  @override
+  String get liveShareNotifText => 'Seus pais podem ver onde você está';
+
+  @override
+  String get noLocationYet =>
+      'Ainda sem localização — peça para a criança compartilhar';
+
+  @override
+  String liveSharingRemaining(String minutes) {
+    return 'Ao vivo · faltam $minutes min';
+  }
+
+  @override
+  String lastSeenAt(String time) {
+    return 'Última localização às $time';
+  }
+
+  @override
+  String childLocationTitle(String name) {
+    return '$name está aqui';
+  }
+
+  @override
+  String askChildLocation(String name) {
+    return 'Pedir localização a $name';
+  }
+
+  @override
+  String get askAgain => 'Pedir de novo';
+
+  @override
+  String get liveBadge => 'AO VIVO';
+
+  @override
+  String get noChildLinkedTitle =>
+      'Vincule-se à criança para ver a localização e receber avisos';
+
+  @override
+  String get linkWithChild => 'Vincular à criança';
+
+  @override
+  String get notLinkedYetHint =>
+      'Ainda não vinculado aos pais — vincule em Configurações';
+
+  @override
+  String get dismiss => 'Dispensar';
+
+  @override
+  String get locationServiceOff =>
+      'A localização está desativada. Ative e tente de novo.';
+
+  @override
+  String get locationPermissionNeeded =>
+      'É preciso permitir a localização para compartilhar com os pais.';
+
+  @override
+  String get locationPermissionSettings =>
+      'A permissão de localização está desativada. Abra as Configurações para permitir.';
+
+  @override
+  String get locationNoFix =>
+      'Não foi possível obter a localização. Tente de novo em um local aberto.';
+
+  @override
+  String minutesRemaining(String minutes) {
+    return 'Faltam $minutes minutos';
+  }
+
+  @override
+  String get liveShareHint => 'Seus pais verão onde você está por 60 minutos';
+
+  @override
+  String get startLiveShare => 'Compartilhar localização ao vivo';
+
+  @override
+  String get stopLiveShare => 'Parar de compartilhar';
+
+  @override
+  String get addTodo => 'Adicionar tarefa';
+
+  @override
+  String get addTodoTitle => 'O que você quer fazer? ✨';
+
+  @override
+  String get addTodoHint => 'ex.: Regar as plantas';
+
+  @override
+  String get childCanAddTodo =>
+      'Toque em \"Adicionar tarefa\" para criar uma, ou espere seus pais 😊';
+
+  @override
+  String get assignTab => 'Atribuir';
+
+  @override
+  String get notesTab => 'Recados';
+
+  @override
+  String get notesTitle => 'Recados para os pais 💌';
+
+  @override
+  String get notesSubtitle => 'O que você quer que seus pais façam?';
+
+  @override
+  String notesWaiting(String count) {
+    return '$count recados aguardando os pais';
+  }
+
+  @override
+  String notesDoneCount(String count) {
+    return 'Feito ($count)';
+  }
+
+  @override
+  String get writeNote => 'Escrever recado';
+
+  @override
+  String get addNoteTitle => 'O que você quer dizer aos seus pais? 💌';
+
+  @override
+  String get addNoteHint => 'ex.: Comprar lápis de cor';
+
+  @override
+  String get sendNote => 'Enviar aos pais';
+
+  @override
+  String get deleteNoteTitle => 'Apagar recado?';
+
+  @override
+  String noteDoneBy(String name, String time) {
+    return 'Feito por $name às $time';
+  }
+
+  @override
+  String get noteWaiting => 'Aguardando os pais…';
+
+  @override
+  String get noNotesYet => 'Nenhum recado ainda';
+
+  @override
+  String get noNotesHint =>
+      'Toque em \"Escrever recado\" para pedir algo aos pais 😊';
+
+  @override
+  String get parentNotesTitle => 'Pendências';
+
+  @override
+  String get parentNotesAllDone =>
+      'Todos os recados da criança foram feitos 🎉';
+
+  @override
+  String parentNotesWaiting(String count) {
+    return '$count pedidos da criança — toque para marcar como feito';
+  }
+
+  @override
+  String get parentNotesEmpty => 'Nenhum recado da criança ainda';
+
+  @override
+  String get parentNotesEmptyHint =>
+      'Quando a criança pedir algo, aparecerá aqui';
+
+  @override
+  String eventNoteCreated(String name, String title) {
+    return '$name pede: $title';
+  }
+
+  @override
+  String noteDoneNotif(String name, String title) {
+    return '$name fez: $title';
   }
 }

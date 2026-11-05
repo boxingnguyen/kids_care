@@ -53,18 +53,12 @@ void main() {
     });
 
     test('UserModel should have default role as child', () {
-      final user = UserModel(
-        uid: 'test-uid-789',
-        name: 'Default User',
-      );
+      final user = UserModel(uid: 'test-uid-789', name: 'Default User');
       expect(user.role, 'child');
     });
 
     test('UserModel should handle null optional fields', () {
-      final user = UserModel(
-        uid: 'test-uid-999',
-        name: 'Minimal User',
-      );
+      final user = UserModel(uid: 'test-uid-999', name: 'Minimal User');
       expect(user.photoUrl, isNull);
       expect(user.fcmToken, isNull);
     });

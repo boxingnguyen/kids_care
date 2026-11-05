@@ -1,12 +1,20 @@
 default_platform(:android)
 
 ROOT = File.expand_path("../..", __dir__)
+ENV_JSON = File.join(ROOT, "config/env.json")
+
+# dart-define values (Mapbox token, ...) — copy config/env.example.json.
+def require_env_json
+  UI.user_error!("Missing #{ENV_JSON} — copy config/env.example.json and fill it in") unless File.exist?(ENV_JSON)
+  UI.user_error!("MAPBOX_ACCESS_TOKEN is empty in #{ENV_JSON}") if JSON.parse(File.read(ENV_JSON))["MAPBOX_ACCESS_TOKEN"].to_s.empty?
+end
 
 platform :android do
   desc "Build signed AAB with Flutter"
   lane :build do
     UI.user_error!("android/key.properties missing — release would be signed with debug key") unless File.exist?("#{ROOT}/android/key.properties")
-    sh("cd #{ROOT} && flutter build appbundle --release")
+    require_env_json
+    sh("cd #{ROOT} && flutter build appbundle --release --dart-define-from-file=#{ENV_JSON}")
   end
 
   desc "Upload to Play Console internal testing track"

@@ -19,4 +19,29 @@ void main() {
     final restored = GeofenceEventModel.fromJson(json);
     expect(restored, model);
   });
+
+  test('doc cũ (không có type) đọc được, mặc định là sự kiện vùng an toàn', () {
+    final restored = GeofenceEventModel.fromJson({
+      'id': 'old',
+      'zoneId': 'z1',
+      'zoneName': 'Nhà',
+      'childUid': 'c',
+      'childName': 'Bon',
+      'status': 'enter',
+      'timestamp': '2026-10-15T08:30:00.000Z',
+    });
+    expect(restored.type, ChildEventType.geofence);
+  });
+
+  test('cập nhật mới không cần zone/status', () {
+    final restored = GeofenceEventModel.fromJson({
+      'id': 'n',
+      'type': ChildEventType.shareStarted,
+      'childUid': 'c',
+      'childName': 'Bon',
+      'timestamp': '2026-10-15T08:30:00.000Z',
+    });
+    expect(restored.zoneName, '');
+    expect(restored.status, '');
+  });
 }

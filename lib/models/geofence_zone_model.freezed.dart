@@ -214,7 +214,7 @@ return $default(_that.id,_that.name,_that.lat,_that.lng,_that.radiusMeters,_that
 @JsonSerializable()
 
 class _GeofenceZoneModel implements GeofenceZoneModel {
-  const _GeofenceZoneModel({required this.id, required this.name, required this.lat, required this.lng, this.radiusMeters = 1000.0, this.emoji = '🏠'});
+  const _GeofenceZoneModel({required this.id, required this.name, required this.lat, required this.lng, this.radiusMeters = AppConstants.defaultGeofenceRadius, this.emoji = '🏠'});
   factory _GeofenceZoneModel.fromJson(Map<String, dynamic> json) => _$GeofenceZoneModelFromJson(json);
 
 @override final  String id;

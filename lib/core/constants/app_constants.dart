@@ -1,14 +1,28 @@
 class AppConstants {
   // Firestore collections
   static const String usersCollection = 'users';
+  static const String linkCodesCollection = 'link_codes';
+  static const String linkRequestsCollection = 'link_requests';
+  static const String parentTodosCollection = 'parent_todos';
   static const String locationEventsCollection = 'location_events';
   static const String geofenceZonesCollection = 'geofence_zones';
   static const String statusCollection = 'child_status';
   static const String zonesSubcollection = 'zones';
   static const String geofenceEventsSubcollection = 'geofence_events';
+  static const String locationSubcollection = 'location';
+  static const String locationRequestsSubcollection = 'location_requests';
+
+  // Username của con đăng nhập bằng email giả <username>@<domain> —
+  // không xác thực được nên được miễn bước xác thực email.
+  static const String childUsernameDomain = 'kidscare.app';
 
   // Geofence defaults
-  static const double defaultGeofenceRadius = 150.0; // meters
+  static const double defaultGeofenceRadius = 500.0; // meters
+
+  // Đã deploy Cloud Function đẩy FCM (functions/, cần gói Blaze + APNs key)?
+  // false → app ở nền vẫn tự bắn thông báo local từ stream Firestore;
+  // true → chỉ bắn local khi app đang mở, ở nền để FCM lo (không trùng).
+  static const bool serverPushEnabled = true;
 
   // Shared prefs keys
   static const String prefUserMode = 'user_mode'; // 'child' or 'parent'
@@ -18,8 +32,11 @@ class AppConstants {
   // Demo / stub parent phone
   static const String demoParentPhone = 'tel:+84338305895';
 
-  // Google Maps placeholder key - replace with real key in Info.plist / AndroidManifest
-  static const String mapsApiKeyPlaceholder = 'YOUR_GOOGLE_MAPS_API_KEY';
+  // Mapbox public token (pk.*) — truyền khi build:
+  // flutter run --dart-define=MAPBOX_ACCESS_TOKEN=pk.xxx
+  static const String mapboxAccessToken = String.fromEnvironment(
+    'MAPBOX_ACCESS_TOKEN',
+  );
 
   // ZegoCloud credentials - get from console.zegocloud.com
   // Replace with your actual AppID (integer) and AppSign (string)

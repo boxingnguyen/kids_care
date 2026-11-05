@@ -57,6 +57,13 @@ String localizeServiceError(AppLocalizations l10n, Object? message) {
     'Đây là mã của chính bạn' => l10n.errOwnCode,
     'Tối đa 3 vùng an toàn' => l10n.errMaxZones,
     'Chưa đăng nhập' => l10n.notSignedIn,
+    'Đã gửi yêu cầu, đang chờ chấp nhận' => l10n.errRequestPending,
+    'Hai tài khoản đã liên kết' => l10n.errAlreadyLinked,
+    'Yêu cầu không còn hiệu lực' => l10n.errRequestGone,
+    'Đã đủ 3 người liên kết' => l10n.errMaxGuardians,
+    'Chưa chọn bé' => l10n.zonesNeedChild,
+    'Đang liên kết với bố/mẹ khác, hãy gỡ liên kết trước' =>
+      l10n.errChildHasParent,
     _ => text,
   };
 }

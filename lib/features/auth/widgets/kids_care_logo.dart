@@ -24,11 +24,7 @@ class KidsCareLogo extends StatelessWidget {
             size: size * 0.75,
             color: AppTheme.primaryColor,
           ),
-          Icon(
-            Icons.favorite_rounded,
-            size: size * 0.32,
-            color: Colors.white,
-          ),
+          Icon(Icons.favorite_rounded, size: size * 0.32, color: Colors.white),
         ],
       ),
     );

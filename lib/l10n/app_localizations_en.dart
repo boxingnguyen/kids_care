@@ -18,7 +18,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get home => 'Home';
 
   @override
-  String get tasks => 'Tasks';
+  String get tasks => 'To-do';
 
   @override
   String get map => 'Map';
@@ -492,10 +492,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voiceCallVia => 'Voice call via ZegoCloud';
 
   @override
-  String get noNotifications => 'No notifications yet';
+  String get noNotifications => 'No updates yet';
 
   @override
-  String get childNoStatusYet => 'Your child hasn\'t sent any updates yet';
+  String get childNoStatusYet =>
+      'Status updates, location shares and finished to-dos from your child show up here';
 
   @override
   String get accountSecurity => 'Account & security';
@@ -566,7 +567,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Oops, couldn\'t load your tasks 😢\nTry again in a little bit!';
 
   @override
-  String get myTasksTitle => 'My tasks 🌟';
+  String get myTasksTitle => 'My to-dos 🌟';
 
   @override
   String get tapTaskWhenDone => 'Tap a task when you finish it!';
@@ -671,5 +672,421 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String geofenceEntered(String name, String zone) {
     return '$name arrived at $zone';
+  }
+
+  @override
+  String get searchPlaceHint => 'Search school, home, park…';
+
+  @override
+  String get searchNoResults => 'No places found';
+
+  @override
+  String get searchFailed => 'Search failed, please try again';
+
+  @override
+  String get locationPermissionDenied =>
+      'Location permission is off, so the map can\'t open at your position.';
+
+  @override
+  String get locationServiceDisabled => 'Location services are turned off.';
+
+  @override
+  String get openSettings => 'Open settings';
+
+  @override
+  String get myLocation => 'My location';
+
+  @override
+  String get linkChildToAssign =>
+      'No child linked yet. Have your child enter your link code to assign tasks.';
+
+  @override
+  String get assignTo => 'Assign to';
+
+  @override
+  String get linkEmailTitle => 'Link email';
+
+  @override
+  String get linkEmailSubtitle =>
+      'Add an email to keep your data and sign back in on a new phone or after reinstalling.';
+
+  @override
+  String get linkEmailAction => 'Link and send verification email';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 6 characters';
+
+  @override
+  String get invalidEmail => 'Invalid email';
+
+  @override
+  String get tooManyRequests =>
+      'Too many attempts, please try again in a few minutes.';
+
+  @override
+  String get verifyEmailTitle => 'Verify your email';
+
+  @override
+  String verifyEmailMessage(String email) {
+    return 'We sent a verification link to $email. Open the email, tap the link, then come back to the app.';
+  }
+
+  @override
+  String get verifyEmailCheck => 'I\'ve verified';
+
+  @override
+  String get verifyEmailResend => 'Resend email';
+
+  @override
+  String verifyEmailResendIn(int seconds) {
+    return 'Resend in ${seconds}s';
+  }
+
+  @override
+  String get verifyEmailSent => 'Verification email sent again';
+
+  @override
+  String get verifyEmailNotYet =>
+      'Your email isn\'t verified yet. Tap the link in the email.';
+
+  @override
+  String get emailLinkedLoggedOut =>
+      'Email linked. Next time, sign in with this email to get your data back.';
+
+  @override
+  String get logoutGuestLinkTitle => 'Your data will be lost';
+
+  @override
+  String get logoutGuestLinkMessage =>
+      'You\'re using a guest account. If you log out, all data and links will be lost for good. Link an email to keep them.';
+
+  @override
+  String get logoutAnyway => 'Log out anyway';
+
+  @override
+  String get setNameTitle => 'What\'s your name?';
+
+  @override
+  String get setNameParentHint => 'e.g. Mom Lan';
+
+  @override
+  String get setNameChildHint => 'e.g. Ben';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get regenerateLinkCode => 'New code';
+
+  @override
+  String get regenerateLinkCodeConfirm =>
+      'The old code will stop working. Already linked accounts stay linked.';
+
+  @override
+  String get linkCodeRegenerated => 'New link code created';
+
+  @override
+  String get confirmPasswordHint => 'Confirm password';
+
+  @override
+  String get sendLinkRequest => 'Send link request';
+
+  @override
+  String get linkRequestSent =>
+      'Link request sent. Waiting for the other side to accept!';
+
+  @override
+  String linkRequestFromParent(String name) {
+    return '$name (parent) wants to link with you';
+  }
+
+  @override
+  String linkRequestFromChild(String name) {
+    return '$name (child) wants to link with you';
+  }
+
+  @override
+  String get linkRequestHint =>
+      'Accept to sync safe zones, tasks and notifications.';
+
+  @override
+  String get accept => 'Accept';
+
+  @override
+  String get reject => 'Decline';
+
+  @override
+  String linkRequestAccepted(String name) {
+    return 'Linked with $name';
+  }
+
+  @override
+  String get pendingRequestsTitle => 'Waiting for acceptance';
+
+  @override
+  String pendingRequestCode(String code) {
+    return 'Code $code';
+  }
+
+  @override
+  String get cancelRequest => 'Cancel request';
+
+  @override
+  String get linkedAccountsTitle => 'Linked accounts';
+
+  @override
+  String get unlink => 'Unlink';
+
+  @override
+  String unlinkConfirmTitle(String name) {
+    return 'Unlink from $name?';
+  }
+
+  @override
+  String get unlinkConfirmMessageParent =>
+      'Your child will no longer see your safe zones and tasks, and you won\'t get their notifications. You can link again with a code.';
+
+  @override
+  String get unlinkConfirmMessageChild =>
+      'Your parents won\'t be notified when you arrive at or leave safe zones anymore. Ask them first!';
+
+  @override
+  String get unlinked => 'Unlinked';
+
+  @override
+  String get errRequestPending =>
+      'Request already sent, waiting for acceptance';
+
+  @override
+  String get errAlreadyLinked => 'These accounts are already linked';
+
+  @override
+  String get errRequestGone =>
+      'This request is no longer valid, or the child already has 3 linked guardians.';
+
+  @override
+  String get errChildHasParent =>
+      'Already linked to another parent. Unlink first.';
+
+  @override
+  String get zonesNeedChild =>
+      'Link with your child first to create their safe zones.';
+
+  @override
+  String get errMaxGuardians =>
+      'This child already has 3 linked guardians. Unlink one first.';
+
+  @override
+  String eventShareStarted(String name) {
+    return '$name is sharing live location';
+  }
+
+  @override
+  String eventShareStopped(String name) {
+    return '$name stopped sharing location';
+  }
+
+  @override
+  String eventTodoCreated(String name, String title) {
+    return '$name added a to-do: $title';
+  }
+
+  @override
+  String eventTodoDone(String name, String title) {
+    return '$name finished: $title';
+  }
+
+  @override
+  String get locationRequestTitle => 'Share location';
+
+  @override
+  String locationRequestBody(String name) {
+    return '$name wants to see where you are';
+  }
+
+  @override
+  String get locationRequestHint => 'Tap \"Share live location\" below';
+
+  @override
+  String locationRequestSent(String name) {
+    return 'Asked $name to share location';
+  }
+
+  @override
+  String locationRequestPending(String time) {
+    return 'Asked at $time, waiting for a reply';
+  }
+
+  @override
+  String get liveShareNotifTitle => 'Sharing location';
+
+  @override
+  String get liveShareNotifText => 'Your parents can see where you are';
+
+  @override
+  String get noLocationYet => 'No location yet — ask your child to share';
+
+  @override
+  String liveSharingRemaining(String minutes) {
+    return 'Sharing live · $minutes min left';
+  }
+
+  @override
+  String lastSeenAt(String time) {
+    return 'Last seen at $time';
+  }
+
+  @override
+  String childLocationTitle(String name) {
+    return '$name is here';
+  }
+
+  @override
+  String askChildLocation(String name) {
+    return 'Ask $name for location';
+  }
+
+  @override
+  String get askAgain => 'Ask again';
+
+  @override
+  String get liveBadge => 'LIVE';
+
+  @override
+  String get noChildLinkedTitle =>
+      'Link with your child to see their location and get updates';
+
+  @override
+  String get linkWithChild => 'Link with child';
+
+  @override
+  String get notLinkedYetHint =>
+      'Not linked with your parents yet — link in Settings';
+
+  @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get locationServiceOff =>
+      'Location services are off. Turn them on and try again.';
+
+  @override
+  String get locationPermissionNeeded =>
+      'Location permission is needed to share with your parents.';
+
+  @override
+  String get locationPermissionSettings =>
+      'Location permission is off. Open Settings to allow it.';
+
+  @override
+  String get locationNoFix =>
+      'Couldn’t get your location. Try again somewhere more open.';
+
+  @override
+  String minutesRemaining(String minutes) {
+    return '$minutes minutes remaining';
+  }
+
+  @override
+  String get liveShareHint =>
+      'Your parents will see where you are for 60 minutes';
+
+  @override
+  String get startLiveShare => 'Share live location';
+
+  @override
+  String get stopLiveShare => 'Stop sharing location';
+
+  @override
+  String get addTodo => 'Add to-do';
+
+  @override
+  String get addTodoTitle => 'What do you want to do? ✨';
+
+  @override
+  String get addTodoHint => 'e.g. Water the plants';
+
+  @override
+  String get childCanAddTodo =>
+      'Tap \"Add to-do\" to add one yourself, or wait for your parents 😊';
+
+  @override
+  String get assignTab => 'Assign';
+
+  @override
+  String get notesTab => 'Notes';
+
+  @override
+  String get notesTitle => 'Notes for my parents 💌';
+
+  @override
+  String get notesSubtitle => 'What would you like your parents to do?';
+
+  @override
+  String notesWaiting(String count) {
+    return '$count notes waiting for your parents';
+  }
+
+  @override
+  String notesDoneCount(String count) {
+    return 'Done ($count)';
+  }
+
+  @override
+  String get writeNote => 'Write a note';
+
+  @override
+  String get addNoteTitle => 'What do you want to tell your parents? 💌';
+
+  @override
+  String get addNoteHint => 'e.g. Please buy me colored pencils';
+
+  @override
+  String get sendNote => 'Send to parents';
+
+  @override
+  String get deleteNoteTitle => 'Delete note?';
+
+  @override
+  String noteDoneBy(String name, String time) {
+    return 'Done by $name at $time';
+  }
+
+  @override
+  String get noteWaiting => 'Waiting for your parents…';
+
+  @override
+  String get noNotesYet => 'No notes yet';
+
+  @override
+  String get noNotesHint =>
+      'Tap \"Write a note\" to ask your parents for something 😊';
+
+  @override
+  String get parentNotesTitle => 'To-do';
+
+  @override
+  String get parentNotesAllDone => 'All of your child’s notes are done 🎉';
+
+  @override
+  String parentNotesWaiting(String count) {
+    return '$count requests from your child — tap to mark done';
+  }
+
+  @override
+  String get parentNotesEmpty => 'No notes from your child yet';
+
+  @override
+  String get parentNotesEmptyHint =>
+      'When your child asks you for something, it shows up here';
+
+  @override
+  String eventNoteCreated(String name, String title) {
+    return '$name asks: $title';
+  }
+
+  @override
+  String noteDoneNotif(String name, String title) {
+    return '$name did it: $title';
   }
 }

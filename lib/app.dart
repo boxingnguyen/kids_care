@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core/session/session_effects.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'l10n/app_localizations.dart';
@@ -19,6 +20,8 @@ class KidsCareApp extends ConsumerWidget {
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       theme: AppTheme.lightTheme,
       routerConfig: router,
+      builder: (context, child) =>
+          SessionEffects(child: child ?? const SizedBox.shrink()),
       debugShowCheckedModeBanner: false,
       // null → theo ngôn ngữ thiết bị (qua localeListResolutionCallback).
       locale: chosenLocale,

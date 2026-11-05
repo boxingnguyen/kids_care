@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserModel {
 
- String get uid; String get name; String? get photoUrl; String? get fcmToken; String get role; bool get isGuest; String? get linkCode; String? get linkedParentId; List<String> get linkedChildIds;
+ String get uid; String get name;/// false = tên mặc định ('Bố/Mẹ'/'Con'), sẽ hỏi đặt tên ở màn home.
+ bool get nameSet; String? get email; String? get photoUrl; String? get fcmToken; String get role; bool get isGuest; String? get linkCode; List<String> get linkedParentIds; List<String> get linkedChildIds;
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $UserModelCopyWith<UserModel> get copyWith => _$UserModelCopyWithImpl<UserModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.name, name) || other.name == name)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken)&&(identical(other.role, role) || other.role == role)&&(identical(other.isGuest, isGuest) || other.isGuest == isGuest)&&(identical(other.linkCode, linkCode) || other.linkCode == linkCode)&&(identical(other.linkedParentId, linkedParentId) || other.linkedParentId == linkedParentId)&&const DeepCollectionEquality().equals(other.linkedChildIds, linkedChildIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.name, name) || other.name == name)&&(identical(other.nameSet, nameSet) || other.nameSet == nameSet)&&(identical(other.email, email) || other.email == email)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken)&&(identical(other.role, role) || other.role == role)&&(identical(other.isGuest, isGuest) || other.isGuest == isGuest)&&(identical(other.linkCode, linkCode) || other.linkCode == linkCode)&&const DeepCollectionEquality().equals(other.linkedParentIds, linkedParentIds)&&const DeepCollectionEquality().equals(other.linkedChildIds, linkedChildIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uid,name,photoUrl,fcmToken,role,isGuest,linkCode,linkedParentId,const DeepCollectionEquality().hash(linkedChildIds));
+int get hashCode => Object.hash(runtimeType,uid,name,nameSet,email,photoUrl,fcmToken,role,isGuest,linkCode,const DeepCollectionEquality().hash(linkedParentIds),const DeepCollectionEquality().hash(linkedChildIds));
 
 @override
 String toString() {
-  return 'UserModel(uid: $uid, name: $name, photoUrl: $photoUrl, fcmToken: $fcmToken, role: $role, isGuest: $isGuest, linkCode: $linkCode, linkedParentId: $linkedParentId, linkedChildIds: $linkedChildIds)';
+  return 'UserModel(uid: $uid, name: $name, nameSet: $nameSet, email: $email, photoUrl: $photoUrl, fcmToken: $fcmToken, role: $role, isGuest: $isGuest, linkCode: $linkCode, linkedParentIds: $linkedParentIds, linkedChildIds: $linkedChildIds)';
 }
 
 
@@ -48,7 +49,7 @@ abstract mixin class $UserModelCopyWith<$Res>  {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) _then) = _$UserModelCopyWithImpl;
 @useResult
 $Res call({
- String uid, String name, String? photoUrl, String? fcmToken, String role, bool isGuest, String? linkCode, String? linkedParentId, List<String> linkedChildIds
+ String uid, String name, bool nameSet, String? email, String? photoUrl, String? fcmToken, String role, bool isGuest, String? linkCode, List<String> linkedParentIds, List<String> linkedChildIds
 });
 
 
@@ -65,17 +66,19 @@ class _$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? uid = null,Object? name = null,Object? photoUrl = freezed,Object? fcmToken = freezed,Object? role = null,Object? isGuest = null,Object? linkCode = freezed,Object? linkedParentId = freezed,Object? linkedChildIds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? uid = null,Object? name = null,Object? nameSet = null,Object? email = freezed,Object? photoUrl = freezed,Object? fcmToken = freezed,Object? role = null,Object? isGuest = null,Object? linkCode = freezed,Object? linkedParentIds = null,Object? linkedChildIds = null,}) {
   return _then(_self.copyWith(
 uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
+as String,nameSet: null == nameSet ? _self.nameSet : nameSet // ignore: cast_nullable_to_non_nullable
+as bool,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
 as String?,fcmToken: freezed == fcmToken ? _self.fcmToken : fcmToken // ignore: cast_nullable_to_non_nullable
 as String?,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as String,isGuest: null == isGuest ? _self.isGuest : isGuest // ignore: cast_nullable_to_non_nullable
 as bool,linkCode: freezed == linkCode ? _self.linkCode : linkCode // ignore: cast_nullable_to_non_nullable
-as String?,linkedParentId: freezed == linkedParentId ? _self.linkedParentId : linkedParentId // ignore: cast_nullable_to_non_nullable
-as String?,linkedChildIds: null == linkedChildIds ? _self.linkedChildIds : linkedChildIds // ignore: cast_nullable_to_non_nullable
+as String?,linkedParentIds: null == linkedParentIds ? _self.linkedParentIds : linkedParentIds // ignore: cast_nullable_to_non_nullable
+as List<String>,linkedChildIds: null == linkedChildIds ? _self.linkedChildIds : linkedChildIds // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
 }
@@ -161,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String uid,  String name,  String? photoUrl,  String? fcmToken,  String role,  bool isGuest,  String? linkCode,  String? linkedParentId,  List<String> linkedChildIds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String uid,  String name,  bool nameSet,  String? email,  String? photoUrl,  String? fcmToken,  String role,  bool isGuest,  String? linkCode,  List<String> linkedParentIds,  List<String> linkedChildIds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserModel() when $default != null:
-return $default(_that.uid,_that.name,_that.photoUrl,_that.fcmToken,_that.role,_that.isGuest,_that.linkCode,_that.linkedParentId,_that.linkedChildIds);case _:
+return $default(_that.uid,_that.name,_that.nameSet,_that.email,_that.photoUrl,_that.fcmToken,_that.role,_that.isGuest,_that.linkCode,_that.linkedParentIds,_that.linkedChildIds);case _:
   return orElse();
 
 }
@@ -182,10 +185,10 @@ return $default(_that.uid,_that.name,_that.photoUrl,_that.fcmToken,_that.role,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String uid,  String name,  String? photoUrl,  String? fcmToken,  String role,  bool isGuest,  String? linkCode,  String? linkedParentId,  List<String> linkedChildIds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String uid,  String name,  bool nameSet,  String? email,  String? photoUrl,  String? fcmToken,  String role,  bool isGuest,  String? linkCode,  List<String> linkedParentIds,  List<String> linkedChildIds)  $default,) {final _that = this;
 switch (_that) {
 case _UserModel():
-return $default(_that.uid,_that.name,_that.photoUrl,_that.fcmToken,_that.role,_that.isGuest,_that.linkCode,_that.linkedParentId,_that.linkedChildIds);case _:
+return $default(_that.uid,_that.name,_that.nameSet,_that.email,_that.photoUrl,_that.fcmToken,_that.role,_that.isGuest,_that.linkCode,_that.linkedParentIds,_that.linkedChildIds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +205,10 @@ return $default(_that.uid,_that.name,_that.photoUrl,_that.fcmToken,_that.role,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String uid,  String name,  String? photoUrl,  String? fcmToken,  String role,  bool isGuest,  String? linkCode,  String? linkedParentId,  List<String> linkedChildIds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String uid,  String name,  bool nameSet,  String? email,  String? photoUrl,  String? fcmToken,  String role,  bool isGuest,  String? linkCode,  List<String> linkedParentIds,  List<String> linkedChildIds)?  $default,) {final _that = this;
 switch (_that) {
 case _UserModel() when $default != null:
-return $default(_that.uid,_that.name,_that.photoUrl,_that.fcmToken,_that.role,_that.isGuest,_that.linkCode,_that.linkedParentId,_that.linkedChildIds);case _:
+return $default(_that.uid,_that.name,_that.nameSet,_that.email,_that.photoUrl,_that.fcmToken,_that.role,_that.isGuest,_that.linkCode,_that.linkedParentIds,_that.linkedChildIds);case _:
   return null;
 
 }
@@ -217,17 +220,26 @@ return $default(_that.uid,_that.name,_that.photoUrl,_that.fcmToken,_that.role,_t
 @JsonSerializable()
 
 class _UserModel implements UserModel {
-  const _UserModel({required this.uid, required this.name, this.photoUrl, this.fcmToken, this.role = 'child', this.isGuest = false, this.linkCode, this.linkedParentId, final  List<String> linkedChildIds = const []}): _linkedChildIds = linkedChildIds;
+  const _UserModel({required this.uid, required this.name, this.nameSet = false, this.email, this.photoUrl, this.fcmToken, this.role = 'child', this.isGuest = false, this.linkCode, final  List<String> linkedParentIds = const [], final  List<String> linkedChildIds = const []}): _linkedParentIds = linkedParentIds,_linkedChildIds = linkedChildIds;
   factory _UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
 @override final  String uid;
 @override final  String name;
+/// false = tên mặc định ('Bố/Mẹ'/'Con'), sẽ hỏi đặt tên ở màn home.
+@override@JsonKey() final  bool nameSet;
+@override final  String? email;
 @override final  String? photoUrl;
 @override final  String? fcmToken;
 @override@JsonKey() final  String role;
 @override@JsonKey() final  bool isGuest;
 @override final  String? linkCode;
-@override final  String? linkedParentId;
+ final  List<String> _linkedParentIds;
+@override@JsonKey() List<String> get linkedParentIds {
+  if (_linkedParentIds is EqualUnmodifiableListView) return _linkedParentIds;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_linkedParentIds);
+}
+
  final  List<String> _linkedChildIds;
 @override@JsonKey() List<String> get linkedChildIds {
   if (_linkedChildIds is EqualUnmodifiableListView) return _linkedChildIds;
@@ -249,16 +261,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.name, name) || other.name == name)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken)&&(identical(other.role, role) || other.role == role)&&(identical(other.isGuest, isGuest) || other.isGuest == isGuest)&&(identical(other.linkCode, linkCode) || other.linkCode == linkCode)&&(identical(other.linkedParentId, linkedParentId) || other.linkedParentId == linkedParentId)&&const DeepCollectionEquality().equals(other._linkedChildIds, _linkedChildIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.name, name) || other.name == name)&&(identical(other.nameSet, nameSet) || other.nameSet == nameSet)&&(identical(other.email, email) || other.email == email)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken)&&(identical(other.role, role) || other.role == role)&&(identical(other.isGuest, isGuest) || other.isGuest == isGuest)&&(identical(other.linkCode, linkCode) || other.linkCode == linkCode)&&const DeepCollectionEquality().equals(other._linkedParentIds, _linkedParentIds)&&const DeepCollectionEquality().equals(other._linkedChildIds, _linkedChildIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uid,name,photoUrl,fcmToken,role,isGuest,linkCode,linkedParentId,const DeepCollectionEquality().hash(_linkedChildIds));
+int get hashCode => Object.hash(runtimeType,uid,name,nameSet,email,photoUrl,fcmToken,role,isGuest,linkCode,const DeepCollectionEquality().hash(_linkedParentIds),const DeepCollectionEquality().hash(_linkedChildIds));
 
 @override
 String toString() {
-  return 'UserModel(uid: $uid, name: $name, photoUrl: $photoUrl, fcmToken: $fcmToken, role: $role, isGuest: $isGuest, linkCode: $linkCode, linkedParentId: $linkedParentId, linkedChildIds: $linkedChildIds)';
+  return 'UserModel(uid: $uid, name: $name, nameSet: $nameSet, email: $email, photoUrl: $photoUrl, fcmToken: $fcmToken, role: $role, isGuest: $isGuest, linkCode: $linkCode, linkedParentIds: $linkedParentIds, linkedChildIds: $linkedChildIds)';
 }
 
 
@@ -269,7 +281,7 @@ abstract mixin class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Re
   factory _$UserModelCopyWith(_UserModel value, $Res Function(_UserModel) _then) = __$UserModelCopyWithImpl;
 @override @useResult
 $Res call({
- String uid, String name, String? photoUrl, String? fcmToken, String role, bool isGuest, String? linkCode, String? linkedParentId, List<String> linkedChildIds
+ String uid, String name, bool nameSet, String? email, String? photoUrl, String? fcmToken, String role, bool isGuest, String? linkCode, List<String> linkedParentIds, List<String> linkedChildIds
 });
 
 
@@ -286,17 +298,19 @@ class __$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? uid = null,Object? name = null,Object? photoUrl = freezed,Object? fcmToken = freezed,Object? role = null,Object? isGuest = null,Object? linkCode = freezed,Object? linkedParentId = freezed,Object? linkedChildIds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? uid = null,Object? name = null,Object? nameSet = null,Object? email = freezed,Object? photoUrl = freezed,Object? fcmToken = freezed,Object? role = null,Object? isGuest = null,Object? linkCode = freezed,Object? linkedParentIds = null,Object? linkedChildIds = null,}) {
   return _then(_UserModel(
 uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
+as String,nameSet: null == nameSet ? _self.nameSet : nameSet // ignore: cast_nullable_to_non_nullable
+as bool,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,photoUrl: freezed == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
 as String?,fcmToken: freezed == fcmToken ? _self.fcmToken : fcmToken // ignore: cast_nullable_to_non_nullable
 as String?,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as String,isGuest: null == isGuest ? _self.isGuest : isGuest // ignore: cast_nullable_to_non_nullable
 as bool,linkCode: freezed == linkCode ? _self.linkCode : linkCode // ignore: cast_nullable_to_non_nullable
-as String?,linkedParentId: freezed == linkedParentId ? _self.linkedParentId : linkedParentId // ignore: cast_nullable_to_non_nullable
-as String?,linkedChildIds: null == linkedChildIds ? _self._linkedChildIds : linkedChildIds // ignore: cast_nullable_to_non_nullable
+as String?,linkedParentIds: null == linkedParentIds ? _self._linkedParentIds : linkedParentIds // ignore: cast_nullable_to_non_nullable
+as List<String>,linkedChildIds: null == linkedChildIds ? _self._linkedChildIds : linkedChildIds // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
 }

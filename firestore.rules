@@ -11,44 +11,238 @@ service cloud.firestore {
       return signedIn() && request.auth.uid == uid;
     }
 
-    // Con đã liên kết với bố/mẹ [parentId]
+    function userDoc(uid) {
+      return /databases/$(database)/documents/users/$(uid);
+    }
+
+    // Tối đa số người (bố/mẹ, ông bà…) liên kết với một bé.
+    function maxGuardians() {
+      return 3;
+    }
+
+    // Mình là con đã liên kết với [parentId]. An toàn vì linkedParentIds chỉ
+    // thêm được khi bên kia chấp nhận yêu cầu (xem rule users bên dưới).
     function isLinkedChildOf(parentId) {
       return signedIn()
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('linkedParentId', null) == parentId;
+        && parentId in get(userDoc(request.auth.uid)).data.get('linkedParentIds', []);
+    }
+
+    // Mình là một trong các bố/mẹ đang liên kết với bé [childId].
+    function isParentOf(childId) {
+      return signedIn()
+        && request.auth.uid in get(userDoc(childId)).data.get('linkedParentIds', []);
     }
 
     function onlyChanges(fields) {
       return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields);
     }
 
-    match /users/{uid} {
-      // Mọi user đã đăng nhập (kể cả khách) đọc được để tìm theo linkCode.
-      allow read: if signedIn();
+    function codeData(code) {
+      return get(/databases/$(database)/documents/link_codes/$(code)).data;
+    }
 
-      allow create: if isSelf(uid);
+    function linkRequest(id) {
+      return get(/databases/$(database)/documents/link_requests/$(id)).data;
+    }
+
+    // Yêu cầu liên kết [id] gửi tới mình được chấp nhận ngay trong batch này
+    // (pending → accepted). Mỗi yêu cầu chỉ "tiêu thụ" được một lần, nên không
+    // dùng lại được yêu cầu cũ để tự liên kết lại.
+    function acceptsRequest(id) {
+      return linkRequest(id).toUid == request.auth.uid
+        && linkRequest(id).status == 'pending'
+        && getAfter(/databases/$(database)/documents/link_requests/$(id)).data.status == 'accepted';
+    }
+
+    // Mảng [field] chỉ bớt đi [uid] (hoặc không đổi), không thêm phần tử nào.
+    function removesOnly(field, uid) {
+      let before = resource.data.get(field, []).toSet();
+      let after = request.resource.data.get(field, []).toSet();
+      return before.difference(after).hasOnly([uid])
+        && after.difference(before).size() == 0;
+    }
+
+    // Mảng [field] chỉ được thêm đúng một phần tử [added], không bớt phần tử nào.
+    function addsExactly(field, added) {
+      let before = resource.data.get(field, []).toSet();
+      let after = request.resource.data.get(field, []).toSet();
+      return after.difference(before) == [added].toSet()
+        && before.difference(after).size() == 0;
+    }
+
+    // ── Mã liên kết ────────────────────────────────────────────────────────
+    // Chỉ tra được khi biết đúng mã (get), không liệt kê được (list).
+    match /link_codes/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['uid', 'role'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.role == getAfter(userDoc(request.auth.uid)).data.role;
+      allow update: if false;
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    // ── Yêu cầu liên kết ───────────────────────────────────────────────────
+    // A nhập mã của B → tạo yêu cầu (fromUid = A, toUid = B). B thấy ở màn home
+    // và chấp nhận/từ chối. Chỉ hai bên đọc được.
+    match /link_requests/{requestId} {
+      allow read: if signedIn()
+        && (resource.data.fromUid == request.auth.uid
+            || resource.data.toUid == request.auth.uid);
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(
+             ['fromUid', 'fromRole', 'fromName', 'toUid', 'toRole', 'code', 'status', 'createdAt'])
+        && request.resource.data.fromUid == request.auth.uid
+        && request.resource.data.fromRole == get(userDoc(request.auth.uid)).data.role
+        && request.resource.data.status == 'pending'
+        && codeData(request.resource.data.code).uid == request.resource.data.toUid
+        && codeData(request.resource.data.code).role == request.resource.data.toRole
+        && request.resource.data.toUid != request.auth.uid
+        && request.resource.data.fromRole != request.resource.data.toRole;
+
+      // Người nhận trả lời một lần.
+      allow update: if signedIn()
+        && resource.data.toUid == request.auth.uid
+        && resource.data.status == 'pending'
+        && request.resource.data.status in ['accepted', 'rejected']
+        && onlyChanges(['status', 'respondedAt']);
+
+      // Người gửi huỷ, hoặc người nhận dọn.
+      allow delete: if signedIn()
+        && (resource.data.fromUid == request.auth.uid
+            || resource.data.toUid == request.auth.uid);
+    }
+
+    // ── Người dùng ─────────────────────────────────────────────────────────
+    // Bé có linkedParentIds (tối đa maxGuardians()), bố/mẹ có linkedChildIds.
+    // Liên kết chỉ xảy ra khi người nhận chấp nhận yêu cầu: một batch gồm
+    //  - link_requests/{id}: pending → accepted;
+    //  - doc của người nhận: trường liên kết + linkedVia = id yêu cầu;
+    //  - doc của người gửi: chỉ trường liên kết, rule đối chiếu doc người nhận
+    //    sau batch (getAfter).
+    // Gỡ liên kết: mỗi bên chỉ gỡ chính mình khỏi doc của bên kia.
+    match /users/{uid} {
+      allow read: if isSelf(uid)
+        || (signedIn() && request.auth.uid in resource.data.get('linkedParentIds', []))
+        || (signedIn() && request.auth.uid in resource.data.get('linkedChildIds', []));
+
+      allow create: if isSelf(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.role in ['parent', 'child']
+        && request.resource.data.get('linkedParentId', null) == null
+        && request.resource.data.get('linkedParentIds', []).size() == 0
+        && request.resource.data.get('linkedChildIds', []).size() == 0
+        && !('linkedVia' in request.resource.data);
+
       allow delete: if isSelf(uid);
 
-      allow update: if isSelf(uid)
-        // Bố/mẹ liên kết con: chỉ được đặt linkedParentId của con = chính mình
-        || (signedIn()
-            && onlyChanges(['linkedParentId'])
-            && request.resource.data.linkedParentId == request.auth.uid)
-        // Con liên kết bố/mẹ: chỉ được thêm chính mình vào linkedChildIds
-        || (signedIn()
-            && onlyChanges(['linkedChildIds'])
-            && request.resource.data.linkedChildIds.toSet()
-                 .difference(resource.data.get('linkedChildIds', []).toSet())
-                 == [request.auth.uid].toSet()
-            && resource.data.get('linkedChildIds', []).toSet()
-                 .difference(request.resource.data.linkedChildIds.toSet()).size() == 0);
+      allow update: if
+        // Tự sửa hồ sơ (tên, fcmToken, mã hiển thị…) — không được đụng vai trò
+        // hay các trường liên kết.
+        (isSelf(uid)
+          && !request.resource.data.diff(resource.data).affectedKeys()
+               .hasAny(['uid', 'role', 'linkedParentId', 'linkedParentIds',
+                        'linkedChildIds', 'linkedVia']))
 
-      // Vùng an toàn: bố/mẹ ghi, con đã liên kết chỉ đọc
+        // Chuyển dữ liệu cũ: linkedParentId (một người) → linkedParentIds.
+        || (isSelf(uid)
+          && resource.data.role == 'child'
+          && resource.data.get('linkedParentId', null) != null
+          && onlyChanges(['linkedParentId', 'linkedParentIds'])
+          && !('linkedParentId' in request.resource.data)
+          && request.resource.data.linkedParentIds == [resource.data.linkedParentId])
+
+        // ── Chấp nhận yêu cầu ──
+        // Con chấp nhận yêu cầu của bố/mẹ → thêm vào linkedParentIds của mình.
+        || (isSelf(uid)
+          && resource.data.role == 'child'
+          && onlyChanges(['linkedParentIds', 'linkedVia'])
+          && acceptsRequest(request.resource.data.linkedVia)
+          && linkRequest(request.resource.data.linkedVia).fromRole == 'parent'
+          && addsExactly('linkedParentIds', linkRequest(request.resource.data.linkedVia).fromUid)
+          && request.resource.data.linkedParentIds.size() <= maxGuardians())
+        // Bố/mẹ chấp nhận yêu cầu của con → thêm con vào linkedChildIds của mình.
+        || (isSelf(uid)
+          && resource.data.role == 'parent'
+          && onlyChanges(['linkedChildIds', 'linkedVia'])
+          && acceptsRequest(request.resource.data.linkedVia)
+          && linkRequest(request.resource.data.linkedVia).fromRole == 'child'
+          && addsExactly('linkedChildIds', linkRequest(request.resource.data.linkedVia).fromUid))
+        // Con chấp nhận → thêm mình vào linkedChildIds của bố/mẹ đã gửi yêu cầu.
+        || (signedIn()
+          && resource.data.role == 'parent'
+          && onlyChanges(['linkedChildIds'])
+          && addsExactly('linkedChildIds', request.auth.uid)
+          && acceptsRequest(getAfter(userDoc(request.auth.uid)).data.linkedVia)
+          && linkRequest(getAfter(userDoc(request.auth.uid)).data.linkedVia).fromUid == uid)
+        // Bố/mẹ chấp nhận → thêm mình vào linkedParentIds của con đã gửi yêu cầu.
+        || (signedIn()
+          && resource.data.role == 'child'
+          && onlyChanges(['linkedParentIds'])
+          && addsExactly('linkedParentIds', request.auth.uid)
+          && request.resource.data.linkedParentIds.size() <= maxGuardians()
+          && acceptsRequest(getAfter(userDoc(request.auth.uid)).data.linkedVia)
+          && linkRequest(getAfter(userDoc(request.auth.uid)).data.linkedVia).fromUid == uid)
+
+        // ── Gỡ liên kết ──
+        // Con tự bỏ bố/mẹ khỏi danh sách của mình.
+        || (isSelf(uid)
+          && resource.data.role == 'child'
+          && onlyChanges(['linkedParentIds'])
+          && request.resource.data.get('linkedParentIds', []).toSet()
+               .difference(resource.data.get('linkedParentIds', []).toSet()).size() == 0)
+        // Bố/mẹ tự bỏ con khỏi danh sách của mình.
+        || (isSelf(uid)
+          && resource.data.role == 'parent'
+          && onlyChanges(['linkedChildIds'])
+          && request.resource.data.get('linkedChildIds', []).toSet()
+               .difference(resource.data.get('linkedChildIds', []).toSet()).size() == 0)
+        // Bố/mẹ gỡ con: bỏ chính mình khỏi linkedParentIds của con.
+        || (signedIn()
+          && resource.data.role == 'child'
+          && onlyChanges(['linkedParentIds'])
+          && removesOnly('linkedParentIds', request.auth.uid))
+        // Con gỡ bố/mẹ: bỏ chính mình khỏi linkedChildIds của bố/mẹ.
+        || (signedIn()
+          && resource.data.role == 'parent'
+          && onlyChanges(['linkedChildIds'])
+          && removesOnly('linkedChildIds', request.auth.uid));
+
+      // Vùng an toàn thuộc về bé: mọi bố/mẹ đang liên kết thêm/xoá, bé chỉ đọc.
+      // Tối đa 3 vùng — chỉ cho 3 id cố định; không update (2 người cùng chọn
+      // một ô thì người sau thất bại và thử ô khác).
       match /zones/{zoneId} {
-        allow read: if isSelf(uid) || isLinkedChildOf(uid);
-        allow write: if isSelf(uid);
+        allow read: if isSelf(uid) || isParentOf(uid);
+        allow create: if isParentOf(uid) && zoneId in ['z1', 'z2', 'z3'];
+        allow delete: if isParentOf(uid);
       }
 
-      // Sự kiện geofence: con đã liên kết tạo, bố/mẹ đọc
+      // Vị trí gần nhất của bé (một doc 'current'): bé ghi, bố/mẹ đang liên
+      // kết đọc. sharingUntil != null → đang chia sẻ trực tiếp tới thời điểm đó.
+      match /location/{docId} {
+        allow read: if isSelf(uid) || isParentOf(uid);
+        allow create, update: if isSelf(uid)
+          && docId == 'current'
+          && request.resource.data.keys().hasOnly(
+               ['lat', 'lng', 'accuracy', 'updatedAt', 'sharingUntil'])
+          && request.resource.data.lat is number
+          && request.resource.data.lng is number;
+      }
+
+      // Bố/mẹ nhờ bé chia sẻ vị trí — mỗi bố/mẹ một doc (id = uid của mình),
+      // hỏi lại thì ghi đè. Bé thấy ở màn home và xoá khi chia sẻ / bỏ qua.
+      match /location_requests/{parentId} {
+        allow read: if isSelf(uid) || (isSelf(parentId) && isParentOf(uid));
+        allow create, update: if isSelf(parentId)
+          && isParentOf(uid)
+          && request.resource.data.keys().hasOnly(['fromUid', 'fromName', 'createdAt'])
+          && request.resource.data.fromUid == parentId;
+        allow delete: if isSelf(uid) || isSelf(parentId);
+      }
+
+      // Sự kiện geofence (theo từng bố/mẹ): con đã liên kết tạo, bố/mẹ đọc
       match /geofence_events/{eventId} {
         allow read: if isSelf(uid);
         allow create: if isLinkedChildOf(uid)
@@ -57,9 +251,78 @@ service cloud.firestore {
       }
     }
 
-    // Todo hiện dùng id cố định (child-001) — tạm cho mọi user đã đăng nhập.
+    // ── Nhiệm vụ ───────────────────────────────────────────────────────────
+    // Nhiệm vụ thuộc về bé (assignedChildId): mọi bố/mẹ đang liên kết với bé
+    // cùng xem/sửa/xoá; bé xem, đánh dấu hoàn thành, và tự thêm việc cho
+    // mình (sửa/xoá được việc mình tạo). Truy vấn theo assignedChildId
+    // (bố/mẹ: mỗi bé một truy vấn).
     match /todos/{todoId} {
-      allow read, write: if signedIn();
+      function isOwnChildTodo(data) {
+        return data.assignedChildId == request.auth.uid
+          && data.createdBy == request.auth.uid;
+      }
+
+      allow read: if signedIn()
+        && (resource.data.assignedChildId == request.auth.uid
+            || isParentOf(resource.data.assignedChildId));
+
+      allow create: if signedIn()
+        && request.resource.data.createdBy == request.auth.uid
+        && (isParentOf(request.resource.data.assignedChildId)
+            || (isOwnChildTodo(request.resource.data)
+                && get(userDoc(request.auth.uid)).data.role == 'child'));
+
+      allow update: if signedIn() && (
+        (isParentOf(resource.data.assignedChildId)
+          && request.resource.data.assignedChildId == resource.data.assignedChildId
+          && request.resource.data.createdBy == resource.data.createdBy)
+        || (isOwnChildTodo(resource.data) && isOwnChildTodo(request.resource.data))
+        || (resource.data.assignedChildId == request.auth.uid
+          && onlyChanges(['isCompleted', 'completedAt'])));
+
+      allow delete: if signedIn()
+        && (isParentOf(resource.data.assignedChildId) || isOwnChildTodo(resource.data));
+    }
+
+    // ── Lời nhắn gửi (việc bé nhờ bố/mẹ làm) ─────────────────────────────────
+    // Bé viết, sửa, xoá lời nhắn của mình; mọi bố/mẹ đang liên kết cùng thấy và
+    // đánh dấu đã làm (kèm tên người làm). Truy vấn theo childId.
+    match /parent_todos/{noteId} {
+      function noteFields() {
+        return ['childId', 'title', 'emoji', 'createdAt', 'isCompleted',
+                'completedAt', 'completedBy', 'completedByName'];
+      }
+
+      allow read: if signedIn()
+        && (resource.data.childId == request.auth.uid
+            || isParentOf(resource.data.childId));
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(noteFields())
+        && request.resource.data.childId == request.auth.uid
+        && request.resource.data.isCompleted == false
+        && request.resource.data.get('completedBy', null) == null
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 100
+        && get(userDoc(request.auth.uid)).data.role == 'child';
+
+      allow update: if signedIn() && (
+        // Bé sửa nội dung
+        (resource.data.childId == request.auth.uid
+          && onlyChanges(['title', 'emoji'])
+          && request.resource.data.title is string
+          && request.resource.data.title.size() > 0
+          && request.resource.data.title.size() <= 100)
+        // Bố/mẹ đánh dấu đã làm (ghi tên mình) hoặc bỏ đánh dấu
+        || (isParentOf(resource.data.childId)
+          && onlyChanges(['isCompleted', 'completedAt', 'completedBy', 'completedByName'])
+          && ((request.resource.data.isCompleted == true
+                && request.resource.data.completedBy == request.auth.uid)
+              || (request.resource.data.isCompleted == false
+                && request.resource.data.get('completedBy', null) == null))));
+
+      allow delete: if signedIn() && resource.data.childId == request.auth.uid;
     }
   }
 }

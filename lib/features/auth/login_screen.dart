@@ -50,8 +50,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       // Email → parent, username → child (appended with @kidscare.app)
       final email = _isEmail(input) ? input : '$input@kidscare.app';
 
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       if (!mounted) return;
 
@@ -85,8 +87,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void _showError(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(msg,
-            style: GoogleFonts.nunito(fontWeight: FontWeight.w700)),
+        content: Text(
+          msg,
+          style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
+        ),
         backgroundColor: AppTheme.dangerColor,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),

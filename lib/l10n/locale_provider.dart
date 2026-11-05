@@ -63,7 +63,6 @@ Locale resolveLocale(Iterable<Locale>? deviceLocales) {
 
 /// Lấy bản dịch khi không có BuildContext (vd. thông báo đẩy nền).
 AppLocalizations l10nWithoutContext(Locale? chosen) {
-  final locale =
-      chosen ?? resolveLocale(PlatformDispatcher.instance.locales);
+  final locale = chosen ?? resolveLocale(PlatformDispatcher.instance.locales);
   return lookupAppLocalizations(locale);
 }

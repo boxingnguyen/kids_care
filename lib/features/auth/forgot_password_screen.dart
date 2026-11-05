@@ -14,7 +14,8 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  ConsumerState<ForgotPasswordScreen> createState() =>
+      _ForgotPasswordScreenState();
 }
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
@@ -43,9 +44,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         leadingWidth: 64,
-        leading: const Center(
-          child: AppBackButton(fallbackLocation: '/login'),
-        ),
+        leading: const Center(child: AppBackButton(fallbackLocation: '/login')),
       ),
       extendBodyBehindAppBar: true,
       body: Container(
@@ -63,7 +62,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                
+
                 Text(
                   context.l10n.forgotPasswordTitle,
                   style: GoogleFonts.nunito(
@@ -82,7 +81,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     height: 1.4,
                   ),
                 ),
-                
+
                 const SizedBox(height: 48),
 
                 Container(

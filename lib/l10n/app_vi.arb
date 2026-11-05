@@ -3,7 +3,7 @@
   "appTitle": "Kids Care",
   "back": "Quay lại",
   "home": "Trang chủ",
-  "tasks": "Nhiệm vụ",
+  "tasks": "Việc cần làm",
   "map": "Bản đồ",
   "settings": "Cài đặt",
   "notifications": "Thông báo",
@@ -149,7 +149,7 @@
   "pickButtonToTell": "Chọn một nút để báo cho bố mẹ biết nhé!",
   "statusGoSchool": "Con đi học",
   "statusGoPlay": "Con đi chơi",
-  "statusArrived": "Con đã tới",
+  "statusArrived": "Con đã đến",
   "statusBackHome": "Con đã về",
   "callParents": "GỌI BỐ MẸ",
   "callParentsHint": "Nhấn nút xanh nếu con cần bố mẹ giúp ngay!",
@@ -162,10 +162,10 @@
       }
     }
   },
-  "statusLabelSchool": "Đi học",
-  "statusLabelPlaying": "Đang chơi",
-  "statusLabelHome": "Về nhà",
-  "statusLabelArrived": "Đã đến",
+  "statusLabelSchool": "Con đang đi học",
+  "statusLabelPlaying": "Con đang đi chơi",
+  "statusLabelHome": "Con đã về nhà",
+  "statusLabelArrived": "Con đã đến trường",
   "statusLabelLeft": "Rời khỏi",
   "linkCodeFormatError": "Nhập mã 6 ký tự (VD: ABC-123)",
   "notSignedIn": "Chưa đăng nhập",
@@ -189,7 +189,7 @@
   "menuNotificationsDesc": "Con đang ở đâu, vừa báo gì, gọi khẩn cho con",
   "menuMapTitle": "Bản đồ & vùng an toàn",
   "menuMapDesc": "Đánh dấu trường, nhà, nơi chơi của con",
-  "menuTasksTitle": "Nhiệm vụ của con",
+  "menuTasksTitle": "Việc cần làm của con",
   "menuTasksDesc": "Giao việc hằng ngày và xem con đã làm xong chưa",
   "addSafeZone": "Thêm vùng an toàn",
   "zoneNameHint": "Tên vùng (VD: Trường học)",
@@ -248,8 +248,8 @@
   "statusSafe": "✅ An toàn",
   "emergencyCallChild": "Gọi khẩn cho con",
   "voiceCallVia": "Cuộc gọi thoại qua ZegoCloud",
-  "noNotifications": "Chưa có thông báo",
-  "childNoStatusYet": "Con chưa cập nhật trạng thái nào",
+  "noNotifications": "Chưa có cập nhật nào",
+  "childNoStatusYet": "Khi con báo trạng thái, chia sẻ vị trí hay làm xong việc, bạn sẽ thấy ở đây",
   "accountSecurity": "Tài khoản & bảo mật",
   "logout": "Đăng xuất",
   "logoutSubtitle": "Đăng xuất khỏi tài khoản hiện tại",
@@ -283,10 +283,10 @@
       }
     }
   },
-  "childTasksLoadError": "Ôi, chưa tải được nhiệm vụ 😢\nCon thử lại sau một chút nhé!",
-  "myTasksTitle": "Nhiệm vụ của mình 🌟",
-  "tapTaskWhenDone": "Chạm vào nhiệm vụ khi con làm xong nhé!",
-  "doneOfTotalToday": "Đã xong {done}/{total} nhiệm vụ hôm nay!",
+  "childTasksLoadError": "Ôi, chưa tải được việc cần làm 😢\nCon thử lại sau một chút nhé!",
+  "myTasksTitle": "Việc cần làm 🌟",
+  "tapTaskWhenDone": "Chạm vào việc khi con làm xong nhé!",
+  "doneOfTotalToday": "Đã xong {done}/{total} việc hôm nay!",
   "@doneOfTotalToday": {
     "placeholders": {
       "done": {
@@ -321,9 +321,9 @@
       }
     }
   },
-  "noTasksYetChild": "Chưa có nhiệm vụ nào!",
+  "noTasksYetChild": "Chưa có việc nào!",
   "parentWillAssign": "Bố/mẹ sẽ giao nhiệm vụ cho mình sớm nhé 😊",
-  "parentTasksLoadError": "Không tải được danh sách nhiệm vụ.\n{message}",
+  "parentTasksLoadError": "Không tải được danh sách việc cần làm.\n{message}",
   "@parentTasksLoadError": {
     "placeholders": {
       "message": {
@@ -331,8 +331,8 @@
       }
     }
   },
-  "parentTasksTitle": "📋 Nhiệm vụ của con",
-  "tasksCompleted": "{done}/{total} nhiệm vụ hoàn thành",
+  "parentTasksTitle": "📋 Việc cần làm của con",
+  "tasksCompleted": "{done}/{total} việc đã xong",
   "@tasksCompleted": {
     "placeholders": {
       "done": {
@@ -343,7 +343,7 @@
       }
     }
   },
-  "deleteTaskTitle": "Xoá nhiệm vụ?",
+  "deleteTaskTitle": "Xoá việc này?",
   "deleteTaskMessage": "Bạn muốn xoá \"{title}\"?",
   "@deleteTaskMessage": {
     "placeholders": {
@@ -354,10 +354,10 @@
   },
   "taskDone": "Xong",
   "taskPending": "Chờ",
-  "addTask": "Thêm nhiệm vụ",
-  "addNewTask": "✨ Thêm nhiệm vụ mới",
+  "addTask": "Thêm việc",
+  "addNewTask": "✨ Thêm việc mới",
   "chooseIcon": "Chọn biểu tượng",
-  "taskNameHint": "Tên nhiệm vụ (ví dụ: Làm bài tập)",
+  "taskNameHint": "Tên việc (ví dụ: Làm bài tập)",
   "taskDescriptionHint": "Mô tả thêm (không bắt buộc)",
   "dueDateLabel": "Hạn: {date}",
   "@dueDateLabel": {
@@ -368,9 +368,9 @@
     }
   },
   "pickDueDate": "Chọn ngày hết hạn (không bắt buộc)",
-  "assignTask": "Giao nhiệm vụ 🚀",
-  "noTasksYetParent": "Chưa có nhiệm vụ nào",
-  "tapPlusToAssign": "Bấm + để giao nhiệm vụ cho con nhé!",
+  "assignTask": "Giao việc 🚀",
+  "noTasksYetParent": "Chưa có việc nào",
+  "tapPlusToAssign": "Bấm + để giao việc cho con nhé!",
   "geofenceChannelName": "Thông báo vùng an toàn",
   "geofenceChannelDesc": "Thông báo khi con vào/ra khỏi vùng an toàn",
   "geofenceLeft": "{name} vừa rời khỏi {zone}",
@@ -391,6 +391,309 @@
         "type": "String"
       },
       "zone": {
+        "type": "String"
+      }
+    }
+  },
+  "searchPlaceHint": "Tìm trường, nhà, công viên…",
+  "searchNoResults": "Không tìm thấy địa điểm nào",
+  "searchFailed": "Không tìm được, vui lòng thử lại",
+  "locationPermissionDenied": "Chưa có quyền vị trí nên không thể mở bản đồ tại chỗ bạn đứng.",
+  "locationServiceDisabled": "Dịch vụ vị trí đang tắt.",
+  "openSettings": "Mở cài đặt",
+  "myLocation": "Vị trí của tôi",
+  "linkChildToAssign": "Chưa liên kết với con. Hãy cho con nhập mã liên kết để giao việc.",
+  "assignTo": "Giao cho",
+  "linkEmailTitle": "Liên kết email",
+  "linkEmailSubtitle": "Gắn email để giữ dữ liệu và đăng nhập lại khi đổi máy hoặc cài lại app.",
+  "linkEmailAction": "Liên kết và gửi email xác thực",
+  "passwordTooShort": "Mật khẩu cần ít nhất 6 ký tự",
+  "invalidEmail": "Email không hợp lệ",
+  "tooManyRequests": "Bạn thao tác quá nhanh, hãy thử lại sau ít phút.",
+  "verifyEmailTitle": "Xác thực email",
+  "verifyEmailMessage": "Đã gửi link xác thực tới {email}. Mở email, bấm vào link rồi quay lại app.",
+  "@verifyEmailMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyEmailCheck": "Tôi đã xác thực",
+  "verifyEmailResend": "Gửi lại email",
+  "verifyEmailResendIn": "Gửi lại sau {seconds}s",
+  "@verifyEmailResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "verifyEmailSent": "Đã gửi lại email xác thực",
+  "verifyEmailNotYet": "Email chưa được xác thực. Hãy bấm link trong email.",
+  "emailLinkedLoggedOut": "Đã liên kết email. Lần sau đăng nhập bằng email này để lấy lại dữ liệu.",
+  "logoutGuestLinkTitle": "Dữ liệu sẽ bị mất",
+  "logoutGuestLinkMessage": "Bạn đang dùng tài khoản khách. Nếu đăng xuất, toàn bộ dữ liệu và liên kết sẽ mất vĩnh viễn. Hãy liên kết email để giữ lại.",
+  "logoutAnyway": "Vẫn đăng xuất",
+  "setNameTitle": "Bạn tên là gì?",
+  "setNameParentHint": "VD: Mẹ Lan",
+  "setNameChildHint": "VD: Bin",
+  "save": "Lưu",
+  "regenerateLinkCode": "Tạo mã mới",
+  "regenerateLinkCodeConfirm": "Mã cũ sẽ không dùng được nữa. Các tài khoản đã liên kết vẫn giữ nguyên.",
+  "linkCodeRegenerated": "Đã tạo mã liên kết mới",
+  "confirmPasswordHint": "Nhập lại mật khẩu",
+  "sendLinkRequest": "Gửi yêu cầu liên kết",
+  "linkRequestSent": "Đã gửi yêu cầu liên kết. Chờ bên kia chấp nhận nhé!",
+  "linkRequestFromParent": "{name} (bố/mẹ) muốn liên kết với bạn",
+  "@linkRequestFromParent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "linkRequestFromChild": "{name} (con) muốn liên kết với bạn",
+  "@linkRequestFromChild": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "linkRequestHint": "Chấp nhận để đồng bộ vùng an toàn, việc cần làm và thông báo.",
+  "accept": "Chấp nhận",
+  "reject": "Từ chối",
+  "linkRequestAccepted": "Đã liên kết với {name}",
+  "@linkRequestAccepted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pendingRequestsTitle": "Đang chờ chấp nhận",
+  "pendingRequestCode": "Mã {code}",
+  "@pendingRequestCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "cancelRequest": "Huỷ yêu cầu",
+  "linkedAccountsTitle": "Tài khoản đã liên kết",
+  "unlink": "Gỡ liên kết",
+  "unlinkConfirmTitle": "Gỡ liên kết với {name}?",
+  "@unlinkConfirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unlinkConfirmMessageParent": "Con sẽ không còn thấy vùng an toàn và việc cần làm của bạn, bạn cũng không nhận thông báo từ con nữa. Có thể liên kết lại bằng mã.",
+  "unlinkConfirmMessageChild": "Bố mẹ sẽ không nhận được thông báo khi con đến hoặc rời vùng an toàn nữa. Hãy hỏi bố mẹ trước nhé!",
+  "unlinked": "Đã gỡ liên kết",
+  "errRequestPending": "Đã gửi yêu cầu, đang chờ bên kia chấp nhận",
+  "errAlreadyLinked": "Hai tài khoản đã liên kết rồi",
+  "errRequestGone": "Yêu cầu không còn hiệu lực, hoặc bé đã đủ 3 người liên kết.",
+  "errChildHasParent": "Đang liên kết với bố/mẹ khác. Hãy gỡ liên kết trước.",
+  "zonesNeedChild": "Liên kết với bé trước để tạo vùng an toàn cho bé.",
+  "errMaxGuardians": "Bé đã có đủ 3 người liên kết. Hãy gỡ bớt một người trước.",
+  "eventShareStarted": "{name} đang chia sẻ vị trí trực tiếp",
+  "@eventShareStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "eventShareStopped": "{name} đã dừng chia sẻ vị trí",
+  "@eventShareStopped": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "eventTodoCreated": "{name} vừa thêm việc: {title}",
+  "@eventTodoCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "eventTodoDone": "{name} đã làm xong: {title}",
+  "@eventTodoDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "locationRequestTitle": "Chia sẻ vị trí",
+  "locationRequestBody": "{name} muốn xem con đang ở đâu",
+  "@locationRequestBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "locationRequestHint": "Bấm nút \"Chia sẻ vị trí trực tiếp\" ở dưới nhé",
+  "locationRequestSent": "Đã nhờ {name} chia sẻ vị trí",
+  "@locationRequestSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "locationRequestPending": "Đã hỏi lúc {time}, đang chờ con trả lời",
+  "@locationRequestPending": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "liveShareNotifTitle": "Đang chia sẻ vị trí",
+  "liveShareNotifText": "Bố mẹ đang thấy vị trí của con",
+  "noLocationYet": "Chưa có vị trí — hãy nhờ con chia sẻ",
+  "liveSharingRemaining": "Đang chia sẻ trực tiếp · còn {minutes} phút",
+  "@liveSharingRemaining": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "lastSeenAt": "Vị trí gần nhất lúc {time}",
+  "@lastSeenAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "childLocationTitle": "{name} đang ở đây",
+  "@childLocationTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "askChildLocation": "Hỏi vị trí của {name}",
+  "@askChildLocation": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "askAgain": "Hỏi lại",
+  "liveBadge": "TRỰC TIẾP",
+  "noChildLinkedTitle": "Liên kết với con để xem vị trí và nhận thông báo",
+  "linkWithChild": "Liên kết với con",
+  "notLinkedYetHint": "Con chưa liên kết với bố mẹ — vào Cài đặt để liên kết nhé",
+  "dismiss": "Bỏ qua",
+  "locationServiceOff": "Dịch vụ vị trí đang tắt. Hãy bật lên rồi thử lại nhé.",
+  "locationPermissionNeeded": "Cần cho phép vị trí để chia sẻ với bố mẹ.",
+  "locationPermissionSettings": "Quyền vị trí đang bị tắt. Mở Cài đặt để cho phép nhé.",
+  "locationNoFix": "Chưa lấy được vị trí. Thử ra chỗ thoáng rồi bấm lại nhé.",
+  "minutesRemaining": "Còn {minutes} phút",
+  "@minutesRemaining": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "liveShareHint": "Bố mẹ sẽ thấy con ở đâu trong 60 phút",
+  "startLiveShare": "Chia sẻ vị trí trực tiếp",
+  "stopLiveShare": "Dừng chia sẻ vị trí",
+  "addTodo": "Thêm việc",
+  "addTodoTitle": "Con muốn làm gì? ✨",
+  "addTodoHint": "Ví dụ: Tưới cây",
+  "childCanAddTodo": "Bấm \"Thêm việc\" để tự thêm, hoặc chờ bố mẹ giao nhé 😊",
+  "assignTab": "Giao việc",
+  "notesTab": "Lời nhắn gửi",
+  "notesTitle": "Lời nhắn gửi bố mẹ 💌",
+  "notesSubtitle": "Con muốn bố mẹ làm gì giúp con?",
+  "notesWaiting": "{count} lời nhắn đang chờ bố mẹ",
+  "@notesWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "notesDoneCount": "Đã làm ({count})",
+  "@notesDoneCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "writeNote": "Viết lời nhắn",
+  "addNoteTitle": "Con muốn nhắn bố mẹ điều gì? 💌",
+  "addNoteHint": "Ví dụ: Mua giúp con hộp bút chì",
+  "sendNote": "Gửi bố mẹ",
+  "deleteNoteTitle": "Xoá lời nhắn?",
+  "noteDoneBy": "{name} đã làm lúc {time}",
+  "@noteDoneBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "noteWaiting": "Đang chờ bố mẹ…",
+  "noNotesYet": "Chưa có lời nhắn nào",
+  "noNotesHint": "Bấm \"Viết lời nhắn\" để nhờ bố mẹ làm giúp con nhé 😊",
+  "parentNotesTitle": "Việc cần làm",
+  "parentNotesAllDone": "Đã làm hết lời nhắn của con 🎉",
+  "parentNotesWaiting": "Con nhờ {count} việc — chạm để đánh dấu đã làm",
+  "@parentNotesWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "parentNotesEmpty": "Chưa có lời nhắn nào từ con",
+  "parentNotesEmptyHint": "Khi con nhờ bạn làm gì, lời nhắn sẽ hiện ở đây",
+  "eventNoteCreated": "{name} nhắn: {title}",
+  "@eventNoteCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "noteDoneNotif": "{name} đã làm: {title}",
+  "@noteDoneNotif": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "title": {
         "type": "String"
       }
     }

@@ -127,7 +127,7 @@ abstract class AppLocalizations {
   /// No description provided for @tasks.
   ///
   /// In vi, this message translates to:
-  /// **'Nhiệm vụ'**
+  /// **'Việc cần làm'**
   String get tasks;
 
   /// No description provided for @map.
@@ -667,7 +667,7 @@ abstract class AppLocalizations {
   /// No description provided for @statusArrived.
   ///
   /// In vi, this message translates to:
-  /// **'Con đã tới'**
+  /// **'Con đã đến'**
   String get statusArrived;
 
   /// No description provided for @statusBackHome.
@@ -703,25 +703,25 @@ abstract class AppLocalizations {
   /// No description provided for @statusLabelSchool.
   ///
   /// In vi, this message translates to:
-  /// **'Đi học'**
+  /// **'Con đang đi học'**
   String get statusLabelSchool;
 
   /// No description provided for @statusLabelPlaying.
   ///
   /// In vi, this message translates to:
-  /// **'Đang chơi'**
+  /// **'Con đang đi chơi'**
   String get statusLabelPlaying;
 
   /// No description provided for @statusLabelHome.
   ///
   /// In vi, this message translates to:
-  /// **'Về nhà'**
+  /// **'Con đã về nhà'**
   String get statusLabelHome;
 
   /// No description provided for @statusLabelArrived.
   ///
   /// In vi, this message translates to:
-  /// **'Đã đến'**
+  /// **'Con đã đến trường'**
   String get statusLabelArrived;
 
   /// No description provided for @statusLabelLeft.
@@ -865,7 +865,7 @@ abstract class AppLocalizations {
   /// No description provided for @menuTasksTitle.
   ///
   /// In vi, this message translates to:
-  /// **'Nhiệm vụ của con'**
+  /// **'Việc cần làm của con'**
   String get menuTasksTitle;
 
   /// No description provided for @menuTasksDesc.
@@ -991,13 +991,13 @@ abstract class AppLocalizations {
   /// No description provided for @noNotifications.
   ///
   /// In vi, this message translates to:
-  /// **'Chưa có thông báo'**
+  /// **'Chưa có cập nhật nào'**
   String get noNotifications;
 
   /// No description provided for @childNoStatusYet.
   ///
   /// In vi, this message translates to:
-  /// **'Con chưa cập nhật trạng thái nào'**
+  /// **'Khi con báo trạng thái, chia sẻ vị trí hay làm xong việc, bạn sẽ thấy ở đây'**
   String get childNoStatusYet;
 
   /// No description provided for @accountSecurity.
@@ -1117,25 +1117,25 @@ abstract class AppLocalizations {
   /// No description provided for @childTasksLoadError.
   ///
   /// In vi, this message translates to:
-  /// **'Ôi, chưa tải được nhiệm vụ 😢\nCon thử lại sau một chút nhé!'**
+  /// **'Ôi, chưa tải được việc cần làm 😢\nCon thử lại sau một chút nhé!'**
   String get childTasksLoadError;
 
   /// No description provided for @myTasksTitle.
   ///
   /// In vi, this message translates to:
-  /// **'Nhiệm vụ của mình 🌟'**
+  /// **'Việc cần làm 🌟'**
   String get myTasksTitle;
 
   /// No description provided for @tapTaskWhenDone.
   ///
   /// In vi, this message translates to:
-  /// **'Chạm vào nhiệm vụ khi con làm xong nhé!'**
+  /// **'Chạm vào việc khi con làm xong nhé!'**
   String get tapTaskWhenDone;
 
   /// No description provided for @doneOfTotalToday.
   ///
   /// In vi, this message translates to:
-  /// **'Đã xong {done}/{total} nhiệm vụ hôm nay!'**
+  /// **'Đã xong {done}/{total} việc hôm nay!'**
   String doneOfTotalToday(String done, String total);
 
   /// No description provided for @greatJobDone.
@@ -1159,7 +1159,7 @@ abstract class AppLocalizations {
   /// No description provided for @noTasksYetChild.
   ///
   /// In vi, this message translates to:
-  /// **'Chưa có nhiệm vụ nào!'**
+  /// **'Chưa có việc nào!'**
   String get noTasksYetChild;
 
   /// No description provided for @parentWillAssign.
@@ -1171,25 +1171,25 @@ abstract class AppLocalizations {
   /// No description provided for @parentTasksLoadError.
   ///
   /// In vi, this message translates to:
-  /// **'Không tải được danh sách nhiệm vụ.\n{message}'**
+  /// **'Không tải được danh sách việc cần làm.\n{message}'**
   String parentTasksLoadError(String message);
 
   /// No description provided for @parentTasksTitle.
   ///
   /// In vi, this message translates to:
-  /// **'📋 Nhiệm vụ của con'**
+  /// **'📋 Việc cần làm của con'**
   String get parentTasksTitle;
 
   /// No description provided for @tasksCompleted.
   ///
   /// In vi, this message translates to:
-  /// **'{done}/{total} nhiệm vụ hoàn thành'**
+  /// **'{done}/{total} việc đã xong'**
   String tasksCompleted(String done, String total);
 
   /// No description provided for @deleteTaskTitle.
   ///
   /// In vi, this message translates to:
-  /// **'Xoá nhiệm vụ?'**
+  /// **'Xoá việc này?'**
   String get deleteTaskTitle;
 
   /// No description provided for @deleteTaskMessage.
@@ -1213,13 +1213,13 @@ abstract class AppLocalizations {
   /// No description provided for @addTask.
   ///
   /// In vi, this message translates to:
-  /// **'Thêm nhiệm vụ'**
+  /// **'Thêm việc'**
   String get addTask;
 
   /// No description provided for @addNewTask.
   ///
   /// In vi, this message translates to:
-  /// **'✨ Thêm nhiệm vụ mới'**
+  /// **'✨ Thêm việc mới'**
   String get addNewTask;
 
   /// No description provided for @chooseIcon.
@@ -1231,7 +1231,7 @@ abstract class AppLocalizations {
   /// No description provided for @taskNameHint.
   ///
   /// In vi, this message translates to:
-  /// **'Tên nhiệm vụ (ví dụ: Làm bài tập)'**
+  /// **'Tên việc (ví dụ: Làm bài tập)'**
   String get taskNameHint;
 
   /// No description provided for @taskDescriptionHint.
@@ -1255,19 +1255,19 @@ abstract class AppLocalizations {
   /// No description provided for @assignTask.
   ///
   /// In vi, this message translates to:
-  /// **'Giao nhiệm vụ 🚀'**
+  /// **'Giao việc 🚀'**
   String get assignTask;
 
   /// No description provided for @noTasksYetParent.
   ///
   /// In vi, this message translates to:
-  /// **'Chưa có nhiệm vụ nào'**
+  /// **'Chưa có việc nào'**
   String get noTasksYetParent;
 
   /// No description provided for @tapPlusToAssign.
   ///
   /// In vi, this message translates to:
-  /// **'Bấm + để giao nhiệm vụ cho con nhé!'**
+  /// **'Bấm + để giao việc cho con nhé!'**
   String get tapPlusToAssign;
 
   /// No description provided for @geofenceChannelName.
@@ -1293,6 +1293,684 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'{name} đã vào {zone}'**
   String geofenceEntered(String name, String zone);
+
+  /// No description provided for @searchPlaceHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tìm trường, nhà, công viên…'**
+  String get searchPlaceHint;
+
+  /// No description provided for @searchNoResults.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tìm thấy địa điểm nào'**
+  String get searchNoResults;
+
+  /// No description provided for @searchFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tìm được, vui lòng thử lại'**
+  String get searchFailed;
+
+  /// No description provided for @locationPermissionDenied.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có quyền vị trí nên không thể mở bản đồ tại chỗ bạn đứng.'**
+  String get locationPermissionDenied;
+
+  /// No description provided for @locationServiceDisabled.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dịch vụ vị trí đang tắt.'**
+  String get locationServiceDisabled;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mở cài đặt'**
+  String get openSettings;
+
+  /// No description provided for @myLocation.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vị trí của tôi'**
+  String get myLocation;
+
+  /// No description provided for @linkChildToAssign.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa liên kết với con. Hãy cho con nhập mã liên kết để giao việc.'**
+  String get linkChildToAssign;
+
+  /// No description provided for @assignTo.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giao cho'**
+  String get assignTo;
+
+  /// No description provided for @linkEmailTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Liên kết email'**
+  String get linkEmailTitle;
+
+  /// No description provided for @linkEmailSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Gắn email để giữ dữ liệu và đăng nhập lại khi đổi máy hoặc cài lại app.'**
+  String get linkEmailSubtitle;
+
+  /// No description provided for @linkEmailAction.
+  ///
+  /// In vi, this message translates to:
+  /// **'Liên kết và gửi email xác thực'**
+  String get linkEmailAction;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mật khẩu cần ít nhất 6 ký tự'**
+  String get passwordTooShort;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In vi, this message translates to:
+  /// **'Email không hợp lệ'**
+  String get invalidEmail;
+
+  /// No description provided for @tooManyRequests.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn thao tác quá nhanh, hãy thử lại sau ít phút.'**
+  String get tooManyRequests;
+
+  /// No description provided for @verifyEmailTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xác thực email'**
+  String get verifyEmailTitle;
+
+  /// No description provided for @verifyEmailMessage.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã gửi link xác thực tới {email}. Mở email, bấm vào link rồi quay lại app.'**
+  String verifyEmailMessage(String email);
+
+  /// No description provided for @verifyEmailCheck.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tôi đã xác thực'**
+  String get verifyEmailCheck;
+
+  /// No description provided for @verifyEmailResend.
+  ///
+  /// In vi, this message translates to:
+  /// **'Gửi lại email'**
+  String get verifyEmailResend;
+
+  /// No description provided for @verifyEmailResendIn.
+  ///
+  /// In vi, this message translates to:
+  /// **'Gửi lại sau {seconds}s'**
+  String verifyEmailResendIn(int seconds);
+
+  /// No description provided for @verifyEmailSent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã gửi lại email xác thực'**
+  String get verifyEmailSent;
+
+  /// No description provided for @verifyEmailNotYet.
+  ///
+  /// In vi, this message translates to:
+  /// **'Email chưa được xác thực. Hãy bấm link trong email.'**
+  String get verifyEmailNotYet;
+
+  /// No description provided for @emailLinkedLoggedOut.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã liên kết email. Lần sau đăng nhập bằng email này để lấy lại dữ liệu.'**
+  String get emailLinkedLoggedOut;
+
+  /// No description provided for @logoutGuestLinkTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dữ liệu sẽ bị mất'**
+  String get logoutGuestLinkTitle;
+
+  /// No description provided for @logoutGuestLinkMessage.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn đang dùng tài khoản khách. Nếu đăng xuất, toàn bộ dữ liệu và liên kết sẽ mất vĩnh viễn. Hãy liên kết email để giữ lại.'**
+  String get logoutGuestLinkMessage;
+
+  /// No description provided for @logoutAnyway.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vẫn đăng xuất'**
+  String get logoutAnyway;
+
+  /// No description provided for @setNameTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn tên là gì?'**
+  String get setNameTitle;
+
+  /// No description provided for @setNameParentHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'VD: Mẹ Lan'**
+  String get setNameParentHint;
+
+  /// No description provided for @setNameChildHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'VD: Bin'**
+  String get setNameChildHint;
+
+  /// No description provided for @save.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lưu'**
+  String get save;
+
+  /// No description provided for @regenerateLinkCode.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tạo mã mới'**
+  String get regenerateLinkCode;
+
+  /// No description provided for @regenerateLinkCodeConfirm.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mã cũ sẽ không dùng được nữa. Các tài khoản đã liên kết vẫn giữ nguyên.'**
+  String get regenerateLinkCodeConfirm;
+
+  /// No description provided for @linkCodeRegenerated.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã tạo mã liên kết mới'**
+  String get linkCodeRegenerated;
+
+  /// No description provided for @confirmPasswordHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhập lại mật khẩu'**
+  String get confirmPasswordHint;
+
+  /// No description provided for @sendLinkRequest.
+  ///
+  /// In vi, this message translates to:
+  /// **'Gửi yêu cầu liên kết'**
+  String get sendLinkRequest;
+
+  /// No description provided for @linkRequestSent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã gửi yêu cầu liên kết. Chờ bên kia chấp nhận nhé!'**
+  String get linkRequestSent;
+
+  /// No description provided for @linkRequestFromParent.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} (bố/mẹ) muốn liên kết với bạn'**
+  String linkRequestFromParent(String name);
+
+  /// No description provided for @linkRequestFromChild.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} (con) muốn liên kết với bạn'**
+  String linkRequestFromChild(String name);
+
+  /// No description provided for @linkRequestHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chấp nhận để đồng bộ vùng an toàn, việc cần làm và thông báo.'**
+  String get linkRequestHint;
+
+  /// No description provided for @accept.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chấp nhận'**
+  String get accept;
+
+  /// No description provided for @reject.
+  ///
+  /// In vi, this message translates to:
+  /// **'Từ chối'**
+  String get reject;
+
+  /// No description provided for @linkRequestAccepted.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã liên kết với {name}'**
+  String linkRequestAccepted(String name);
+
+  /// No description provided for @pendingRequestsTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang chờ chấp nhận'**
+  String get pendingRequestsTitle;
+
+  /// No description provided for @pendingRequestCode.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mã {code}'**
+  String pendingRequestCode(String code);
+
+  /// No description provided for @cancelRequest.
+  ///
+  /// In vi, this message translates to:
+  /// **'Huỷ yêu cầu'**
+  String get cancelRequest;
+
+  /// No description provided for @linkedAccountsTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tài khoản đã liên kết'**
+  String get linkedAccountsTitle;
+
+  /// No description provided for @unlink.
+  ///
+  /// In vi, this message translates to:
+  /// **'Gỡ liên kết'**
+  String get unlink;
+
+  /// No description provided for @unlinkConfirmTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Gỡ liên kết với {name}?'**
+  String unlinkConfirmTitle(String name);
+
+  /// No description provided for @unlinkConfirmMessageParent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Con sẽ không còn thấy vùng an toàn và việc cần làm của bạn, bạn cũng không nhận thông báo từ con nữa. Có thể liên kết lại bằng mã.'**
+  String get unlinkConfirmMessageParent;
+
+  /// No description provided for @unlinkConfirmMessageChild.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bố mẹ sẽ không nhận được thông báo khi con đến hoặc rời vùng an toàn nữa. Hãy hỏi bố mẹ trước nhé!'**
+  String get unlinkConfirmMessageChild;
+
+  /// No description provided for @unlinked.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã gỡ liên kết'**
+  String get unlinked;
+
+  /// No description provided for @errRequestPending.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã gửi yêu cầu, đang chờ bên kia chấp nhận'**
+  String get errRequestPending;
+
+  /// No description provided for @errAlreadyLinked.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hai tài khoản đã liên kết rồi'**
+  String get errAlreadyLinked;
+
+  /// No description provided for @errRequestGone.
+  ///
+  /// In vi, this message translates to:
+  /// **'Yêu cầu không còn hiệu lực, hoặc bé đã đủ 3 người liên kết.'**
+  String get errRequestGone;
+
+  /// No description provided for @errChildHasParent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang liên kết với bố/mẹ khác. Hãy gỡ liên kết trước.'**
+  String get errChildHasParent;
+
+  /// No description provided for @zonesNeedChild.
+  ///
+  /// In vi, this message translates to:
+  /// **'Liên kết với bé trước để tạo vùng an toàn cho bé.'**
+  String get zonesNeedChild;
+
+  /// No description provided for @errMaxGuardians.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bé đã có đủ 3 người liên kết. Hãy gỡ bớt một người trước.'**
+  String get errMaxGuardians;
+
+  /// No description provided for @eventShareStarted.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đang chia sẻ vị trí trực tiếp'**
+  String eventShareStarted(String name);
+
+  /// No description provided for @eventShareStopped.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đã dừng chia sẻ vị trí'**
+  String eventShareStopped(String name);
+
+  /// No description provided for @eventTodoCreated.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} vừa thêm việc: {title}'**
+  String eventTodoCreated(String name, String title);
+
+  /// No description provided for @eventTodoDone.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đã làm xong: {title}'**
+  String eventTodoDone(String name, String title);
+
+  /// No description provided for @locationRequestTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chia sẻ vị trí'**
+  String get locationRequestTitle;
+
+  /// No description provided for @locationRequestBody.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} muốn xem con đang ở đâu'**
+  String locationRequestBody(String name);
+
+  /// No description provided for @locationRequestHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bấm nút \"Chia sẻ vị trí trực tiếp\" ở dưới nhé'**
+  String get locationRequestHint;
+
+  /// No description provided for @locationRequestSent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã nhờ {name} chia sẻ vị trí'**
+  String locationRequestSent(String name);
+
+  /// No description provided for @locationRequestPending.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã hỏi lúc {time}, đang chờ con trả lời'**
+  String locationRequestPending(String time);
+
+  /// No description provided for @liveShareNotifTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang chia sẻ vị trí'**
+  String get liveShareNotifTitle;
+
+  /// No description provided for @liveShareNotifText.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bố mẹ đang thấy vị trí của con'**
+  String get liveShareNotifText;
+
+  /// No description provided for @noLocationYet.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có vị trí — hãy nhờ con chia sẻ'**
+  String get noLocationYet;
+
+  /// No description provided for @liveSharingRemaining.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang chia sẻ trực tiếp · còn {minutes} phút'**
+  String liveSharingRemaining(String minutes);
+
+  /// No description provided for @lastSeenAt.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vị trí gần nhất lúc {time}'**
+  String lastSeenAt(String time);
+
+  /// No description provided for @childLocationTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đang ở đây'**
+  String childLocationTitle(String name);
+
+  /// No description provided for @askChildLocation.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi vị trí của {name}'**
+  String askChildLocation(String name);
+
+  /// No description provided for @askAgain.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hỏi lại'**
+  String get askAgain;
+
+  /// No description provided for @liveBadge.
+  ///
+  /// In vi, this message translates to:
+  /// **'TRỰC TIẾP'**
+  String get liveBadge;
+
+  /// No description provided for @noChildLinkedTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Liên kết với con để xem vị trí và nhận thông báo'**
+  String get noChildLinkedTitle;
+
+  /// No description provided for @linkWithChild.
+  ///
+  /// In vi, this message translates to:
+  /// **'Liên kết với con'**
+  String get linkWithChild;
+
+  /// No description provided for @notLinkedYetHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Con chưa liên kết với bố mẹ — vào Cài đặt để liên kết nhé'**
+  String get notLinkedYetHint;
+
+  /// No description provided for @dismiss.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bỏ qua'**
+  String get dismiss;
+
+  /// No description provided for @locationServiceOff.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dịch vụ vị trí đang tắt. Hãy bật lên rồi thử lại nhé.'**
+  String get locationServiceOff;
+
+  /// No description provided for @locationPermissionNeeded.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cần cho phép vị trí để chia sẻ với bố mẹ.'**
+  String get locationPermissionNeeded;
+
+  /// No description provided for @locationPermissionSettings.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quyền vị trí đang bị tắt. Mở Cài đặt để cho phép nhé.'**
+  String get locationPermissionSettings;
+
+  /// No description provided for @locationNoFix.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa lấy được vị trí. Thử ra chỗ thoáng rồi bấm lại nhé.'**
+  String get locationNoFix;
+
+  /// No description provided for @minutesRemaining.
+  ///
+  /// In vi, this message translates to:
+  /// **'Còn {minutes} phút'**
+  String minutesRemaining(String minutes);
+
+  /// No description provided for @liveShareHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bố mẹ sẽ thấy con ở đâu trong 60 phút'**
+  String get liveShareHint;
+
+  /// No description provided for @startLiveShare.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chia sẻ vị trí trực tiếp'**
+  String get startLiveShare;
+
+  /// No description provided for @stopLiveShare.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dừng chia sẻ vị trí'**
+  String get stopLiveShare;
+
+  /// No description provided for @addTodo.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thêm việc'**
+  String get addTodo;
+
+  /// No description provided for @addTodoTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Con muốn làm gì? ✨'**
+  String get addTodoTitle;
+
+  /// No description provided for @addTodoHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ví dụ: Tưới cây'**
+  String get addTodoHint;
+
+  /// No description provided for @childCanAddTodo.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bấm \"Thêm việc\" để tự thêm, hoặc chờ bố mẹ giao nhé 😊'**
+  String get childCanAddTodo;
+
+  /// No description provided for @assignTab.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giao việc'**
+  String get assignTab;
+
+  /// No description provided for @notesTab.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lời nhắn gửi'**
+  String get notesTab;
+
+  /// No description provided for @notesTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lời nhắn gửi bố mẹ 💌'**
+  String get notesTitle;
+
+  /// No description provided for @notesSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Con muốn bố mẹ làm gì giúp con?'**
+  String get notesSubtitle;
+
+  /// No description provided for @notesWaiting.
+  ///
+  /// In vi, this message translates to:
+  /// **'{count} lời nhắn đang chờ bố mẹ'**
+  String notesWaiting(String count);
+
+  /// No description provided for @notesDoneCount.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã làm ({count})'**
+  String notesDoneCount(String count);
+
+  /// No description provided for @writeNote.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viết lời nhắn'**
+  String get writeNote;
+
+  /// No description provided for @addNoteTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Con muốn nhắn bố mẹ điều gì? 💌'**
+  String get addNoteTitle;
+
+  /// No description provided for @addNoteHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ví dụ: Mua giúp con hộp bút chì'**
+  String get addNoteHint;
+
+  /// No description provided for @sendNote.
+  ///
+  /// In vi, this message translates to:
+  /// **'Gửi bố mẹ'**
+  String get sendNote;
+
+  /// No description provided for @deleteNoteTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xoá lời nhắn?'**
+  String get deleteNoteTitle;
+
+  /// No description provided for @noteDoneBy.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đã làm lúc {time}'**
+  String noteDoneBy(String name, String time);
+
+  /// No description provided for @noteWaiting.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang chờ bố mẹ…'**
+  String get noteWaiting;
+
+  /// No description provided for @noNotesYet.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có lời nhắn nào'**
+  String get noNotesYet;
+
+  /// No description provided for @noNotesHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bấm \"Viết lời nhắn\" để nhờ bố mẹ làm giúp con nhé 😊'**
+  String get noNotesHint;
+
+  /// No description provided for @parentNotesTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Việc cần làm'**
+  String get parentNotesTitle;
+
+  /// No description provided for @parentNotesAllDone.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã làm hết lời nhắn của con 🎉'**
+  String get parentNotesAllDone;
+
+  /// No description provided for @parentNotesWaiting.
+  ///
+  /// In vi, this message translates to:
+  /// **'Con nhờ {count} việc — chạm để đánh dấu đã làm'**
+  String parentNotesWaiting(String count);
+
+  /// No description provided for @parentNotesEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có lời nhắn nào từ con'**
+  String get parentNotesEmpty;
+
+  /// No description provided for @parentNotesEmptyHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khi con nhờ bạn làm gì, lời nhắn sẽ hiện ở đây'**
+  String get parentNotesEmptyHint;
+
+  /// No description provided for @eventNoteCreated.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} nhắn: {title}'**
+  String eventNoteCreated(String name, String title);
+
+  /// No description provided for @noteDoneNotif.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đã làm: {title}'**
+  String noteDoneNotif(String name, String title);
 }
 
 class _AppLocalizationsDelegate

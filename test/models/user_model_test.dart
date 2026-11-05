@@ -9,14 +9,14 @@ void main() {
         name: 'Test',
         isGuest: true,
         linkCode: 'ABC-123',
-        linkedParentId: 'parent-uid',
+        linkedParentIds: ['parent-uid', 'grandma-uid'],
         linkedChildIds: ['child-uid-1'],
         role: 'child',
       );
       final json = model.toJson();
       expect(json['isGuest'], true);
       expect(json['linkCode'], 'ABC-123');
-      expect(json['linkedParentId'], 'parent-uid');
+      expect(json['linkedParentIds'], ['parent-uid', 'grandma-uid']);
       expect(json['linkedChildIds'], ['child-uid-1']);
 
       final restored = UserModel.fromJson(json);
@@ -28,6 +28,7 @@ void main() {
       expect(model.isGuest, false);
       expect(model.linkCode, null);
       expect(model.linkedChildIds, isEmpty);
+      expect(model.linkedParentIds, isEmpty);
     });
   });
 }
