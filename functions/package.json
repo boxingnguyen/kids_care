@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "node --test",
+    "test:emulator": "firebase emulators:exec --only firestore --project demo-kids-care '\"$npm_node_execpath\" --test'",
     "deploy": "firebase deploy --only functions"
   },
   "dependencies": {

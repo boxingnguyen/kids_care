@@ -9,7 +9,7 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get appTitle => 'Kids Care';
+  String get appTitle => 'FamHub';
 
   @override
   String get back => '戻る';
@@ -114,7 +114,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get guestModeWarning =>
-      '登録不要のお試しモードです。データはこの端末だけに保存されます。連携コードを控えて、アカウントをアップグレードするとデータを失いません。';
+      '登録不要のお試しモードです。ログアウトや機種変更でデータを失わないよう、設定でメールアドレスを連携してください。';
 
   @override
   String get tryAsParent => '保護者として試す';
@@ -149,11 +149,6 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String loginFailed(String message) {
     return 'ログインに失敗しました：$message';
-  }
-
-  @override
-  String googleLoginFailed(String message) {
-    return 'Googleログインに失敗しました：$message';
   }
 
   @override
@@ -213,7 +208,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get resetSuccessTitle => '再設定が完了しました！';
 
   @override
-  String get resetSuccessMessage => 'パスワードが変更されました。ログインしてKids Careを続けましょう！';
+  String get resetSuccessMessage => 'パスワードが変更されました。ログインしてFamHubを続けましょう！';
 
   @override
   String get loginNow => '今すぐログイン';
@@ -506,18 +501,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get stay => 'やめる';
-
-  @override
-  String get upgradeAccount => 'アカウントをアップグレード';
-
-  @override
-  String get upgradeAccountSubtitle => 'Googleと連携してデータを守りましょう';
-
-  @override
-  String get accountUpgraded => 'アカウントをアップグレードしました！';
-
-  @override
-  String get googleAccountInUse => 'このGoogleアカウントは別のアカウントで使われています';
 
   @override
   String get yourLinkCode => 'あなたの連携コード';
@@ -1049,4 +1032,48 @@ class AppLocalizationsJa extends AppLocalizations {
   String noteDoneNotif(String name, String title) {
     return '$nameがやってくれたよ：$title';
   }
+
+  @override
+  String get privacyPolicy => 'プライバシーポリシー';
+
+  @override
+  String get deleteAccount => 'アカウントを削除';
+
+  @override
+  String get deleteAccountSubtitle => 'アカウントとデータを完全に削除します';
+
+  @override
+  String get deleteAccountConfirmTitle => 'アカウントを削除しますか？';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'アカウント、位置情報、安全エリア、やること、メモ、連携がすべて完全に削除されます。元に戻すことはできません。';
+
+  @override
+  String get deleteAccountAskParent => '先におうちの人に聞いてね！';
+
+  @override
+  String get deleteAccountAction => '完全に削除';
+
+  @override
+  String get deleteAccountFailed => 'アカウントを削除できませんでした。接続を確認して、もう一度お試しください。';
+
+  @override
+  String get accountDeleted => 'アカウントを削除しました';
+
+  @override
+  String get locationDisclosureTitle => 'FamHubは位置情報を使います';
+
+  @override
+  String get locationDisclosureBody =>
+      'FamHubは、安全エリアへの到着や出発を連携中の保護者に知らせるため、アプリを閉じているときや使用していないときも位置情報を収集します。\n\n状況を知らせるボタンを押したときや、位置情報をリアルタイムで共有したときにも位置情報が送信されます。見られるのは連携中の保護者だけです。';
+
+  @override
+  String get locationDisclosureContinue => '続ける';
+
+  @override
+  String get locationDisclosureNotNow => '今はしない';
+
+  @override
+  String get checkInLocationHint => 'ボタンを押すと、位置情報も保護者に送信されます';
 }

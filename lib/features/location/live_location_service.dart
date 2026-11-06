@@ -26,7 +26,8 @@ class LiveShareException implements Exception {
 
 /// Bé chia sẻ vị trí trực tiếp trong [shareDuration] (giống Messenger), kể cả
 /// khi app chạy nền. Vị trí ghi vào users/{bé}/location/current; bố/mẹ đang
-/// liên kết đọc realtime. State = thời điểm hết hạn (null = không chia sẻ).
+/// liên kết đọc realtime. Dừng hoặc hết hạn thì xoá doc đó. State = thời điểm
+/// hết hạn (null = không chia sẻ).
 class LiveShareNotifier extends StateNotifier<DateTime?> {
   LiveShareNotifier({Locale? Function()? localeOf})
     : _localeOf = localeOf ?? (() => null),
@@ -128,7 +129,8 @@ class LiveShareNotifier extends StateNotifier<DateTime?> {
       final snap = await _doc(childUid).get();
       final until = (snap.data()?['sharingUntil'] as Timestamp?)?.toDate();
       if (until == null || !until.isAfter(DateTime.now())) {
-        if (until != null) await _doc(childUid).update({'sharingUntil': null});
+        // Hết hạn lúc app đang tắt → xoá như khi dừng chia sẻ.
+        if (until != null) await _doc(childUid).delete();
         return;
       }
       await ensurePermission();
@@ -138,13 +140,14 @@ class LiveShareNotifier extends StateNotifier<DateTime?> {
     }
   }
 
-  /// Bé tự dừng → báo cho bố/mẹ. [notify] false khi dừng do đăng xuất/gỡ liên kết.
+  /// Dừng chia sẻ và xoá vị trí đã gửi. Bé tự dừng → báo cho bố/mẹ.
+  /// [notify] false khi dừng do đăng xuất/gỡ liên kết.
   Future<void> stop({UserModel? child, bool notify = true}) async {
     final uid = _childUid;
     _cancel();
     if (uid == null) return;
     try {
-      await _doc(uid).update({'sharingUntil': null});
+      await _doc(uid).delete();
     } catch (e) {
       debugPrint('LiveShare: stop write failed: $e');
     }
@@ -186,7 +189,7 @@ class LiveShareNotifier extends StateNotifier<DateTime?> {
     }
   }
 
-  /// Hết 60 phút: dừng gửi, bố/mẹ thấy "đã dừng" qua sharingUntil.
+  /// Hết 60 phút: dừng gửi và xoá vị trí, bố/mẹ thấy bản đồ biến mất.
   Future<void> _expire() => stop(notify: false);
 
   void _cancel() {

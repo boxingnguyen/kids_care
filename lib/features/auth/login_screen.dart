@@ -5,8 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
 import 'package:kids_care/core/widgets/app_back_button.dart';
-import 'package:kids_care/features/auth/providers/auth_providers.dart';
-import 'package:kids_care/features/auth/services/auth_service.dart';
 import 'package:kids_care/features/auth/services/user_service.dart';
 import 'package:kids_care/features/auth/widgets/auth_text_field.dart';
 import 'package:kids_care/features/auth/widgets/primary_button.dart';
@@ -98,50 +96,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Future<void> _signInWithGoogle() async {
-    ref.read(googleSignInLoadingProvider.notifier).state = true;
-    try {
-      final userCred = await ref.read(authServiceProvider).signInWithGoogle();
-      if (mounted && userCred != null) {
-        // Check if user already has a role
-        final userService = ref.read(userServiceProvider);
-        final userData = await userService.getCurrentUserData();
-
-        if (userData != null) {
-          // User already registered, route by role
-          if (userData.role == 'parent') {
-            context.go('/parent-home');
-          } else {
-            context.go('/child');
-          }
-        } else {
-          // New user - go to child registration
-          context.go('/register-child');
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.l10n.googleLoginFailed('$e')),
-            backgroundColor: AppTheme.dangerColor,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        ref.read(googleSignInLoadingProvider.notifier).state = false;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final obscurePassword = ref.watch(loginObscureProvider);
     final isLoading = ref.watch(loginLoadingProvider);
-
-    final googleIsLoading = ref.watch(googleSignInLoadingProvider);
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundGrey,
@@ -300,31 +258,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         onPressed: _login,
                       ),
                       const SizedBox(height: 20),
-                      // TODO: Add Social media sign in later
-                      // Row(
-                      //   children: [
-                      //     Expanded(child: Divider(color: Colors.grey.shade200)),
-                      //     Padding(
-                      //       padding: const EdgeInsets.symmetric(horizontal: 12),
-                      //       child: Text(
-                      //         'hoặc',
-                      //         style: GoogleFonts.nunito(
-                      //           fontSize: 13,
-                      //           color: AppTheme.textHint,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     Expanded(child: Divider(color: Colors.grey.shade200)),
-                      //   ],
-                      // ),
-                      // const SizedBox(height: 16),
-
-                      // SocialButton(
-                      //   label: 'Sign in with Google',
-                      //   iconPath: 'assets/icons/google_logo.png',
-                      //   isLoading: googleIsLoading,
-                      //   onPressed: _signInWithGoogle,
-                      // ),
                     ],
                   ),
                 ),

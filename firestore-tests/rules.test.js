@@ -513,6 +513,17 @@ describe('vị trí của bé', () => {
     await assertSucceeds(getDoc(doc(db(P), 'users', C, 'location', 'current')));
   });
 
+  test('dừng chia sẻ: chỉ bé xoá được doc vị trí', async () => {
+    const ref = (uid) => doc(db(uid), 'users', C, 'location', 'current');
+    await setDoc(ref(C), loc({ sharingUntil: new Date() }));
+    await assertFails(deleteDoc(ref(P)));
+    await assertFails(deleteDoc(ref(S)));
+    await assertFails(deleteDoc(ref(SC)));
+    await assertSucceeds(deleteDoc(ref(C)));
+    const after = await assertSucceeds(getDoc(ref(P)));
+    if (after.exists()) throw new Error('location doc should be gone');
+  });
+
   const req = (from) => ({ fromUid: from, fromName: from, createdAt: serverTimestamp() });
 
   test('bố/mẹ nhờ bé chia sẻ (hỏi lại = ghi đè); bé thấy hết và xoá', async () => {

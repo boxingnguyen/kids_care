@@ -12,6 +12,7 @@ import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/features/child/child_events.dart';
 import 'package:kids_care/features/link/widgets/link_requests_banner.dart';
 import 'package:kids_care/features/location/live_location_service.dart';
+import 'package:kids_care/features/location/location_consent.dart';
 import 'package:kids_care/features/location/location_providers.dart';
 import 'package:kids_care/models/child_status.dart';
 import 'package:kids_care/models/geofence_event_model.dart';
@@ -28,6 +29,29 @@ class ChildHomeScreen extends ConsumerStatefulWidget {
 class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
   // Theo dõi vùng an toàn / chia sẻ vị trí chạy ở SessionEffects (cả phiên).
 
+  /// "Để sau" chỉ có hiệu lực tới lần mở app kế tiếp.
+  bool _disclosureAsked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    ref.listenManual(needsLocationDisclosureProvider, (_, needs) {
+      if (needs) _askLocationDisclosure();
+    }, fireImmediately: true);
+  }
+
+  void _askLocationDisclosure() {
+    if (_disclosureAsked) return;
+    _disclosureAsked = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      showLocationDisclosure(
+        context,
+        ref.read(locationConsentProvider.notifier),
+      );
+    });
+  }
+
   Future<void> _updateStatus(ChildStatusType status) async {
     HapticFeedback.mediumImpact();
     ref.read(childStatusProvider.notifier).updateStatus(status);
@@ -42,7 +66,11 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
         zoneName: _getZoneForStatus(status),
       ),
     );
-    if (user != null) unawaited(_shareLastLocation(user.uid));
+    if (user != null &&
+        user.linkedParentIds.isNotEmpty &&
+        ref.read(locationConsentProvider) == true) {
+      unawaited(_shareLastLocation(user.uid));
+    }
 
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -108,6 +136,13 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
   Widget build(BuildContext context) {
     final childName = ref.watch(childNameProvider);
     final currentStatus = ref.watch(childStatusProvider);
+    final sendsLocation =
+        ref.watch(locationConsentProvider) == true &&
+        ref.watch(
+          currentUserProvider.select(
+            (u) => u.valueOrNull?.linkedParentIds.isNotEmpty ?? false,
+          ),
+        );
 
     return NamePrompt(
       child: Scaffold(
@@ -142,6 +177,18 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                         ),
                         textAlign: TextAlign.center,
                       ),
+                      if (sendsLocation) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          context.l10n.checkInLocationHint,
+                          style: GoogleFonts.nunito(
+                            fontSize: 13,
+                            color: AppTheme.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                       const SizedBox(height: 32),
 
                       // 2×2 Status grid
@@ -219,12 +266,15 @@ class _ChildHomeScreenState extends ConsumerState<ChildHomeScreen> {
                   shape: BoxShape.circle,
                 ),
                 child: Center(
-                  child: Image.network(
-                    'https://api.dicebear.com/7.x/notionists/png?seed=$childName',
-                    width: 32,
-                    height: 32,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Text('👧', style: TextStyle(fontSize: 22)),
+                  child: Text(
+                    childName.isEmpty
+                        ? '👧'
+                        : childName.characters.first.toUpperCase(),
+                    style: GoogleFonts.nunito(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: AppTheme.primaryColor,
+                    ),
                   ),
                 ),
               ),
@@ -505,6 +555,16 @@ class _LiveShareBarState extends ConsumerState<_LiveShareBar> {
     final user = await ref.read(currentUserProvider.future);
     if (user == null || !mounted) return;
     HapticFeedback.heavyImpact();
+    // Chưa đồng ý → hỏi trước. Đồng ý xong SessionEffects sẽ xin quyền, nên dừng
+    // ở đây: hai hộp thoại xin quyền cùng lúc thì geolocator báo lỗi. Bé bấm lại.
+    if (!share.isSharing && ref.read(locationConsentProvider) != true) {
+      await showLocationDisclosure(
+        context,
+        ref.read(locationConsentProvider.notifier),
+      );
+      return;
+    }
+    if (!mounted) return;
     final messenger = ScaffoldMessenger.of(context);
     final l10n = context.l10n;
     setState(() => _busy = true);

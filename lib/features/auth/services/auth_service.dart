@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kids_care/core/constants/app_constants.dart';
 import 'package:kids_care/core/notifications/push_notifications.dart';
 import 'package:kids_care/models/user_model.dart';
@@ -10,53 +10,6 @@ import 'user_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  /// Đăng nhập bằng Google
-  Future<UserCredential?> signInWithGoogle() async {
-    try {
-      // Gọi popup / màn hình đăng nhập Google
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        // Người dùng ấn huỷ
-        return null;
-      }
-
-      // Lấy authentication data (tokens)
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      // Tạo Firebase credential từ Google tokens
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      // Đăng nhập vào Firebase bằng credential vừa tạo
-      return await _auth.signInWithCredential(credential);
-    } catch (e) {
-      // Xử lý lỗi (tuỳ chọn: ném ra ngoài để UI hiển thị dialog / snackbar)
-      rethrow;
-    }
-  }
-
-  /// Liên kết tài khoản khách (anonymous) với Google. Giữ nguyên UID và dữ liệu.
-  /// Trả về false nếu người dùng huỷ.
-  Future<bool> upgradeGuest() async {
-    final googleUser = await _googleSignIn.signIn();
-    if (googleUser == null) return false;
-    final googleAuth = await googleUser.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    await _auth.currentUser!.linkWithCredential(credential);
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(_auth.currentUser!.uid)
-        .update({'isGuest': false});
-    return true;
-  }
 
   /// Tài khoản email thật chưa xác thực → phải qua màn xác thực trước khi vào
   /// app. Khách (anonymous) và username của con (email giả) được miễn.
@@ -109,11 +62,19 @@ class AuthService {
     });
   }
 
-  /// Đăng xuất khỏi Google và Firebase
   Future<void> signOut() async {
     // Gỡ token FCM khi còn đăng nhập — máy này thôi nhận thông báo của tài khoản.
     await PushNotifications.instance.unregister();
-    await _googleSignIn.signOut();
+    await _auth.signOut();
+  }
+
+  /// Xoá vĩnh viễn tài khoản và dữ liệu (Cloud Function `deleteAccount`), rồi
+  /// đăng xuất khỏi máy này. Lỗi thì ném ra và vẫn còn đăng nhập để thử lại.
+  Future<void> deleteAccount() async {
+    await FirebaseFunctions.instanceFor(
+      region: AppConstants.functionsRegion,
+    ).httpsCallable('deleteAccount').call<void>();
+    await PushNotifications.instance.unregister(removeFromProfile: false);
     await _auth.signOut();
   }
 

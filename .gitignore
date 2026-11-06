@@ -57,6 +57,8 @@ android/key.properties
 *.keystore
 *.p8
 fastlane-secrets/
+# Contains the App Review demo account password
+ios/fastlane/metadata/**/app_review_notes.txt
 **/fastlane/report.xml
 **/fastlane/README.md
 

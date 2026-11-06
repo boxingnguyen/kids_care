@@ -9,7 +9,7 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get appTitle => 'Kids Care';
+  String get appTitle => 'FamHub';
 
   @override
   String get back => 'Quay lại';
@@ -114,7 +114,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get guestModeWarning =>
-      'Chế độ thử không cần đăng ký. Dữ liệu chỉ gắn với thiết bị này — hãy ghi lại mã liên kết và nâng cấp tài khoản để không mất dữ liệu.';
+      'Chế độ thử không cần đăng ký. Hãy gắn email trong Cài đặt để không mất dữ liệu khi đăng xuất hoặc đổi máy.';
 
   @override
   String get tryAsParent => 'Thử với tư cách Bố/Mẹ';
@@ -151,11 +151,6 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String loginFailed(String message) {
     return 'Đăng nhập thất bại: $message';
-  }
-
-  @override
-  String googleLoginFailed(String message) {
-    return 'Đăng nhập Google thất bại: $message';
   }
 
   @override
@@ -217,7 +212,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get resetSuccessMessage =>
-      'Mật khẩu đã được thay đổi. Đăng nhập để lướt cùng Kids Care!';
+      'Mật khẩu đã được thay đổi. Đăng nhập để lướt cùng FamHub!';
 
   @override
   String get loginNow => 'Đăng nhập ngay';
@@ -517,20 +512,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get stay => 'Ở lại';
-
-  @override
-  String get upgradeAccount => 'Nâng cấp tài khoản';
-
-  @override
-  String get upgradeAccountSubtitle =>
-      'Liên kết với Google để không mất dữ liệu';
-
-  @override
-  String get accountUpgraded => 'Tài khoản đã được nâng cấp!';
-
-  @override
-  String get googleAccountInUse =>
-      'Tài khoản Google này đã được dùng cho tài khoản khác';
 
   @override
   String get yourLinkCode => 'Mã liên kết của bạn';
@@ -1086,4 +1067,51 @@ class AppLocalizationsVi extends AppLocalizations {
   String noteDoneNotif(String name, String title) {
     return '$name đã làm: $title';
   }
+
+  @override
+  String get privacyPolicy => 'Chính sách quyền riêng tư';
+
+  @override
+  String get deleteAccount => 'Xoá tài khoản';
+
+  @override
+  String get deleteAccountSubtitle =>
+      'Xoá vĩnh viễn tài khoản và dữ liệu của bạn';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Xoá tài khoản?';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Tài khoản, vị trí, vùng an toàn, việc cần làm, lời nhắn và các liên kết của bạn sẽ bị xoá vĩnh viễn. Không thể hoàn tác.';
+
+  @override
+  String get deleteAccountAskParent => 'Hãy hỏi bố mẹ trước nhé!';
+
+  @override
+  String get deleteAccountAction => 'Xoá vĩnh viễn';
+
+  @override
+  String get deleteAccountFailed =>
+      'Chưa xoá được tài khoản. Hãy kiểm tra kết nối mạng rồi thử lại.';
+
+  @override
+  String get accountDeleted => 'Đã xoá tài khoản của bạn';
+
+  @override
+  String get locationDisclosureTitle => 'FamHub dùng vị trí của bạn';
+
+  @override
+  String get locationDisclosureBody =>
+      'FamHub thu thập vị trí của bạn để báo cho bố mẹ đã liên kết khi bạn đến hoặc rời vùng an toàn, kể cả khi app đã đóng hoặc không được sử dụng.\n\nVị trí cũng được gửi khi bạn bấm nút báo trạng thái hoặc chia sẻ vị trí trực tiếp. Chỉ những bố mẹ đã liên kết với bạn mới xem được.';
+
+  @override
+  String get locationDisclosureContinue => 'Tiếp tục';
+
+  @override
+  String get locationDisclosureNotNow => 'Để sau';
+
+  @override
+  String get checkInLocationHint =>
+      'Khi bấm nút, vị trí của bạn cũng được gửi cho bố mẹ';
 }

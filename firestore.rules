@@ -221,8 +221,11 @@ service cloud.firestore {
 
       // Vị trí gần nhất của bé (một doc 'current'): bé ghi, bố/mẹ đang liên
       // kết đọc. sharingUntil != null → đang chia sẻ trực tiếp tới thời điểm đó.
+      // Dừng chia sẻ thì bé xoá doc; app bị tắt trước khi hết hạn thì TTL trên
+      // sharingUntil (firestore.indexes.json) xoá thay.
       match /location/{docId} {
         allow read: if isSelf(uid) || isParentOf(uid);
+        allow delete: if isSelf(uid) && docId == 'current';
         allow create, update: if isSelf(uid)
           && docId == 'current'
           && request.resource.data.keys().hasOnly(

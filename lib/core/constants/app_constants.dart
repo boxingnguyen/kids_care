@@ -16,6 +16,13 @@ class AppConstants {
   // không xác thực được nên được miễn bước xác thực email.
   static const String childUsernameDomain = 'kidscare.app';
 
+  // Cùng vùng với Cloud Functions (functions/index.js).
+  static const String functionsRegion = 'asia-southeast1';
+
+  // Trang chính sách quyền riêng tư (hosting/privacy.html, Firebase Hosting).
+  static const String privacyPolicyUrl =
+      'https://www.crosstechedu.com/projects/fam-hub/privacy/';
+
   // Geofence defaults
   static const double defaultGeofenceRadius = 500.0; // meters
 

@@ -9,7 +9,7 @@ class AppLocalizationsId extends AppLocalizations {
   AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
-  String get appTitle => 'Kids Care';
+  String get appTitle => 'FamHub';
 
   @override
   String get back => 'Kembali';
@@ -114,7 +114,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get guestModeWarning =>
-      'Mode percobaan tanpa daftar. Data hanya tersimpan di perangkat ini — catat kode tautan dan tingkatkan akun agar data tidak hilang.';
+      'Mode percobaan tanpa daftar. Tautkan email di Pengaturan agar data tidak hilang saat keluar akun atau ganti ponsel.';
 
   @override
   String get tryAsParent => 'Coba sebagai orang tua';
@@ -152,11 +152,6 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String loginFailed(String message) {
     return 'Gagal masuk: $message';
-  }
-
-  @override
-  String googleLoginFailed(String message) {
-    return 'Gagal masuk dengan Google: $message';
   }
 
   @override
@@ -218,7 +213,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get resetSuccessMessage =>
-      'Kata sandi telah diubah. Masuk untuk lanjut dengan Kids Care!';
+      'Kata sandi telah diubah. Masuk untuk lanjut dengan FamHub!';
 
   @override
   String get loginNow => 'Masuk sekarang';
@@ -520,19 +515,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get stay => 'Tetap di sini';
-
-  @override
-  String get upgradeAccount => 'Tingkatkan akun';
-
-  @override
-  String get upgradeAccountSubtitle =>
-      'Tautkan dengan Google agar data tidak hilang';
-
-  @override
-  String get accountUpgraded => 'Akun berhasil ditingkatkan!';
-
-  @override
-  String get googleAccountInUse => 'Akun Google ini sudah dipakai akun lain';
 
   @override
   String get yourLinkCode => 'Kode tautanmu';
@@ -1090,4 +1072,50 @@ class AppLocalizationsId extends AppLocalizations {
   String noteDoneNotif(String name, String title) {
     return '$name sudah mengerjakan: $title';
   }
+
+  @override
+  String get privacyPolicy => 'Kebijakan privasi';
+
+  @override
+  String get deleteAccount => 'Hapus akun';
+
+  @override
+  String get deleteAccountSubtitle => 'Hapus akun dan datamu secara permanen';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Hapus akunmu?';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Akun, lokasi, zona aman, tugas, catatan, dan tautanmu akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.';
+
+  @override
+  String get deleteAccountAskParent => 'Tanya Ayah atau Ibu dulu ya!';
+
+  @override
+  String get deleteAccountAction => 'Hapus permanen';
+
+  @override
+  String get deleteAccountFailed =>
+      'Akun belum bisa dihapus. Periksa koneksi lalu coba lagi.';
+
+  @override
+  String get accountDeleted => 'Akunmu telah dihapus';
+
+  @override
+  String get locationDisclosureTitle => 'FamHub menggunakan lokasimu';
+
+  @override
+  String get locationDisclosureBody =>
+      'FamHub mengumpulkan lokasimu untuk memberi tahu orang tua yang tertaut saat kamu tiba di atau meninggalkan zona aman, bahkan saat aplikasi ditutup atau tidak digunakan.\n\nLokasimu juga dikirim saat kamu mengetuk tombol status atau membagikan lokasi langsung. Hanya orang tua yang tertaut denganmu yang dapat melihatnya.';
+
+  @override
+  String get locationDisclosureContinue => 'Lanjutkan';
+
+  @override
+  String get locationDisclosureNotNow => 'Nanti saja';
+
+  @override
+  String get checkInLocationHint =>
+      'Saat kamu mengetuk tombol, lokasimu juga dikirim ke orang tua';
 }

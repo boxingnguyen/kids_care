@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kids_care/core/privacy_policy.dart';
 import 'package:kids_care/core/session/session_effects.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
 import 'package:kids_care/core/widgets/app_back_button.dart';
@@ -12,6 +12,7 @@ import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/features/auth/services/auth_service.dart';
 import 'package:kids_care/features/link/providers/link_providers.dart';
 import 'package:kids_care/features/link/services/link_service.dart';
+import 'package:kids_care/features/location/location_consent.dart';
 import 'package:kids_care/models/user_model.dart';
 import 'package:kids_care/l10n/l10n.dart';
 import 'package:kids_care/l10n/locale_provider.dart';
@@ -45,7 +46,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 14),
                 if (user?.isGuest == true) ...[
-                  _UpgradeCard(),
+                  const _LinkEmailCard(),
                   const SizedBox(height: 12),
                 ],
                 if (user != null) ...[
@@ -86,6 +87,23 @@ class SettingsScreen extends ConsumerWidget {
                         context.go('/');
                       }
                     },
+                  ),
+                ),
+                if (user != null) ...[
+                  const SizedBox(height: 12),
+                  _DeleteAccountCard(user: user),
+                ],
+                const SizedBox(height: 12),
+                Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.privacy_tip_outlined),
+                    title: Text(context.l10n.privacyPolicy),
+                    trailing: const Icon(Icons.open_in_new_rounded, size: 20),
+                    onTap: openPrivacyPolicy,
                   ),
                 ),
               ],
@@ -164,54 +182,117 @@ class SettingsScreen extends ConsumerWidget {
 
 enum _GuestLogoutChoice { linkEmail, logout }
 
-/// Nâng cấp tài khoản khách lên Google — chỉ hiện với user isGuest.
-class _UpgradeCard extends ConsumerWidget {
+/// Mời tài khoản khách gắn email để giữ dữ liệu — chỉ hiện với user isGuest.
+class _LinkEmailCard extends StatelessWidget {
+  const _LinkEmailCard();
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Card(
       elevation: 0,
       color: AppTheme.primaryLight,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ListTile(
         leading: const Icon(
-          Icons.upgrade_rounded,
+          Icons.mail_outline_rounded,
           color: AppTheme.primaryColor,
         ),
         title: Text(
-          context.l10n.upgradeAccount,
+          context.l10n.linkEmailTitle,
           style: const TextStyle(color: AppTheme.primaryColor),
         ),
-        subtitle: Text(context.l10n.upgradeAccountSubtitle),
+        subtitle: Text(context.l10n.linkEmailSubtitle),
         trailing: const Icon(
           Icons.chevron_right_rounded,
           color: AppTheme.primaryColor,
         ),
-        onTap: () async {
-          final messenger = ScaffoldMessenger.of(context);
-          final l10n = context.l10n;
-          try {
-            final upgraded = await ref.read(authServiceProvider).upgradeGuest();
-            if (!upgraded) return;
-            ref.invalidate(currentUserProvider);
-            messenger.showSnackBar(
-              SnackBar(content: Text(l10n.accountUpgraded)),
-            );
-          } on FirebaseAuthException catch (e) {
-            messenger.showSnackBar(
-              SnackBar(
-                content: Text(
-                  e.code == 'credential-already-in-use'
-                      ? l10n.googleAccountInUse
-                      : l10n.errorWithMessage('${e.message}'),
-                ),
-              ),
-            );
-          } catch (e) {
-            messenger.showSnackBar(
-              SnackBar(content: Text(l10n.errorWithMessage('$e'))),
-            );
-          }
-        },
+        onTap: () => context.push('/link-email'),
+      ),
+    );
+  }
+}
+
+/// Xoá vĩnh viễn tài khoản và dữ liệu (cả tài khoản khách).
+class _DeleteAccountCard extends ConsumerWidget {
+  final UserModel user;
+
+  const _DeleteAccountCard({required this.user});
+
+  Future<void> _delete(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context, rootNavigator: true);
+    final message = user.role == 'child'
+        ? '${l10n.deleteAccountConfirmMessage}\n\n${l10n.deleteAccountAskParent}'
+        : l10n.deleteAccountConfirmMessage;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        icon: const Icon(
+          Icons.warning_amber_rounded,
+          color: AppTheme.dangerColor,
+          size: 40,
+        ),
+        title: Text(l10n.deleteAccountConfirmTitle),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            style: TextButton.styleFrom(
+              foregroundColor: AppTheme.textSecondary,
+            ),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: TextButton.styleFrom(foregroundColor: AppTheme.dangerColor),
+            child: Text(l10n.deleteAccountAction),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const PopScope(
+        canPop: false,
+        child: Center(child: CircularProgressIndicator()),
+      ),
+    );
+    // Dừng ghi vị trí trước, nếu không bản ghi đến sau sẽ tạo lại dữ liệu vừa xoá.
+    await stopSessionBeforeSignOut(ref);
+    try {
+      await ref.read(authServiceProvider).deleteAccount();
+    } catch (e) {
+      debugPrint('deleteAccount failed: $e');
+      await resumeSessionAfterFailedDelete(ref, user);
+      navigator.pop();
+      messenger.showSnackBar(SnackBar(content: Text(l10n.deleteAccountFailed)));
+      return;
+    }
+    await ref.read(locationConsentProvider.notifier).reset();
+    ref.invalidate(currentUserProvider);
+    navigator.pop();
+    messenger.showSnackBar(SnackBar(content: Text(l10n.accountDeleted)));
+    if (context.mounted) context.go('/');
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: ListTile(
+        iconColor: AppTheme.dangerColor,
+        textColor: AppTheme.dangerColor,
+        leading: const Icon(Icons.delete_forever_rounded),
+        title: Text(context.l10n.deleteAccount),
+        subtitle: Text(context.l10n.deleteAccountSubtitle),
+        trailing: const Icon(Icons.chevron_right_rounded),
+        onTap: () => _delete(context, ref),
       ),
     );
   }

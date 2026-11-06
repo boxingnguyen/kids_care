@@ -1,4 +1,4 @@
-# Kids Care - AI Coding Guidelines
+# FamHub - AI Coding Guidelines
 
 ## Architecture Overview
 - **Feature-based structure**: Code organized under `lib/features/` with child/parent modes

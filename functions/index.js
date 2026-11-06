@@ -1,8 +1,11 @@
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 import { getMessaging } from 'firebase-admin/messaging';
 import { logger, setGlobalOptions } from 'firebase-functions/v2';
 import { onDocumentCreated } from 'firebase-functions/v2/firestore';
+import { HttpsError, onCall } from 'firebase-functions/v2/https';
+import { deleteUserData } from './account_deletion.js';
 import { buildGeofenceMessage, shouldPush, staleTokens } from './messages.js';
 
 initializeApp();
@@ -44,3 +47,19 @@ export const onGeofenceEventCreated = onDocumentCreated(
     }
   },
 );
+
+// Người dùng tự xoá tài khoản trong Cài đặt. Xoá dữ liệu trước, tài khoản sau:
+// lỗi giữa chừng thì vẫn còn đăng nhập để thử lại.
+export const deleteAccount = onCall(async (request) => {
+  const uid = request.auth?.uid;
+  if (!uid) throw new HttpsError('unauthenticated', 'Sign in required');
+
+  await deleteUserData(getFirestore(), uid);
+  try {
+    await getAuth().deleteUser(uid);
+  } catch (e) {
+    if (e.code !== 'auth/user-not-found') throw e;
+  }
+  logger.info('Account deleted', { uid });
+  return { deleted: true };
+});

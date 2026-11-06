@@ -5,9 +5,11 @@ import 'package:kids_care/features/auth/providers/auth_providers.dart';
 import 'package:kids_care/features/geofence/geofence_service.dart';
 import 'package:kids_care/features/link/providers/link_providers.dart';
 import 'package:kids_care/features/location/live_location_service.dart';
+import 'package:kids_care/features/location/location_consent.dart';
 import 'package:kids_care/features/location/location_providers.dart';
 import 'package:kids_care/features/notes/notes_provider.dart';
 import 'package:kids_care/l10n/locale_provider.dart';
+import 'package:kids_care/models/user_model.dart';
 import 'package:kids_care/providers/geofence_provider.dart';
 import 'package:kids_care/providers/notifications_provider.dart';
 import 'package:kids_care/providers/user_provider.dart';
@@ -44,6 +46,10 @@ class _SessionEffectsState extends ConsumerState<SessionEffects> {
       (prev, next) => _onChildSessionChanged(prev ?? '', next),
       fireImmediately: true,
     );
+    // Bé vừa đồng ý dùng vị trí (hoặc vừa đọc xong lựa chọn đã lưu).
+    ref.listenManual(locationConsentProvider, (prev, next) {
+      if (next == true && prev != true) _startGeofencing();
+    });
   }
 
   void _onChildSessionChanged(String prev, String next) {
@@ -75,6 +81,8 @@ class _SessionEffectsState extends ConsumerState<SessionEffects> {
     final user = await ref.read(currentUserProvider.future);
     if (user == null || user.role != 'child' || !mounted) return;
     if (user.nameSet) ref.read(childNameProvider.notifier).setName(user.name);
+    // Chưa đồng ý thì chưa xin quyền, chưa theo dõi vị trí.
+    if (ref.read(locationConsentProvider) != true) return;
     await GeofenceService.instance.start(
       parentIds: user.linkedParentIds,
       childUid: user.uid,
@@ -142,4 +150,18 @@ Future<void> stopSessionBeforeSignOut(WidgetRef ref) async {
   await ref.read(liveShareProvider.notifier).stop(notify: false);
   await GeofenceService.instance.stop();
   ref.read(geofenceZonesProvider.notifier).stopWatching();
+}
+
+/// Xoá tài khoản thất bại → bật lại theo dõi vùng an toàn đã dừng ở trên.
+Future<void> resumeSessionAfterFailedDelete(
+  WidgetRef ref,
+  UserModel user,
+) async {
+  if (user.role != 'child' || ref.read(locationConsentProvider) != true) return;
+  await GeofenceService.instance.start(
+    parentIds: user.linkedParentIds,
+    childUid: user.uid,
+    childName: user.name,
+    zonesNotifier: ref.read(geofenceZonesProvider.notifier),
+  );
 }

@@ -72,7 +72,8 @@ class PushNotifications {
 
   /// Gỡ token khỏi doc — phải gọi TRƯỚC khi đăng xuất (rule cần còn đăng nhập),
   /// nếu không máy này vẫn nhận thông báo của tài khoản cũ.
-  Future<void> unregister() async {
+  /// [removeFromProfile] false khi hồ sơ đã bị xoá cùng tài khoản.
+  Future<void> unregister({bool removeFromProfile = true}) async {
     final uid = _uid;
     final token = _token;
     _uid = null;
@@ -81,7 +82,7 @@ class PushNotifications {
     _refreshSub = null;
     if (!supported || uid == null) return;
     try {
-      if (token != null) {
+      if (token != null && removeFromProfile) {
         await _userDoc(uid).update({
           'fcmTokens': FieldValue.arrayRemove([token]),
         });

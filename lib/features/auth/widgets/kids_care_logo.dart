@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kids_care/core/theme/app_theme.dart';
 
-/// Kids Care shield+heart logo widget.
+/// FamHub shield+heart logo widget.
 class KidsCareLogo extends StatelessWidget {
   final double size;
 

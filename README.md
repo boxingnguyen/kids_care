@@ -1,6 +1,6 @@
-# Kids Care 👧👦
+# FamHub 👧👦
 
-**Kids Care** is a Flutter application designed to keep children safe and parents informed. It features real-time location tracking, geofencing, voice/video calling, and task management through separate interfaces for parents and children.
+**FamHub** is a Flutter application designed to keep children safe and parents informed. It features real-time location tracking, geofencing, voice/video calling, and task management through separate interfaces for parents and children.
 
 ## 📋 Table of Contents
 
@@ -20,7 +20,7 @@
 
 ## 🎯 Overview
 
-Kids Care is a dual-interface Flutter application that:
+FamHub is a dual-interface Flutter application that:
 
 - **Parents** can monitor their child's location, set safe zones, manage tasks, and receive notifications
 - **Children** can share their location, receive tasks, make voice/video calls to parents, and navigate to safe zones
@@ -124,7 +124,7 @@ Path-based declarative navigation with automatic redirect logic:
 
 | Service             | Purpose                                               |
 | ------------------- | ----------------------------------------------------- |
-| **Auth**            | User login/registration with Google Sign-In support   |
+| **Auth**            | Email, child username and guest accounts              |
 | **Firestore**       | Real-time database for users, locations, zones, tasks |
 | **Cloud Messaging** | Push notifications                                    |
 | **Storage**         | User avatars and media                                |
@@ -174,7 +174,6 @@ Path-based declarative navigation with automatic redirect logic:
 - Login/Registration screens
 - Password reset flows
 - Auth service and user service
-- Google Sign-In integration
 
 **`lib/features/parent/`**
 
@@ -217,7 +216,6 @@ All data models are in `lib/models/`:
 
 - **Firebase Project**: For backend services
 - **Zego Cloud**: For voice/video calling
-- **Google Sign-In**: OAuth credentials
 - **Mapbox**: Map tiles and place search
 
 ### Tools
@@ -272,7 +270,7 @@ flutter pub run build_runner watch
 2. Add Android and iOS apps to your project
 3. Download `google-services.json` (Android) and place in `android/app/`
 4. Download `GoogleService-Info.plist` (iOS) and add to Xcode
-5. Enable Authentication (Google Sign-In), Firestore, and Cloud Messaging services
+5. Enable Authentication (Email/Password, Anonymous), Firestore, and Cloud Messaging services
 
 ### 6. Configure Zego Cloud
 

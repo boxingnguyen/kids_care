@@ -1,0 +1,43 @@
+FamHub helps parents know their children got where they were going. Set safe zones, get arrival alerts and see your child's check-ins, all from your own phone.
+
+FamHub has two simple modes. Parents get updates, safe zones and a to-do list. A companion mode on your child's phone has big, friendly buttons to check in, share their location and see their tasks.
+
+SAFE ZONE ALERTS
+• Mark up to 3 places that matter, such as home, school or the park, right on the map, or search for them by name.
+• Get a notification when your child arrives at or leaves a safe zone.
+
+LIVE LOCATION, SHARED BY YOUR CHILD
+• Your child taps "Share live location" to let you see where they are for the next 60 minutes.
+• Want to know where they are? Send a request with one tap and your child gets a friendly prompt to share.
+• When sharing ends, the map closes and the shared location is deleted.
+
+ONE-TAP CHECK-INS
+• "Going to school", "Going to play", "I've arrived", "I'm home": kids tell you with a single tap, and their current location is sent along with it.
+• Every update appears on your home screen as it happens.
+
+DAILY TO-DOS
+• Assign tasks with a fun icon, an optional description and a due date.
+• Kids tap a task when it's done and see a cheer. You get notified right away.
+• Kids can also add their own to-dos.
+
+NOTES FOR PARENTS
+• Kids can send little requests like "Please buy colored pencils" or "Pick me up at 4:30".
+• Mark notes as done so everyone stays in the loop.
+
+BUILT FOR THE WHOLE FAMILY
+• Follow several children from one parent account.
+• Up to 3 parents or guardians can link with each child.
+• Accounts link with a 6-character code, and the other person has to accept, so no one is linked without agreeing.
+• Try it right away without signing up, then link an email later to keep your data.
+• Available in English, Vietnamese, Japanese, Chinese, Indonesian and Portuguese.
+
+PRIVACY FIRST
+Your child's location is shared only with the parents and guardians linked to their account. Live location is shared only when your child turns it on, and it stops automatically after 60 minutes.
+
+Your child's current location is also sent when they tap a check-in button and when they arrive at or leave a safe zone, so you can see when they were last seen. Safe zone alerts use location in the background on your child's device so arrivals and departures are noticed even when the app is closed. Your child sees this explained in the app before location is ever used.
+
+You can unlink an account or permanently delete an account and its data in Settings at any time.
+
+Privacy policy: https://www.crosstechedu.com/projects/fam-hub/privacy/
+
+Note: Safe zone alerts need location permission set to "Always" on the child's device. Using location in the background can reduce battery life.

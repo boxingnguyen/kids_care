@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'Kids Care';
+  String get appTitle => 'FamHub';
 
   @override
   String get back => '返回';
@@ -113,7 +113,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeTagline => '随时随地守护孩子';
 
   @override
-  String get guestModeWarning => '试用模式，无需注册。数据只保存在这台设备上——请记下关联码并升级账号，以免数据丢失。';
+  String get guestModeWarning => '试用模式，无需注册。请在设置中关联邮箱，以免退出登录或更换手机时丢失数据。';
 
   @override
   String get tryAsParent => '以家长身份试用';
@@ -148,11 +148,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String loginFailed(String message) {
     return '登录失败：$message';
-  }
-
-  @override
-  String googleLoginFailed(String message) {
-    return 'Google 登录失败：$message';
   }
 
   @override
@@ -212,7 +207,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resetSuccessTitle => '重置成功！';
 
   @override
-  String get resetSuccessMessage => '密码已修改。登录继续使用 Kids Care！';
+  String get resetSuccessMessage => '密码已修改。登录继续使用 FamHub！';
 
   @override
   String get loginNow => '立即登录';
@@ -503,18 +498,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get stay => '留下';
-
-  @override
-  String get upgradeAccount => '升级账号';
-
-  @override
-  String get upgradeAccountSubtitle => '关联 Google 账号，避免数据丢失';
-
-  @override
-  String get accountUpgraded => '账号已升级！';
-
-  @override
-  String get googleAccountInUse => '该 Google 账号已被其他账号使用';
 
   @override
   String get yourLinkCode => '你的关联码';
@@ -1044,4 +1027,48 @@ class AppLocalizationsZh extends AppLocalizations {
   String noteDoneNotif(String name, String title) {
     return '$name 已完成：$title';
   }
+
+  @override
+  String get privacyPolicy => '隐私政策';
+
+  @override
+  String get deleteAccount => '删除账号';
+
+  @override
+  String get deleteAccountSubtitle => '永久删除你的账号和数据';
+
+  @override
+  String get deleteAccountConfirmTitle => '要删除账号吗？';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      '你的账号、位置、安全区域、待办事项、留言和关联将被永久删除，且无法恢复。';
+
+  @override
+  String get deleteAccountAskParent => '请先问问爸爸妈妈！';
+
+  @override
+  String get deleteAccountAction => '永久删除';
+
+  @override
+  String get deleteAccountFailed => '无法删除账号。请检查网络连接后重试。';
+
+  @override
+  String get accountDeleted => '你的账号已删除';
+
+  @override
+  String get locationDisclosureTitle => 'FamHub 会使用你的位置';
+
+  @override
+  String get locationDisclosureBody =>
+      'FamHub 会收集你的位置信息，以便在你到达或离开安全区域时通知已关联的家长，即使应用已关闭或未在使用也是如此。\n\n当你点按状态按钮或实时共享位置时，也会发送你的位置。只有与你关联的家长才能看到。';
+
+  @override
+  String get locationDisclosureContinue => '继续';
+
+  @override
+  String get locationDisclosureNotNow => '以后再说';
+
+  @override
+  String get checkInLocationHint => '点按按钮时，你的位置也会发送给家长';
 }

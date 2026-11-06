@@ -9,7 +9,7 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get appTitle => 'Kids Care';
+  String get appTitle => 'FamHub';
 
   @override
   String get back => 'Voltar';
@@ -115,7 +115,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get guestModeWarning =>
-      'Modo de teste, sem cadastro. Os dados ficam só neste aparelho — anote seu código de vínculo e atualize a conta para não perdê-los.';
+      'Modo de teste, sem cadastro. Vincule um e-mail nas Configurações para não perder seus dados ao sair da conta ou trocar de aparelho.';
 
   @override
   String get tryAsParent => 'Experimentar como responsável';
@@ -151,11 +151,6 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String loginFailed(String message) {
     return 'Falha ao entrar: $message';
-  }
-
-  @override
-  String googleLoginFailed(String message) {
-    return 'Falha ao entrar com o Google: $message';
   }
 
   @override
@@ -217,7 +212,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get resetSuccessMessage =>
-      'Sua senha foi alterada. Entre para continuar com o Kids Care!';
+      'Sua senha foi alterada. Entre para continuar com o FamHub!';
 
   @override
   String get loginNow => 'Entrar agora';
@@ -522,20 +517,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get stay => 'Ficar';
-
-  @override
-  String get upgradeAccount => 'Atualizar conta';
-
-  @override
-  String get upgradeAccountSubtitle =>
-      'Vincule ao Google para não perder seus dados';
-
-  @override
-  String get accountUpgraded => 'Conta atualizada!';
-
-  @override
-  String get googleAccountInUse =>
-      'Esta conta do Google já é usada por outra conta';
 
   @override
   String get yourLinkCode => 'Seu código de vínculo';
@@ -1095,4 +1076,51 @@ class AppLocalizationsPt extends AppLocalizations {
   String noteDoneNotif(String name, String title) {
     return '$name fez: $title';
   }
+
+  @override
+  String get privacyPolicy => 'Política de privacidade';
+
+  @override
+  String get deleteAccount => 'Excluir conta';
+
+  @override
+  String get deleteAccountSubtitle =>
+      'Remova sua conta e seus dados permanentemente';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Excluir sua conta?';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Sua conta, localização, zonas seguras, tarefas, recados e vínculos serão excluídos permanentemente. Isso não pode ser desfeito.';
+
+  @override
+  String get deleteAccountAskParent => 'Pergunte antes à mamãe ou ao papai!';
+
+  @override
+  String get deleteAccountAction => 'Excluir permanentemente';
+
+  @override
+  String get deleteAccountFailed =>
+      'Não foi possível excluir sua conta. Verifique a conexão e tente novamente.';
+
+  @override
+  String get accountDeleted => 'Sua conta foi excluída';
+
+  @override
+  String get locationDisclosureTitle => 'O FamHub usa sua localização';
+
+  @override
+  String get locationDisclosureBody =>
+      'O FamHub coleta sua localização para avisar os pais vinculados quando você chega a uma zona segura ou sai dela, mesmo quando o app está fechado ou não está em uso.\n\nSua localização também é enviada quando você toca em um botão de status ou compartilha a localização em tempo real. Só os pais vinculados a você podem vê-la.';
+
+  @override
+  String get locationDisclosureContinue => 'Continuar';
+
+  @override
+  String get locationDisclosureNotNow => 'Agora não';
+
+  @override
+  String get checkInLocationHint =>
+      'Ao tocar em um botão, sua localização também é enviada aos seus pais';
 }

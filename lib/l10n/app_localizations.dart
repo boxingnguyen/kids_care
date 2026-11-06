@@ -109,7 +109,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In vi, this message translates to:
-  /// **'Kids Care'**
+  /// **'FamHub'**
   String get appTitle;
 
   /// No description provided for @back.
@@ -301,7 +301,7 @@ abstract class AppLocalizations {
   /// No description provided for @guestModeWarning.
   ///
   /// In vi, this message translates to:
-  /// **'Chế độ thử không cần đăng ký. Dữ liệu chỉ gắn với thiết bị này — hãy ghi lại mã liên kết và nâng cấp tài khoản để không mất dữ liệu.'**
+  /// **'Chế độ thử không cần đăng ký. Hãy gắn email trong Cài đặt để không mất dữ liệu khi đăng xuất hoặc đổi máy.'**
   String get guestModeWarning;
 
   /// No description provided for @tryAsParent.
@@ -369,12 +369,6 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Đăng nhập thất bại: {message}'**
   String loginFailed(String message);
-
-  /// No description provided for @googleLoginFailed.
-  ///
-  /// In vi, this message translates to:
-  /// **'Đăng nhập Google thất bại: {message}'**
-  String googleLoginFailed(String message);
 
   /// No description provided for @forgotPasswordSubtitle.
   ///
@@ -487,7 +481,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetSuccessMessage.
   ///
   /// In vi, this message translates to:
-  /// **'Mật khẩu đã được thay đổi. Đăng nhập để lướt cùng Kids Care!'**
+  /// **'Mật khẩu đã được thay đổi. Đăng nhập để lướt cùng FamHub!'**
   String get resetSuccessMessage;
 
   /// No description provided for @loginNow.
@@ -1041,30 +1035,6 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Ở lại'**
   String get stay;
-
-  /// No description provided for @upgradeAccount.
-  ///
-  /// In vi, this message translates to:
-  /// **'Nâng cấp tài khoản'**
-  String get upgradeAccount;
-
-  /// No description provided for @upgradeAccountSubtitle.
-  ///
-  /// In vi, this message translates to:
-  /// **'Liên kết với Google để không mất dữ liệu'**
-  String get upgradeAccountSubtitle;
-
-  /// No description provided for @accountUpgraded.
-  ///
-  /// In vi, this message translates to:
-  /// **'Tài khoản đã được nâng cấp!'**
-  String get accountUpgraded;
-
-  /// No description provided for @googleAccountInUse.
-  ///
-  /// In vi, this message translates to:
-  /// **'Tài khoản Google này đã được dùng cho tài khoản khác'**
-  String get googleAccountInUse;
 
   /// No description provided for @yourLinkCode.
   ///
@@ -1971,6 +1941,90 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'{name} đã làm: {title}'**
   String noteDoneNotif(String name, String title);
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chính sách quyền riêng tư'**
+  String get privacyPolicy;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xoá tài khoản'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xoá vĩnh viễn tài khoản và dữ liệu của bạn'**
+  String get deleteAccountSubtitle;
+
+  /// No description provided for @deleteAccountConfirmTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xoá tài khoản?'**
+  String get deleteAccountConfirmTitle;
+
+  /// No description provided for @deleteAccountConfirmMessage.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tài khoản, vị trí, vùng an toàn, việc cần làm, lời nhắn và các liên kết của bạn sẽ bị xoá vĩnh viễn. Không thể hoàn tác.'**
+  String get deleteAccountConfirmMessage;
+
+  /// No description provided for @deleteAccountAskParent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hãy hỏi bố mẹ trước nhé!'**
+  String get deleteAccountAskParent;
+
+  /// No description provided for @deleteAccountAction.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xoá vĩnh viễn'**
+  String get deleteAccountAction;
+
+  /// No description provided for @deleteAccountFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa xoá được tài khoản. Hãy kiểm tra kết nối mạng rồi thử lại.'**
+  String get deleteAccountFailed;
+
+  /// No description provided for @accountDeleted.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã xoá tài khoản của bạn'**
+  String get accountDeleted;
+
+  /// No description provided for @locationDisclosureTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'FamHub dùng vị trí của bạn'**
+  String get locationDisclosureTitle;
+
+  /// No description provided for @locationDisclosureBody.
+  ///
+  /// In vi, this message translates to:
+  /// **'FamHub thu thập vị trí của bạn để báo cho bố mẹ đã liên kết khi bạn đến hoặc rời vùng an toàn, kể cả khi app đã đóng hoặc không được sử dụng.\n\nVị trí cũng được gửi khi bạn bấm nút báo trạng thái hoặc chia sẻ vị trí trực tiếp. Chỉ những bố mẹ đã liên kết với bạn mới xem được.'**
+  String get locationDisclosureBody;
+
+  /// No description provided for @locationDisclosureContinue.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiếp tục'**
+  String get locationDisclosureContinue;
+
+  /// No description provided for @locationDisclosureNotNow.
+  ///
+  /// In vi, this message translates to:
+  /// **'Để sau'**
+  String get locationDisclosureNotNow;
+
+  /// No description provided for @checkInLocationHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khi bấm nút, vị trí của bạn cũng được gửi cho bố mẹ'**
+  String get checkInLocationHint;
 }
 
 class _AppLocalizationsDelegate

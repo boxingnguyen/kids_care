@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FamHub Privacy Policy</title>
+<style>
+  :root { color-scheme: light dark; --text: #2b2b2b; --muted: #666; --bg: #fffaf3; --accent: #d9730d; }
+  @media (prefers-color-scheme: dark) { :root { --text: #eee; --muted: #aaa; --bg: #1c1a17; --accent: #f5a25d; } }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.9em; line-height: 1.2; margin-bottom: 4px; }
+  h2 { font-size: 1.2em; margin-top: 2em; color: var(--accent); }
+  .date { color: var(--muted); margin-top: 0; }
+  a { color: var(--accent); }
+  li { margin-bottom: 0.4em; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.95em; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid color-mix(in srgb, var(--muted) 35%, transparent); }
+</style>
+</head>
+<body>
+<main>
+<h1>FamHub Privacy Policy</h1>
+<p class="date">Effective November 6, 2026</p>
+
+<p>FamHub helps parents and children stay connected through safe zone alerts, location sharing, check-ins and to-dos. It is provided by Cross Tech &amp; Edu ("we"). Because the app handles a child's location, this policy explains exactly what is collected, who can see it and how to delete it.</p>
+
+<h2>What we collect</h2>
+<div class="table-wrap">
+<table>
+  <tr><th>Data</th><th>When and why</th></tr>
+  <tr><td>Precise location of the child (latitude, longitude, accuracy, time)</td><td>When the child shares live location, taps a check-in button, or arrives at or leaves a safe zone. Safe zone monitoring runs on the child's device in the background, including when the app is closed. Used to show location and send alerts to linked parents and guardians.</td></tr>
+  <tr><td>Location of the parent's device</td><td>Only while the map setup screen is open, to center the map. It is not saved to your account.</td></tr>
+  <tr><td>Safe zones (name, coordinates, radius)</td><td>When a parent or guardian creates one. Used to detect arrivals and departures.</td></tr>
+  <tr><td>Account details (display name, role, link code, and an email or a child username)</td><td>To create and link accounts. Passwords are handled by Firebase Authentication and are not visible to us. Guest accounts have no email.</td></tr>
+  <tr><td>Family activity (check-in status, safe zone events, to-dos, notes)</td><td>Created when family members use these features, and shared between linked accounts.</td></tr>
+  <tr><td>Device data (notification token, language)</td><td>To deliver notifications in your language.</td></tr>
+</table>
+</div>
+
+<h2>Who can see it</h2>
+<ul>
+  <li><strong>Linked parents and guardians.</strong> Accounts link only after one person enters the other's code and the other person accepts. Up to 3 parents or guardians can link with a child. A child's location can be read only by the child's own account and the accounts currently linked to it.</li>
+  <li><strong>Service providers</strong> that run the app, listed below. They receive only what they need to provide their service.</li>
+</ul>
+<p>We do not sell personal data, show ads, use third-party analytics, or track users across other companies' apps and websites.</p>
+
+<h2>Service providers</h2>
+<ul>
+  <li><strong>Google Firebase</strong> (Authentication, Firestore, Cloud Functions, Cloud Messaging) stores and processes all account and location data. The database is located in Singapore (asia-southeast1), so data may be processed outside your country.</li>
+  <li><strong>Apple Push Notification service</strong> delivers notifications to iPhones and iPads.</li>
+  <li><strong>Mapbox and OpenStreetMap</strong> provide map images. When a map is displayed they receive the map area requested and your IP address. When you search for a place, Mapbox also receives your search text and your approximate position.</li>
+</ul>
+
+<h2>How long we keep data</h2>
+<ul>
+  <li><strong>Live location:</strong> only the latest position is stored, and it is overwritten as the child moves. It is deleted when sharing stops or after 60 minutes. If the app was closed before then, it is deleted the next time the app opens, or automatically, usually within 24 hours.</li>
+  <li><strong>Check-in and safe zone location:</strong> only the latest position is stored. It is replaced by the next one and removed when a live share ends or the account is deleted. We keep no location history.</li>
+  <li><strong>Everything else:</strong> kept until you delete it or delete the account. Unlinking stops new sharing, but updates already delivered to a parent stay in that parent's account until the child's or the parent's account is deleted.</li>
+</ul>
+
+<h2>Your choices and deleting your data</h2>
+<ul>
+  <li><strong>Delete your account:</strong> open Settings &gt; Delete account in the app. This works for guest accounts too. It immediately and permanently deletes the account, profile, location, safe zones, link codes and requests, to-dos, notes and the child's events stored in parents' accounts. To-dos a deleted parent created for a child are also removed.</li>
+  <li><strong>Stop sharing:</strong> stop live sharing at any time, unlink an account in Settings, or turn off location permission in your device settings. Safe zone alerts stop working without location permission.</li>
+  <li><strong>Other requests:</strong> to access, correct or delete data, or to withdraw consent, email <a href="mailto:crosstechedu@gmail.com">crosstechedu@gmail.com</a>.</li>
+</ul>
+
+<h2>Children</h2>
+<p>FamHub has a child mode and collects personal data, including precise location, from children. A parent or guardian should set up the child's account and stay involved in how it is used. Parents can review what their child has shared in the app, and can ask us to review or delete a child's data, or stop further collection, by emailing <a href="mailto:crosstechedu@gmail.com">crosstechedu@gmail.com</a> or by deleting the child's account in Settings on the child's device. If you believe a child is using FamHub without a parent's permission, please contact us and we will delete the data.</p>
+
+<h2>Security</h2>
+<p>Data is encrypted in transit (TLS) and encrypted at rest on Google's servers, and database rules limit who can read each record. Location data is not end-to-end encrypted, which means it is readable on the server by the service and its administrators, who access it only to operate and support the app. No system is perfectly secure, so please keep your password private.</p>
+
+<h2>Changes</h2>
+<p>If we change this policy, we will update this page and the effective date. For significant changes we will also let you know in the app.</p>
+
+<h2>Contact</h2>
+<p>Cross Tech &amp; Edu &middot;<a href="mailto:crosstechedu@gmail.com">crosstechedu@gmail.com</a></p>
+</main>
+</body>
+</html>
