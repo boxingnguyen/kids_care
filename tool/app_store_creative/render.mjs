@@ -13,7 +13,7 @@
 // Requires Google Chrome and ImageMagick.
 
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -51,9 +51,9 @@ const LAYOUTS = {
     W: 3840, H: 1646,
     safe: { x: 1097, y: 493, w: 1646, h: 661 },
     mapScale: 0.82,
-    headline: { top: 506, size: 150, oneLine: true },
-    phone: { top: 700, w: 900 },
-    banner: { top: 742, w: 1340 },
+    headline: { top: 531, size: 150, oneLine: true },
+    phone: { top: 725, w: 900 },
+    banner: { top: 767, w: 1340 },
     zone: { r: 1130 },
     glow: { cy: 640, rx: 1300, ry: 480 },
     home: { dx: -1400, dy: 250, r: 310 },
@@ -202,7 +202,13 @@ function sceneSvg(l) {
   </svg>`;
 }
 
-function html(l, t) {
+// Keep the phone's UI in the same language as the headline.
+function screenshotFor(locale) {
+  const path = (loc) => `ios/fastlane/screenshots/${loc}/iPhone69_01_parent-home.png`;
+  return existsSync(join(ROOT, path(locale))) ? path(locale) : path('en-US');
+}
+
+function html(l, t, locale) {
   const font = (w, f) =>
     `@font-face{font-family:Nunito;font-weight:${w};src:url(${dataUri(`assets/fonts/${f}.ttf`, 'font/ttf')}) format('truetype');}`;
   const bezel = Math.round(l.phone.w * 0.026);
@@ -232,7 +238,7 @@ function html(l, t) {
   ${mapSvg(l)}
   ${sceneSvg(l)}
   <h1>${title}</h1>
-  <div class="phone"><img src="${dataUri('ios/fastlane/screenshots/en-US/iPhone69_01_parent-home.png', 'image/png')}"></div>
+  <div class="phone"><img src="${dataUri(screenshotFor(locale), 'image/png')}"></div>
   <div class="banner">
     <img src="${dataUri('assets/icons/app/app_icon.png', 'image/png')}">
     <div class="text">
@@ -254,9 +260,10 @@ const work = mkdtempSync(join(tmpdir(), 'creative-'));
 for (const l of Object.values(LAYOUTS)) {
   const page = join(work, `${l.W}.html`);
   const raw = join(work, `${l.W}.png`);
-  writeFileSync(page, html(l, copy));
+  writeFileSync(page, html(l, copy, locale));
   execFileSync(CHROME, [
     '--headless=new', '--disable-gpu', '--hide-scrollbars', '--force-device-scale-factor=1',
+    '--force-color-profile=srgb',
     `--window-size=${l.W},${l.H}`, '--virtual-time-budget=8000',
     `--user-data-dir=${join(work, 'profile')}`, `--screenshot=${raw}`, `file://${page}`,
   ], { stdio: 'ignore' });
